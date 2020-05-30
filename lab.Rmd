@@ -1,0 +1,77 @@
+---
+title: "lab"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+pacman::p_load(tidyverse)
+```
+
+```{r}
+trends <- get_trending(10)
+
+urls <- trends$downloadAddr
+url <- urls[1]
+
+
+
+
+
+ #     b = browser(download_url)
+    #     return self.getBytes(download_url, b.signature, b.userAgent)
+```
+
+
+```{r}
+ # def getBytes(self, api_url, signature, userAgent):
+ #        url = api_url + \
+ #            "&_signature=" + signature
+ #        r = requests.get(url, headers={"method": "GET",
+ #                                       "accept-encoding": "gzip, deflate, br",
+ #                                       "referrer": self.referrer,
+ #                                       "user-agent": userAgent,
+ #                                       })
+ #        return r.content
+
+    # def get_Video_By_TikTok(self, data):
+    #     api_url = data['video']['downloadAddr']
+    #     return self.get_Video_By_DownloadURL(api_url)
+    # 
+    # #
+    # # Downloads video from TikTok using download url in a tiktok object
+    # #
+
+    # def get_Video_By_DownloadURL(self, download_url):
+    #     b = browser(download_url)
+    #     return self.getBytes(download_url, b.signature, b.userAgent)
+    # 
+    # #
+    # # Gets the source url of a given url for a tiktok
+    # #
+    # # video_url - the url of the video
+    # # return_bytes - 0 is just the url, 1 is the actual video bytes
+    # # chromedriver_path - path to your chrome driver executible
+    # #
+
+
+    # def get_Video_By_Url(self, video_url, return_bytes=0, chromedriver_path=None):
+    #     if chromedriver_path != None:
+    #         driver = webdriver.Chrome(executable_path=chromedriver_path)
+    #     else:
+    #         driver = webdriver.Chrome()
+    #     driver.get(video_url)
+    #     time.sleep(5)
+    # 
+    #     soup = BeautifulSoup(driver.page_source, 'html.parser')
+    #     data = json.loads(soup.find_all(
+    #         'script', attrs={"id": "videoObject"})[0].text)
+    # 
+    #     if return_bytes == 0:
+    #         return data['contentUrl']
+    #     else:
+    #         r = requests.get(data['contentUrl'])
+    #         return r.content
+```
+
