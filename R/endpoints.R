@@ -31,7 +31,7 @@ get_music_post <- function(count, music_id){
 #' @export
 get_hashtag_post <- function(count, hashtag){
   hash <- get_hashtag(hashtag)
-  get_count("hashtag_post", count = count, hash_id = hash$challengeInfo.challenge.id)
+  get_count(type = "hashtag_post", count = count, hash_id = hash$challengeInfo.challenge.id)
 }
 
 #' discover_hashtags

@@ -17,8 +17,8 @@ get_count <- function(type, ..., count = 1){
       real_count <- max_count
     }
 
-    url <- get_url(type, count = real_count, ...)
-    # url <- get_url(type, count = real_count, hash_id = hash_id)
+    url <- get_url(type, count = real_count, min = min_cursor, max = max_cursor, ...)
+    # url <- get_url(type, count = real_count, hash_id = hash_id, min = min_cursor, max = max_cursor)
 
     out <- get_data(url)
 
@@ -36,14 +36,15 @@ get_count <- function(type, ..., count = 1){
       data <- out$items %>% parse_json_structure
     }
 
+    # tiktok_save_callback  <<-
     response <- dplyr::bind_rows(response, data) %>%
       unique
 
     real_count = count-nrow(response)
-    max_cursor = out$maxCursor
-    min_cursor = out$minCursor
+    max_cursor = out$body$maxCursor
+    min_cursor = out$body$minCursor
 
-    if("hasMore" %in% names(out)){if(!out$hasMore){return(response)}}
+    if("hasMore" %in% names(out$body)){if(!out$body$hasMore){return(response)}}
   }
 
   return(response)
