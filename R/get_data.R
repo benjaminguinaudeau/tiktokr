@@ -2,11 +2,12 @@
 #' @description Main function to get data from tiktok
 #' @export
 
-get_count <- function(type, ..., count = 1){
+get_count <- function(type, ..., count = 1, save = F, path = NULL, query = NULL){
   response <- tibble::tibble()
   max_count <- 99
   max_cursor <- 0
   min_cursor <- 0
+  set <- 1
 
   # while(length(response) < count){
   while(nrow(response) < count){
@@ -36,9 +37,16 @@ get_count <- function(type, ..., count = 1){
       data <- out$items %>% parse_json_structure
     }
 
-    # tiktok_save_callback  <<-
-    response <- dplyr::bind_rows(response, data) %>%
-      unique
+    if(save){
+      if(!dir.exists(path)){dir.create(path)}
+      saveRDS(data, glue::glue("{path}/{query}_{set}.RDS"))
+
+    } else {
+      response <- dplyr::bind_rows(response, data) %>%
+        unique
+    }
+
+    set <- set + 1
 
     real_count = count-nrow(response)
     max_cursor = out$body$maxCursor
@@ -60,7 +68,7 @@ get_data <- function(url, parse = T){
 
   final_url = paste0(url, "&_signature=", br$signature)
 
-  req <- httr::GET(final_url, httr::add_headers(
+  test_req <<- req <- httr::GET(final_url, httr::add_headers(
     `method`= "GET",
     `accept-encoding` = "gzip, deflate, br",
     `referrer` = "https://www.tiktok.com/tag/jakefromstate?lang=en",
