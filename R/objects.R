@@ -3,8 +3,8 @@
 #' @export
 get_username <- function(username){
   url <- get_url("username", username = username)
-  br <- py$browser(url)
-  res <- get_data(url, br$signature, br$userAgent)
+  # br <- py$browser(url)
+  res <- get_data(url)
   out <- res$userInfo$user %>%
     purrr::imap_dfc(~purrr::set_names(tibble::tibble(.x), .y))
 
@@ -16,8 +16,8 @@ get_username <- function(username){
 #' @export
 get_hashtag <- function(hashtag){
   url <- get_url("hashtag", hashtag = hashtag)
-  br <- py$browser(url)
-  res <- get_data(url, br$signature, br$userAgent)
+  # br <- py$browser(url)
+  res <- get_data(url)
   out <- res %>%
     rlist::list.flatten() %>%
     purrr::imap_dfc(~purrr::set_names(tibble::tibble(.x), .y))
@@ -30,8 +30,8 @@ get_hashtag <- function(hashtag){
 #' @export
 get_hashtag <- function(music_id){
   url <- get_url("music", music_id = music_id)
-  br <- py$browser(url)
-  res <- get_data(url, br$signature, br$userAgent)
+  # br <- py$browser(url)
+  res <- get_data(url)
   out <- res %>%
     rlist::list.flatten() %>%
     purrr::imap_dfc(~purrr::set_names(tibble::tibble(.x), .y))
