@@ -75,7 +75,7 @@ get_data <- function(url, parse = T){
 
   final_url = paste0(url, "&_signature=", br$signature)
 
-  req <- httr::GET(final_url, httr::add_headers(
+  req_save <<- req <- httr::GET(final_url, httr::add_headers(
     `method`= "GET",
     `accept-encoding` = "gzip, deflate, br",
     `referrer` = "https://www.tiktok.com/tag/jakefromstate?lang=en",
