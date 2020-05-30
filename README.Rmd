@@ -66,6 +66,7 @@ Returns a tibble with trends.
 trends <- get_trending(200)
 
 
+
 ```
 
 ### Get TikToks from user name
@@ -74,6 +75,7 @@ trends <- get_trending(200)
 # Username
 user <- get_username("willsmith")
 user_posts <- get_user_post(200, "willsmith")
+
 ```
 
 ### Get TikToks from hashtag
@@ -91,7 +93,7 @@ discover_hashtags(100)
 From Trends:
 
 ```{r, eval = F}
-trends <- get_trending(10)
+trends <- get_trending(200)
 
 trends %>%
   split(1:nrow(.)) %>% 
@@ -103,11 +105,15 @@ From hashtag:
 
 ```{r, eval = F}
 
-hash <- get_hashtag("maincharacter")
+hash <- get_hashtag_post(20, "trump2020")
+
 
 trends %>%
+  head(20) 
+
+hash %>%
   split(1:nrow(.)) %>% 
-  purrr::walk(~{download_video(.x$downloadAddr, paste0("video/", .x$id, ".mp4"))})
+  purrr::walk(~{download_video(.x$downloadAddr, paste0("video/hashtag/", .x$id, ".mp4"))})
 
 ```
 
