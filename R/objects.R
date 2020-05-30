@@ -6,6 +6,7 @@ get_username <- function(username){
   # br <- py$browser(url)
   res <- get_data(url)
   out <- res$userInfo$user %>%
+    rlist::list.flatten() %>%
     purrr::imap_dfc(~purrr::set_names(tibble::tibble(.x), .y))
 
   return(out)

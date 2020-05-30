@@ -20,7 +20,12 @@ init_tiktokr()
 
 
 ```{r}
-hash_post <- get_hashtag_post(count = 30, hashtag = "saynotobillgates")
+test_req <- c()
+
+if(length(test_req$content) == 0){do_something}
+
+hash_post <- get_hashtag_post(count = 100000000, hashtag = "coronavirus", save = T, path = "video")
+hash_post <- get_hashtag_post(count = 400, hashtag = "plandemic")
 
 video <- hash_post[50,]
 
@@ -33,11 +38,11 @@ hash_post %>%
     glimpse
 
 hash_post %>%
+    count(id)
     filter(id == "6823804732973337862") %>%
     select_if(~length(unique(.x))  > 1) %>%
     .[[1]]
     pull(url)
-    count(id)
 
 ```
 

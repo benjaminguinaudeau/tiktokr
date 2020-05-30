@@ -11,7 +11,7 @@ get_trending <- function(count) get_count("trending", count = count)
 #' @export
 get_user_post <- function(count, username, ...){
   user <- get_username(username)
-  get_count("user_post", count = count, user_id = user$id, sec_uid = user$secUid, query = username, ...)
+  get_count(type = "user_post", count = count, user_id = user$id, sec_uid = user$secUid, query = username, ...)
 }
 
 #' get_music_post
