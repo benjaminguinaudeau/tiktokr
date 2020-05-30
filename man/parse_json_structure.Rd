@@ -6,6 +6,9 @@
 \usage{
 parse_json_structure(x)
 }
+\arguments{
+\item{x}{json to be parsed}
+}
 \description{
 parse nested data frame in json responses
 }

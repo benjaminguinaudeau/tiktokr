@@ -15,8 +15,8 @@ get_user_post <- function(count, username){
 }
 
 #' get_music_post
-#' @description Function to get tiktoks from a given music
-#' @param music_id Character indicating the username to scrape
+#' @description Function to get tiktoks from a given music piece
+#' @param music_id Character indicating the \code{music_id} to scrape
 #' @param count Numeric indicating the number of tiktoks to scrape
 #' @export
 get_music_post <- function(count, music_id){

@@ -43,7 +43,7 @@ get_url <- function(type, count = NULL,
 #' parse_json_structure
 #' @description parse nested data frame in json responses
 #' @export
-
+#' @param x json to be parsed
 parse_json_structure <- function(x){
   x %>%
     dplyr::select_if(is.data.frame) %>%
@@ -62,9 +62,20 @@ init_tiktokr <- function(){
   reticulate::source_python("tiktokr.py")
 }
 
+#' install_tiktokr
+#' @description Install needed python libraries
+#' @export
+install_tiktokr <- function(){
+  reticulate::py_install(c("pyppeteer", "pyppeteer_stealth", "asyncio"), pip = T)
+}
+
+
+
 #' download_video
 #' @description Function that enable to download tiktoks
 #' @export
+#' @param url url of tiktok to scrape
+#' @param path path to download tiktok video to
 download_video <- function(url, path){
   raw_video <- get_data(url, parse = F)
   writeBin(raw_video, path)

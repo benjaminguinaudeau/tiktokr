@@ -6,6 +6,11 @@
 \usage{
 get_data(url, parse = T)
 }
+\arguments{
+\item{url}{url to visit and get data from}
+
+\item{parse}{logical. whether to return parsed data or not. Defautls to \code{TRUE}.}
+}
 \description{
 Function for http queries
 }

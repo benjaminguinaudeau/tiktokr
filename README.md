@@ -7,8 +7,11 @@
 
 <!-- badges: end -->
 
-The goal of tiktokr is to provide a scraper of tiktok. Mosty inspired by
-[davidteather/TikTok-Api](https://github.com/davidteather/TikTok-Api)
+The goal of `tiktokr` is to provide a scraper for the video-sharing
+social networking service [TikTok](http://tiktok.com/). Mostly inspired
+by this Python module:
+[davidteather/TikTok-Api](https://github.com/davidteather/TikTok-Api).
+You will need Python 3.6 or higher to use `tiktokr`.
 
 ## Installation
 
@@ -20,40 +23,60 @@ You can install the development version from
 devtools::install_github("benjaminguinaudeau/tiktokr")
 ```
 
-## Example
-
-This is a basic example which shows you how to solve a common problem:
+Load library
 
 ``` r
 library(tiktokr)
 ## basic example code
 ```
 
-``` r
-reticulate::use_python("/usr/local/bin/python3")
-library(reticulate)
-devtools::load_all()
-#> Loading tiktokr
+## Example
 
-# reticulate::source_python("browser.py")
+This is a basic example which shows you how to solve a common problem:
+
+Make sure to use your preferred Python installation
+
+``` r
+library(reticulate)
+
+use_python(py_config()$python)
+```
+
+Initialize `tiktokr`
+
+``` r
 init_tiktokr()
 ```
 
-``` r
+### Get TikTok trends
 
+Returns a tibble with trends.
+
+``` r
 # Trend
 trends <- get_trending(200)
+```
 
+### Get TikToks from user name
+
+``` r
 # Username
 user <- get_username("willsmith")
 user_posts <- get_user_post(200, "willsmith")
+```
 
+### Get TikToks from hashtag
 
+``` r
 hash <- get_hashtag("maincharacter")
 hash_post <- get_hashtag_post(100, "maincharacter")
 
 discover_hashtags(100)
 ```
+
+### Download TikTok Videos
+
+From Trends:
 
 ``` r
 trends <- get_trending(10)
@@ -62,6 +85,8 @@ trends %>%
   split(1:nrow(.)) %>% 
   purrr::walk(~{download_video(.x$downloadAddr, paste0("video/", .x$id, ".mp4"))})
 ```
+
+From hashtag:
 
 ``` r
 

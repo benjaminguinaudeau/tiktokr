@@ -6,6 +6,11 @@
 \usage{
 download_video(url, path)
 }
+\arguments{
+\item{url}{url of tiktok to scrape}
+
+\item{path}{path to download tiktok video to}
+}
 \description{
 Function that enable to download tiktoks
 }

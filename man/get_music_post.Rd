@@ -9,8 +9,8 @@ get_music_post(count, music_id)
 \arguments{
 \item{count}{Numeric indicating the number of tiktoks to scrape}
 
-\item{music_id}{Character indicating the username to scrape}
+\item{music_id}{Character indicating the \code{music_id} to scrape}
 }
 \description{
-Function to get tiktoks from a given music
+Function to get tiktoks from a given music piece
 }
