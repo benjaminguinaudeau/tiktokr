@@ -14,3 +14,8 @@ LazyData: true
 RoxygenNote: 7.0.2
 Imports: 
     magrittr
+    reticulate
+    dplyr
+    purrr
+    jsonlite,
+    readr

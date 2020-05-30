@@ -62,6 +62,15 @@ init_tiktokr <- function(){
   reticulate::source_python("tiktokr.py")
 }
 
+#' install_tiktokr
+#' @description Install needed python libraries
+#' @export
+install_tiktokr <- function(){
+  # reticulate::py_install("")
+}
+
+
+
 #' download_video
 #' @description Function that enable to download tiktoks
 #' @export
