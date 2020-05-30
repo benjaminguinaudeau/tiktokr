@@ -51,6 +51,8 @@ get_count <- function(type, ..., count = 1){
 
 #' get_data
 #' @description Function for http queries
+#' @param url url to visit and get data from
+#' @param parse logical. whether to return parsed data or not. Defautls to \code{TRUE}.
 #' @export
 get_data <- function(url, parse = T){
   br <- py$browser(url)
