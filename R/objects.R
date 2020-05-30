@@ -28,7 +28,7 @@ get_hashtag <- function(hashtag){
 #' get_music
 #' @description Function to get information on a given piece of music
 #' @export
-get_hashtag <- function(music_id){
+get_music <- function(music_id){
   url <- get_url("music", music_id = music_id)
   # br <- py$browser(url)
   res <- get_data(url)
