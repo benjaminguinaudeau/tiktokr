@@ -4,18 +4,9 @@
 \alias{get_url}
 \title{get_url}
 \usage{
-get_url(
-  type,
-  count = NULL,
-  username = NULL,
-  user_id = NULL,
-  sec_uid = NULL,
-  hashtag = NULL,
-  hash_id = NULL,
-  music_id = NULL,
-  max = 0,
-  min = 0
-)
+get_url(type, count = NULL, username = NULL, user_id = NULL,
+  sec_uid = NULL, hashtag = NULL, hash_id = NULL, music_id = NULL,
+  max = 0, min = 0)
 }
 \description{
 handle the api url based on a given type

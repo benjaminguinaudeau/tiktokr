@@ -66,7 +66,7 @@ init_tiktokr <- function(){
 #' @description Install needed python libraries
 #' @export
 install_tiktokr <- function(){
-  # reticulate::py_install("")
+  reticulate::py_install(c("pyppeteer", "pyppeteer_stealth", "asyncio"), pip = T)
 }
 
 
