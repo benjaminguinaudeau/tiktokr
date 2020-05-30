@@ -81,5 +81,14 @@ download_video <- function(url, path){
   writeBin(raw_video, path)
 }
 
+#' quiet
+#' @export
+
+quiet <- function(x) {
+  sink(tempfile())
+  on.exit(sink())
+  invisible(force(x))
+}
+
 # script <- readLines("browser.py")
 # usethis::use_data(script, overwrite = T)

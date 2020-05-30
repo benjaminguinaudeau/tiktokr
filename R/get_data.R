@@ -11,7 +11,7 @@ get_count <- function(type, ..., count = 1, save = F, path = NULL, query = NULL)
 
   # while(length(response) < count){
   while(nrow(response) < count){
-
+    cat("\rPage: ", set, "  TikToks: ", nrow(response))
     if(count < max_count){
       real_count <- count
     } else {
@@ -21,7 +21,7 @@ get_count <- function(type, ..., count = 1, save = F, path = NULL, query = NULL)
     url <- get_url(type, count = real_count, min = min_cursor, max = max_cursor, ...)
     # url <- get_url(type, count = real_count, hash_id = hash_id, min = min_cursor, max = max_cursor)
 
-    out <- get_data(url)
+    out <- quiet(get_data(url))
 
     if(type %in% c("hashtag_post", "sound_post")){
       out$items <- out$body$itemListData
@@ -52,7 +52,14 @@ get_count <- function(type, ..., count = 1, save = F, path = NULL, query = NULL)
     max_cursor = out$body$maxCursor
     min_cursor = out$body$minCursor
 
-    if("hasMore" %in% names(out$body)){if(!out$body$hasMore){return(response)}}
+    utils::flush.console()
+
+    if("hasMore" %in% names(out$body)){
+      if(!out$body$hasMore){
+        message("\nReached end of query or no more TikToks available.")
+        return(response)
+      }
+    }
   }
 
   return(response)
@@ -64,11 +71,11 @@ get_count <- function(type, ..., count = 1, save = F, path = NULL, query = NULL)
 #' @param parse logical. whether to return parsed data or not. Defautls to \code{TRUE}.
 #' @export
 get_data <- function(url, parse = T){
-  br <- py$browser(url)
+  br <- quiet(py$browser(url))
 
   final_url = paste0(url, "&_signature=", br$signature)
 
-  test_req <<- req <- httr::GET(final_url, httr::add_headers(
+  req <- httr::GET(final_url, httr::add_headers(
     `method`= "GET",
     `accept-encoding` = "gzip, deflate, br",
     `referrer` = "https://www.tiktok.com/tag/jakefromstate?lang=en",

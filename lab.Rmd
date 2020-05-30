@@ -20,7 +20,7 @@ init_tiktokr()
 
 
 ```{r}
-hash_post <- get_hashtag_post(count = 30, hashtag = "saynotobillgates")
+hash_post <- get_hashtag_post(count = 3000, hashtag = "plandemic")
 
 video <- hash_post[50,]
 
