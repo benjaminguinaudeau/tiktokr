@@ -10,6 +10,32 @@ pacman::p_load(tidyverse)
 ```
 
 ```{r}
+reticulate::use_python("/usr/local/bin/python3")
+library(reticulate)
+devtools::load_all()
+
+init_tiktokr()
+
+```
+
+
+```{r}
+hash_post <- get_hashtag_post(count = 100, hashtag = "saynotobillgates")
+
+video <- hash_post[50,]
+
+download_video(video$playUrl)
+
+
+
+hash_post %>%
+    head(100) %>%
+    glimpse
+
+```
+
+
+```{r}
 trends <- get_trending(10)
 
 urls <- trends$downloadAddr

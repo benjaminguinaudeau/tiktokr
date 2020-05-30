@@ -53,6 +53,7 @@ Initialize `tiktokr`
 
 ```{r}
 init_tiktokr()
+
 ```
 
 ### Get TikTok trends
