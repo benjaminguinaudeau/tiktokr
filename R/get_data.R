@@ -25,7 +25,7 @@ get_count <- function(type, ..., count = 1, save = F, path = NULL, query = NULL)
     # url <- get_url(type, count = real_count, hash_id = hash_id, min = min_cursor, max = max_cursor)
 
 
-    cli::cli_alert("Url: {url}")
+    # cli::cli_alert("Url: {url}")
     out <- quiet(get_data(url))
 
 
