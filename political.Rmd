@@ -8,9 +8,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-handles <- c("conservativehypehouse", "theconservativehypehouse", "therepublicanhypehouse", 
-"liberalhypehouse", "leftist", "votebernie", "republicanism", 
-"republicanhypehouse")
+handles <- c("conservativehypehouse", "therepublicanhypehouse", 
+"liberalhypehouse", "leftist", "votebernie", "republicanism")
 
 ```
 
@@ -32,5 +31,14 @@ url
 
 rawToChar(test_req$content)
 
+
+
 ```
+
+```{r}
+
+political <- handles %>% 
+  map_dfr(~get_user_post(count = 1000, username = .x))
+```
+
 
