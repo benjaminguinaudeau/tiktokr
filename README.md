@@ -30,6 +30,12 @@ library(tiktokr)
 ## basic example code
 ```
 
+Install necessary Python libraries
+
+``` r
+install_tiktokr()
+```
+
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
@@ -71,7 +77,7 @@ user_posts <- get_user_post(200, "willsmith")
 hash <- get_hashtag("maincharacter")
 hash_post <- get_hashtag_post(100, "maincharacter")
 
-discover_hashtags(100)
+discover_hashtags()
 ```
 
 ### Download TikTok Videos
@@ -79,7 +85,7 @@ discover_hashtags(100)
 From Trends:
 
 ``` r
-trends <- get_trending(10)
+trends <- get_trending(200)
 
 trends %>%
   split(1:nrow(.)) %>% 
@@ -90,9 +96,13 @@ From hashtag:
 
 ``` r
 
-hash <- get_hashtag("maincharacter")
+hash <- get_hashtag_post(20, "trump2020")
+
 
 trends %>%
+  head(20) 
+
+hash %>%
   split(1:nrow(.)) %>% 
-  purrr::walk(~{download_video(.x$downloadAddr, paste0("video/", .x$id, ".mp4"))})
+  purrr::walk(~{download_video(.x$downloadAddr, paste0("video/hashtag/", .x$id, ".mp4"))})
 ```
