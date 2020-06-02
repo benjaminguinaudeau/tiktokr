@@ -98,5 +98,21 @@ from_unix <- function(x) {
   as.POSIXct(as.numeric(x), origin = '1970-01-01', tz = 'UTC')
 }
 
-# script <- readLines("browser.py")
-# usethis::use_data(script, overwrite = T)
+#'@export
+default_ua <- "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"
+
+#' @export
+get_signature <- function(urls, ua){
+
+  url <- paste(urls, collapse = '", "')
+
+  tries <- 0
+  br <- tryCatch(py$browser(url, ua), error = function(e) NULL, warning = function(w) NULL, message=  function(m) NULL)
+  while(tries < 3 & inherits(br, "try-error")){
+    br <- tryCatch(py$browser(url, ua), error = function(e) NULL, warning = function(w) NULL, message=  function(m) NULL)
+    tries <- tries + 1
+  }
+
+  paste0(urls, "&_signature=", br$signature)
+
+}

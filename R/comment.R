@@ -1,20 +1,4 @@
 #' @export
-get_signature <- function(urls, ua){
-
-  url <- paste(urls, collapse = '", "')
-
-  tries <- 0
-  br <- tryCatch(py$browser(url, ua), error = function(e) NULL, warning = function(w) NULL, message=  function(m) NULL)
-  while(tries < 3 & inherits(br, "try-error")){
-    br <- tryCatch(py$browser(url, ua), error = function(e) NULL, warning = function(w) NULL, message=  function(m) NULL)
-    tries <- tries + 1
-  }
-
-  paste0(urls, "&_signature=", br$signature)
-
-}
-
-#' @export
 get_comment <- function(post_id, ua, verify = "", id_cookie = ""){
 
   response <- tibble::tibble()
