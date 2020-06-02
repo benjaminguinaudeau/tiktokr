@@ -4,7 +4,7 @@
 \alias{get_count}
 \title{get_count}
 \usage{
-get_count(type, ..., count = 1)
+get_count(type, ..., count = 1, save = F, path = NULL, query = NULL)
 }
 \description{
 Main function to get data from tiktok

@@ -4,12 +4,8 @@
 \alias{get_hashtag}
 \title{get_hashtag}
 \usage{
-get_hashtag(music_id)
-
-get_hashtag(music_id)
+get_hashtag(hashtag)
 }
 \description{
 Function to get information on a given hashtag
-
-Function to get information on a given piece of music
 }

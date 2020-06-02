@@ -4,7 +4,7 @@
 \alias{get_user_post}
 \title{get_user_post}
 \usage{
-get_user_post(count, username)
+get_user_post(count, username, ...)
 }
 \arguments{
 \item{count}{Numeric indicating the number of tiktoks to scrape}
