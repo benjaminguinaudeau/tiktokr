@@ -38,7 +38,7 @@ rawToChar(test_req$content)
 ```{r}
 
 political <- handles %>% 
-  map_dfr(~get_user_post(count = 1000, username = .x))
+  purrr::map_dfr(~get_user_post(count = 1000, username = .x))
 ```
 
 

@@ -58,8 +58,7 @@ parse_json_structure <- function(x){
 #' @description Intitalize puppeeter browser in the reticulate session
 #' @export
 init_tiktokr <- function(){
-  readr::write_lines(script, "tiktokr.py")
-  reticulate::source_python("tiktokr.py")
+  reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/tiktokr.py")
 }
 
 #' install_tiktokr
@@ -83,11 +82,19 @@ download_video <- function(url, path){
 
 #' quiet
 #' @export
-
 quiet <- function(x) {
   sink(tempfile())
   on.exit(sink())
   invisible(force(x))
+}
+
+#' from_unix
+#'
+#' @description Converts UNIX timestamp to datetime format
+#' @param x UNIX timestamp to be converted to datetime
+#' @export
+from_unix <- function(x) {
+  as.POSIXct(as.numeric(x), origin = '1970-01-01', tz = 'UTC')
 }
 
 # script <- readLines("browser.py")

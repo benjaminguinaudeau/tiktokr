@@ -114,3 +114,41 @@ url <- urls[1]
     #         return r.content
 ```
 
+
+
+
+
+```{r}
+library(dockeR)
+
+prune_containers()
+
+# First Container
+chrome <- docker$new(
+  image_src = "selenium/standalone-chrome-debug", #Image to be used (model for the container)
+  container_name = "chrome",
+  other_arguments = "-p 4446:4444 -p 4447:5900"
+  
+  # Name you want to use
+)
+```
+
+```{r}
+list_container() %>%
+  dplyr::glimpse()
+```
+
+
+```{r}
+# chrome %>% get_port(filter_port = c(4444, 5900))
+
+library(tidyselenium)
+library(dockeR)
+
+
+
+chrome <- chrome_init(cache = "tiktokr")
+
+```
+
+

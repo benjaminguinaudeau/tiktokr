@@ -4,7 +4,7 @@
 \alias{get_music_post}
 \title{get_music_post}
 \usage{
-get_music_post(count, music_id)
+get_music_post(count, music_id, ...)
 }
 \arguments{
 \item{count}{Numeric indicating the number of tiktoks to scrape}
