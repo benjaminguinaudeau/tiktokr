@@ -45,6 +45,7 @@ get_url <- function(type, count = NULL,
 #' @export
 #' @param x json to be parsed
 parse_json_structure <- function(x){
+  if(is.null(x)){return(tibble::tibble())}
   x %>%
     dplyr::select_if(is.data.frame) %>%
     purrr::map_dfc(~{

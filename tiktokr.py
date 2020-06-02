@@ -4,9 +4,9 @@ import random
 from pyppeteer_stealth import stealth
 
 class browser:
-    def __init__(self, url):
+    def __init__(self, url, ua = "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"):
         self.url = url
-        self.userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"
+        self.userAgent = ua
         self.args = [
             "--no-sandbox",
             "--disable-setuid-sandbox",
@@ -41,6 +41,14 @@ class browser:
         }})
 
         await self.page.setUserAgent(self.userAgent)
+        
+        # await self.page.evaluate('''() => {
+        #     document.setCookie = 'sid_guard=de3a7d545d4bc49a1764a0f003df17fa%7C1590933930%7C5184000%7CThu%2C+30-Jul-2020+14%3A05%3A30+GMT'
+        #     }''')
+        # await self.page.evaluate('''() => {
+        #     return document.cookie
+        # }''')
+        # await self.page.setCookie({'sid_guard'='de3a7d545d4bc49a1764a0f003df17fa%7C1590933930%7C5184000%7CThu%2C+30-Jul-2020+14%3A05%3A30+GMT'})
 
         await self.page.goto("https://www.tiktok.com/trending?lang=en", {
             'waitUntil': "load"

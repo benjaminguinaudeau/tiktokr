@@ -9,9 +9,12 @@ get_trending <- function(count) get_count("trending", count = count)
 #' @param username Character indicating the username to scrape
 #' @param count Numeric indicating the number of tiktoks to scrape
 #' @export
-get_user_post <- function(count, username, ...){
+get_user_post <- function(count, username, save = F, path = NULL, ...){
   user <- get_username(username)
-  get_count(type = "user_post", count = count, user_id = user$id, sec_uid = user$secUid, query = username, ...)
+
+  if(length(user) == 0){message(glue::glue("{username} was not found")) ; return(tibble::tibble())}
+
+  get_count(type = "user_post", count = count, user_id = user$id, sec_uid = user$secUid, query = username, save = save, path = path, ...)
 }
 
 #' get_music_post
@@ -29,9 +32,10 @@ get_music_post <- function(count, music_id, ...){
 #' @param hashtag Hashtag to scrape
 #' @param count Number of tiktoks to retrieve
 #' @export
-get_hashtag_post <- function(count, hashtag, ...){
+get_hashtag_post <- function(count, hashtag, cursor = 0, save = F, path = NULL,  ...){
   hash <- get_hashtag(hashtag)
-  get_count("hashtag_post", count = count, hash_id = hash$challengeInfo.challenge.id, query = hashtag, ...)
+  get_count(type = "hashtag_post", count = count, cursor = cursor, hash_id = hash$challengeInfo.challenge.id, query = hashtag,
+            save = save, path = path, ...)
 }
 
 #' discover_hashtags
