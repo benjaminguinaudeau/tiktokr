@@ -30,16 +30,6 @@ library(tiktokr)
 ## basic example code
 ```
 
-Install necessary Python libraries
-
-``` r
-install_tiktokr()
-```
-
-## Example
-
-This is a basic example which shows you how to solve a common problem:
-
 Make sure to use your preferred Python installation
 
 ``` r
@@ -48,7 +38,15 @@ library(reticulate)
 use_python(py_config()$python)
 ```
 
-Initialize `tiktokr`
+Install necessary Python libraries
+
+``` r
+install_tiktokr()
+```
+
+## Examples
+
+First you need to initialize `tiktokr`
 
 ``` r
 init_tiktokr()
@@ -97,10 +95,6 @@ From hashtag:
 ``` r
 
 hash <- get_hashtag_post(20, "trump2020")
-
-
-trends %>%
-  head(20) 
 
 hash %>%
   split(1:nrow(.)) %>% 

@@ -36,17 +36,6 @@ library(tiktokr)
 ## basic example code
 ```
 
-Install necessary Python libraries
-
-```{r, eval = F}
-install_tiktokr()
-```
-
-
-## Example
-
-This is a basic example which shows you how to solve a common problem:
-
 Make sure to use your preferred Python installation
 
 ```{r}
@@ -56,12 +45,21 @@ use_python(py_config()$python)
 
 ```
 
-Initialize `tiktokr`
+Install necessary Python libraries
+
+```{r, eval = F}
+install_tiktokr()
+```
+
+
+## Examples
+
+First you need to initialize `tiktokr`
 
 ```{r}
 init_tiktokr()
-
 ```
+
 
 ### Get TikTok trends
 
@@ -113,10 +111,6 @@ From hashtag:
 ```{r, eval = F}
 
 hash <- get_hashtag_post(20, "trump2020")
-
-
-trends %>%
-  head(20) 
 
 hash %>%
   split(1:nrow(.)) %>% 

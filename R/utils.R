@@ -58,8 +58,7 @@ parse_json_structure <- function(x){
 #' @description Intitalize puppeeter browser in the reticulate session
 #' @export
 init_tiktokr <- function(){
-  readr::write_lines(script, "tiktokr.py")
-  reticulate::source_python("tiktokr.py")
+  reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/tiktokr.py")
 }
 
 #' install_tiktokr
