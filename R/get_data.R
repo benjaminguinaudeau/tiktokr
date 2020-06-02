@@ -25,6 +25,7 @@ get_count <- function(type, cursor = 0, ..., count = 1, save = F, path = NULL, q
 
 
     # cli::cli_alert("Url: {url}")
+
     out <- get_data(url)
 
 
