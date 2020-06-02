@@ -28,9 +28,15 @@ get_comment <- function(post_id, ua, verify = "", id_cookie = ""){
 
 
 
-      data <- res %>%
+      data <- try({
+        res %>%
         .[["comments"]] %>%
         parse_json_structure
+      })
+
+      if(inherits(data, "try-error")){
+        return(response)
+      }
 
       if(length(data) == 0){
         message("\nReached end of comments or no more comments available.")
