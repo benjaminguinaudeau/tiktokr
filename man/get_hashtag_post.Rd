@@ -4,7 +4,7 @@
 \alias{get_hashtag_post}
 \title{get_hashtag_post}
 \usage{
-get_hashtag_post(count, hashtag, ...)
+get_hashtag_post(count, hashtag, cursor = 0, save = F, path = NULL, ...)
 }
 \arguments{
 \item{count}{Number of tiktoks to retrieve}
