@@ -101,8 +101,21 @@ from_unix <- function(x) {
 #'@export
 default_ua <- "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"
 
+
 #' @export
-get_signature <- function(urls, ua){
+get_signature <- function(urls, ua, port = NULL){
+  if(!is.null(port)){
+      out <- urls %>%
+        purrr::map_chr(get_docker_signature, port = ports)
+  } else {
+      out <- get_puppeteer_signature(urls, ua)
+  }
+
+  paste0(urls, "&_signature=", out)
+}
+
+#' @export
+get_puppeteer_signature <- function(urls, ua){
 
   url <- paste(urls, collapse = '", "')
 
@@ -113,6 +126,11 @@ get_signature <- function(urls, ua){
     tries <- tries + 1
   }
 
-  paste0(urls, "&_signature=", br$signature)
+  return(br$signature)
+}
 
+#' @export
+get_docker_signature <- function(url, port = 8080){
+  res <- httr::POST(url  = glue::glue("localhost:{port}/signature"), body = url)
+  jsonlite::fromJSON(rawToChar(res$content))$signature
 }

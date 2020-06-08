@@ -79,9 +79,9 @@ get_count <- function(type, cursor = 0, ..., count = 1, save = F, path = NULL, q
 #' @param url url to visit and get data from
 #' @param parse logical. whether to return parsed data or not. Defautls to \code{TRUE}.
 #' @export
-get_data <- function(url, ua = default_ua, parse = T){
+get_data <- function(url, ua = default_ua, parse = T, port = NULL){
 
-  final_url = get_signature(url, ua)
+  final_url = get_signature(url, ua, port = port)
 
   .GlobalEnv[["test_req"]] <- req <- try({
     httr::GET(final_url, httr::add_headers(

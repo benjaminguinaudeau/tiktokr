@@ -1,5 +1,5 @@
 #' @export
-get_comment <- function(post_id, ua, verify = "", id_cookie = ""){
+get_comment <- function(post_id, ua, verify = "", id_cookie = "", port = NULL){
 
   response <- tibble::tibble()
   count <- sample(50:100, 1)
@@ -10,7 +10,7 @@ get_comment <- function(post_id, ua, verify = "", id_cookie = ""){
     cursor <- seq(max_cursor - 1000, max_cursor - 1, 50)
     cat("\rCursor: ", max_cursor, "  Comments: ", nrow(response))
     urls <- glue::glue("https://www.tiktok.com/api/comment/list/?aweme_id={post_id}&cursor={cursor}&count={count}&aid=1988&app_language=fr&device_platform=web_pc&current_region=CA&fromWeb=1&channel_id=5&verifyFp={verify}")
-    fins <- get_signature(urls, ua)
+    fins <- get_signature(urls, ua, port = port)
     # fin <- get_signature(url, ua)
 
 
@@ -57,7 +57,7 @@ get_comment <- function(post_id, ua, verify = "", id_cookie = ""){
 }
 
 #' @export
-get_reply <- function(comment_id, post_id, ua, verify, id_cookie){
+get_reply <- function(comment_id, post_id, ua, verify, id_cookie, port = NULL){
 
   response <- tibble::tibble()
   count <- sample(50:100, 1)
@@ -68,7 +68,7 @@ get_reply <- function(comment_id, post_id, ua, verify, id_cookie){
     cursor <- seq(max_cursor - 1000, max_cursor - 1, 50)
     cat("\rCursor: ", max_cursor, "  Comments: ", nrow(response))
     urls <- glue::glue("https://www.tiktok.com/api/comment/list/reply/?comment_id={comment_id}&item_id={post_id}&cursor={cursor}&count={count}&aid=1988&app_language=fr&device_platform=web_pc&current_region=CA&fromWeb=1&channel_id=5&verifyFp={verify}")
-    fins <- get_signature(urls, ua)
+    fins <- get_signature(urls, ua, port = port)
     # fin <- get_signature(urls[1], ua)
 
     index <- 1
