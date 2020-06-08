@@ -106,7 +106,7 @@ default_ua <- "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKi
 get_signature <- function(urls, ua, port = NULL){
   if(!is.null(port)){
       out <- urls %>%
-        purrr::map_chr(get_docker_signature, port = ports)
+        purrr::map_chr(get_docker_signature, port = port)
   } else {
       out <- get_puppeteer_signature(urls, ua)
   }
