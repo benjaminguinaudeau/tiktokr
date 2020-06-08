@@ -41,7 +41,7 @@ get_count <- function(type, cursor = 0, port = NULL, ..., count = 1, save = F, p
     }
 
     response <- dplyr::bind_rows(response, data) %>%
-      dplyr::distinct(id, .keep_all = T)
+      dplyr::distinct_at(1, .keep_all = T)
 
     max_cursor = as.character(out$maxCursor)
     if(length(max_cursor) == 0){
