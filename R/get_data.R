@@ -2,7 +2,7 @@
 #' @description Main function to get data from tiktok
 #' @export
 
-get_count <- function(type, cursor = 0, ..., count = 1, save = F, path = NULL, query = NULL){
+get_count <- function(type, cursor = 0, port = NULL, ..., count = 1, save = F, path = NULL, query = NULL){
   response <- tibble::tibble()
   max_count <- 99
   max_cursor <- cursor
@@ -15,7 +15,7 @@ get_count <- function(type, cursor = 0, ..., count = 1, save = F, path = NULL, q
     # url <- get_url(type, count = 99, user_id = user_id, sec_uid = sec_uid, min = min_cursor, max = max_cursor)
     # url <- get_url(type, count = real_count, hash_id = hash_id, min = min_cursor, max = max_cursor)
 
-    out <- get_data(url)
+    out <- get_data(url, port = port)
 
     if(type %in% c("hashtag_post", "sound_post")){
       out$items <- out$body$itemListData

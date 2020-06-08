@@ -7,6 +7,7 @@
 get_count(
   type,
   cursor = 0,
+  port = NULL,
   ...,
   count = 1,
   save = F,
