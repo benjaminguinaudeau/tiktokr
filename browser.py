@@ -55,10 +55,10 @@ class browser:
         })
 
         self.signature = await self.page.evaluate('''() => {
-          var t = {}
-          webpackJsonp.filter(x => typeof x[1]['duD4'] === "function")[0][1].duD4(null, t)
+          //var t = {}
+          // webpackJsonp.filter(x => typeof x[1]['duD4'] === "function")[0][1].duD4(null, t)
           var urls = ["''' + self.url + '''"]
-          var token = urls.map(x => t.sign({url : x}))
+          var token = urls.map(x => window.byted_acrawler.sign({ url: x}))
           return token;
           }''')
 
