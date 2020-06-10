@@ -6,10 +6,14 @@
 \usage{
 get_url(
   type,
-  count = NULL,
+  n = NULL,
+  cursor = NULL,
+  verify = NULL,
   username = NULL,
   user_id = NULL,
   sec_uid = NULL,
+  comment_id = NULL,
+  post_id = NULL,
   hashtag = NULL,
   hash_id = NULL,
   music_id = NULL,

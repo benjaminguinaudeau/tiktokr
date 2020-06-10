@@ -5,19 +5,19 @@
 \title{get_hashtag_post}
 \usage{
 get_hashtag_post(
-  count,
   hashtag,
+  n = 10000,
   cursor = 0,
-  save = F,
-  path = NULL,
+  save_dir = NULL,
   port = NULL,
+  ua = default_ua,
   ...
 )
 }
 \arguments{
-\item{count}{Number of tiktoks to retrieve}
-
 \item{hashtag}{Hashtag to scrape}
+
+\item{n}{Number of tiktoks to retrieve}
 }
 \description{
 Function to get tiktoks from a given hashtag

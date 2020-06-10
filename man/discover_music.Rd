@@ -4,7 +4,7 @@
 \alias{discover_music}
 \title{discover_music}
 \usage{
-discover_music()
+discover_music(ua = default_ua)
 }
 \description{
 Function to get 20 suggested musics

@@ -4,7 +4,7 @@
 \alias{discover_hashtags}
 \title{discover_hashtags}
 \usage{
-discover_hashtags()
+discover_hashtags(ua = default_ua)
 }
 \description{
 Function to get 20 suggested hashtags

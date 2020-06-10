@@ -16,11 +16,11 @@ devtools::load_all()
 
 init_tiktokr()
 
-source_python("browser.py")
+get_user_post(username =  ".rebemb", 200)
+hash_post <- get_hashtag_post(hashtag = "maincharacter", 200)
 
-
-get_user_post(1000,username =  "_____________junnu")
-
+hash_post
+out
 ```
 
 

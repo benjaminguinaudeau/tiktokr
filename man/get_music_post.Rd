@@ -4,12 +4,12 @@
 \alias{get_music_post}
 \title{get_music_post}
 \usage{
-get_music_post(count, music_id, port = NULL, ...)
+get_music_post(music_id, n = 10000, port = NULL, ua = default_ua, ...)
 }
 \arguments{
-\item{count}{Numeric indicating the number of tiktoks to scrape}
-
 \item{music_id}{Character indicating the \code{music_id} to scrape}
+
+\item{n}{Numeric indicating the number of tiktoks to scrape}
 }
 \description{
 Function to get tiktoks from a given music piece
