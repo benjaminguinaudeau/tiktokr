@@ -5,6 +5,7 @@
 \title{get_hashtag_post}
 \usage{
 <<<<<<< HEAD
+<<<<<<< HEAD
 get_hashtag_post(
   hashtag,
   n = 10000,
@@ -17,6 +18,17 @@ get_hashtag_post(
 =======
 get_hashtag_post(count, hashtag, ...)
 >>>>>>> 16eb9ca88d97851895eba630e32e62f679ed8cf8
+=======
+get_hashtag_post(
+  count,
+  hashtag,
+  cursor = 0,
+  save = F,
+  path = NULL,
+  port = NULL,
+  ...
+)
+>>>>>>> 5aea75f85e35f9e94fcecf3b8ebdf3d43888f62d
 }
 \arguments{
 \item{hashtag}{Hashtag to scrape}

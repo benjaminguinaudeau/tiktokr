@@ -5,6 +5,7 @@
 \title{get_url}
 \usage{
 <<<<<<< HEAD
+<<<<<<< HEAD
 get_url(
   type,
   n = NULL,
@@ -15,17 +16,28 @@ get_url(
   sec_uid = NULL,
   comment_id = NULL,
   post_id = NULL,
+=======
+get_url(
+  type,
+  count = NULL,
+  username = NULL,
+  user_id = NULL,
+  sec_uid = NULL,
+>>>>>>> 5aea75f85e35f9e94fcecf3b8ebdf3d43888f62d
   hashtag = NULL,
   hash_id = NULL,
   music_id = NULL,
   max = 0,
   min = 0
 )
+<<<<<<< HEAD
 =======
 get_url(type, count = NULL, username = NULL, user_id = NULL,
   sec_uid = NULL, hashtag = NULL, hash_id = NULL, music_id = NULL,
   max = 0, min = 0)
 >>>>>>> 16eb9ca88d97851895eba630e32e62f679ed8cf8
+=======
+>>>>>>> 5aea75f85e35f9e94fcecf3b8ebdf3d43888f62d
 }
 \description{
 handle the api url based on a given type

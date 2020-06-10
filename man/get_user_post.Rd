@@ -5,6 +5,7 @@
 \title{get_user_post}
 \usage{
 <<<<<<< HEAD
+<<<<<<< HEAD
 get_user_post(
   username,
   n = 10000,
@@ -16,6 +17,9 @@ get_user_post(
 =======
 get_user_post(count, username, ...)
 >>>>>>> 16eb9ca88d97851895eba630e32e62f679ed8cf8
+=======
+get_user_post(count, username, save = F, path = NULL, port = NULL, ...)
+>>>>>>> 5aea75f85e35f9e94fcecf3b8ebdf3d43888f62d
 }
 \arguments{
 \item{username}{Character indicating the username to scrape}
