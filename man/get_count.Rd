@@ -4,8 +4,16 @@
 \alias{get_count}
 \title{get_count}
 \usage{
-get_count(type, cursor = 0, port = NULL, ..., count = 1, save = F,
-  path = NULL, query = NULL)
+get_count(
+  type,
+  cursor = 0,
+  port = NULL,
+  ...,
+  count = 1,
+  save = F,
+  path = NULL,
+  query = NULL
+)
 }
 \description{
 Main function to get data from tiktok
