@@ -4,7 +4,7 @@
 \alias{get_data}
 \title{get_data}
 \usage{
-get_data(url, parse = T)
+get_data(url, ua = default_ua, parse = T, port = NULL)
 }
 \arguments{
 \item{url}{url to visit and get data from}

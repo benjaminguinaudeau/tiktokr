@@ -2,32 +2,20 @@
 #' @description Main function to get data from tiktok
 #' @export
 
-get_count <- function(type, ..., count = 1, save = F, path = NULL, query = NULL){
+get_count <- function(type, cursor = 0, port = NULL, ..., count = 1, save = F, path = NULL, query = NULL){
   response <- tibble::tibble()
   max_count <- 99
-  max_cursor <- 0
-  # max_cursor <- 100000000
-  min_cursor <- 0
-  # min_cursor <- 100000000
-  set <- 1
+  max_cursor <- cursor
+  min_cursor <- cursor
 
-  # while(length(response) < count){
   while(nrow(response) < count){
-    cat("\rPage: ", set, "  TikToks: ", nrow(response))
-    if(count < max_count){
-      real_count <- count
-    } else {
-      real_count <- max_count
-    }
+    cat("\rCursor: ", max_cursor, "  TikToks: ", nrow(response))
 
-    url <- get_url(type, count = real_count, min = min_cursor, max = max_cursor, ...)
-    # url <- get_url(type, count = real_count, user_id = user_id, sec_uid = sec_uid, min = min_cursor, max = max_cursor)
+    url <- get_url(type, count = 99, min = min_cursor, max = max_cursor, ...)
+    # url <- get_url(type, count = 99, user_id = user_id, sec_uid = sec_uid, min = min_cursor, max = max_cursor)
     # url <- get_url(type, count = real_count, hash_id = hash_id, min = min_cursor, max = max_cursor)
 
-
-    # cli::cli_alert("Url: {url}")
-    out <- quiet(get_data(url))
-
+    out <- get_data(url, port = port)
 
     if(type %in% c("hashtag_post", "sound_post")){
       out$items <- out$body$itemListData
@@ -41,36 +29,49 @@ get_count <- function(type, ..., count = 1, save = F, path = NULL, query = NULL)
       return(data)
     } else {
       data <- out$items %>% parse_json_structure
+      if(length(data) == 0){
+        message("\nReached end of query or no more TikToks available.")
+        if(save){
+          if(!dir.exists(path)){dir.create(path)}
+          saveRDS(data, glue::glue("{path}/{query}.rds"))
+          return(T)
+        }
+        return(response)
+      }
     }
 
-    if(save){
-      if(!dir.exists(path)){dir.create(path)}
-      saveRDS(data, glue::glue("{path}/{query}_{set}.RDS"))
+    response <- dplyr::bind_rows(response, data) %>%
+      dplyr::distinct_at(1, .keep_all = T)
 
-    } else {
-      response <- dplyr::bind_rows(response, data) %>%
-        dplyr::distinct(id, .keep_all = T)
+    max_cursor = as.character(out$maxCursor)
+    if(length(max_cursor) == 0){
+      out <- out$body
+      max_cursor <- out$maxCursor
     }
-
-    set <- set + 1
-
-    real_count = count-nrow(response)
-    max_cursor = out$body$maxCursor
-    if(length(max_cursor) == 0){max_cursor <- as.character(out$maxCursor)}
-    if(type != "user_post"){ min_cursor = out$body$minCursor}
-    if(type != "user_post" & length(min_cursor) == 0){min_cursor <- as.character(out$minCursor)}
+    if(type != "user_post"){ min_cursor = as.character(out$minCursor)}
 
     utils::flush.console()
 
-    if("hasMore" %in% names(out$body)){
-      if(!out$body$hasMore){
+    if("hasMore" %in% names(out)){
+      if(!out$hasMore){
         message("\nReached end of query or no more TikToks available.")
+        if(save){
+          if(!dir.exists(path)){dir.create(path)}
+          readr::write_rds(data, glue::glue("{path}/{query}.rds"))
+          return(T)
+        }
         return(response)
       }
     }
   }
 
-  return(response)
+  if(save){
+    if(!dir.exists(path)){dir.create(path)}
+    saveRDS(data, glue::glue("{path}/{query}.rds"))
+    return(T)
+  }
+    return(response)
+
 }
 
 #' get_data
@@ -78,24 +79,17 @@ get_count <- function(type, ..., count = 1, save = F, path = NULL, query = NULL)
 #' @param url url to visit and get data from
 #' @param parse logical. whether to return parsed data or not. Defautls to \code{TRUE}.
 #' @export
-get_data <- function(url, parse = T){
+get_data <- function(url, ua = default_ua, parse = T, port = NULL){
 
-  tries <- 0
-  br <- try(py$browser(url))
-  while(tries < 3 & inherits(br, "try-error")){
-    br <- try(py$browser(url))
-    tries <- tries + 1
-  }
-
-  final_url = paste0(url, "&_signature=", br$signature)
+  final_url = get_signature(url, ua, port = port)
 
   .GlobalEnv[["test_req"]] <- req <- try({
     httr::GET(final_url, httr::add_headers(
 
-    `method`= "GET",
-    `accept-encoding` = "gzip, deflate, br",
-    `referrer` = "https://www.tiktok.com/tag/jakefromstate?lang=en",
-    `user-agent` = br$userAgent))
+      `method`= "GET",
+      `accept-encoding` = "gzip, deflate, br",
+      `referrer` = "https://www.tiktok.com/tag/jakefromstate?lang=en",
+      `user-agent` = ua))
   })
 
   if(inherits(req, "try-error")){stop("Error happened while requesting")}

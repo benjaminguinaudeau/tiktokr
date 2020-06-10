@@ -45,6 +45,7 @@ get_url <- function(type, count = NULL,
 #' @export
 #' @param x json to be parsed
 parse_json_structure <- function(x){
+  if(is.null(x)){return(tibble::tibble())}
   x %>%
     dplyr::select_if(is.data.frame) %>%
     purrr::map_dfc(~{
@@ -58,7 +59,7 @@ parse_json_structure <- function(x){
 #' @description Intitalize puppeeter browser in the reticulate session
 #' @export
 init_tiktokr <- function(){
-  reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/tiktokr.py")
+  reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/browser.py")
 }
 
 #' install_tiktokr
@@ -97,5 +98,39 @@ from_unix <- function(x) {
   as.POSIXct(as.numeric(x), origin = '1970-01-01', tz = 'UTC')
 }
 
-# script <- readLines("browser.py")
-# usethis::use_data(script, overwrite = T)
+#'@export
+default_ua <- "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"
+
+
+#' @export
+get_signature <- function(urls, ua, port = NULL){
+  if(!is.null(port)){
+      out <- urls %>%
+        purrr::map_chr(get_docker_signature, port = port)
+  } else {
+      out <- get_puppeteer_signature(urls, ua)
+  }
+
+  paste0(urls, "&_signature=", out)
+}
+
+#' @export
+get_puppeteer_signature <- function(urls, ua){
+
+  url <- paste(urls, collapse = '", "')
+
+  tries <- 0
+  br <- tryCatch(py$browser(url, ua), error = function(e) NULL, warning = function(w) NULL, message=  function(m) NULL)
+  while(tries < 3 & inherits(br, "try-error")){
+    br <- tryCatch(py$browser(url, ua), error = function(e) NULL, warning = function(w) NULL, message=  function(m) NULL)
+    tries <- tries + 1
+  }
+
+  return(br$signature)
+}
+
+#' @export
+get_docker_signature <- function(url, port = 8080){
+  res <- httr::POST(url  = glue::glue("localhost:{port}/signature"), body = url)
+  jsonlite::fromJSON(rawToChar(res$content))$signature
+}

@@ -16,6 +16,11 @@ devtools::load_all()
 
 init_tiktokr()
 
+source_python("browser.py")
+
+
+get_user_post(1000,username =  "_____________junnu")
+
 ```
 
 

@@ -4,7 +4,7 @@
 \alias{get_hashtag}
 \title{get_hashtag}
 \usage{
-get_hashtag(hashtag)
+get_hashtag(hashtag, port = NULL)
 }
 \description{
 Function to get information on a given hashtag
