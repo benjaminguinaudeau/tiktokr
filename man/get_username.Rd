@@ -4,7 +4,11 @@
 \alias{get_username}
 \title{get_username}
 \usage{
+<<<<<<< HEAD
 get_username(username, ua = ua_default, port = NULL)
+=======
+get_username(username)
+>>>>>>> 16eb9ca88d97851895eba630e32e62f679ed8cf8
 }
 \description{
 Function to get information on a given username

@@ -4,7 +4,11 @@
 \alias{get_music_post}
 \title{get_music_post}
 \usage{
+<<<<<<< HEAD
 get_music_post(music_id, n = 10000, port = NULL, ua = default_ua, ...)
+=======
+get_music_post(count, music_id, ...)
+>>>>>>> 16eb9ca88d97851895eba630e32e62f679ed8cf8
 }
 \arguments{
 \item{music_id}{Character indicating the \code{music_id} to scrape}

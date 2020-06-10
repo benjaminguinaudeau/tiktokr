@@ -4,6 +4,7 @@
 \alias{get_url}
 \title{get_url}
 \usage{
+<<<<<<< HEAD
 get_url(
   type,
   n = NULL,
@@ -20,6 +21,11 @@ get_url(
   max = 0,
   min = 0
 )
+=======
+get_url(type, count = NULL, username = NULL, user_id = NULL,
+  sec_uid = NULL, hashtag = NULL, hash_id = NULL, music_id = NULL,
+  max = 0, min = 0)
+>>>>>>> 16eb9ca88d97851895eba630e32e62f679ed8cf8
 }
 \description{
 handle the api url based on a given type

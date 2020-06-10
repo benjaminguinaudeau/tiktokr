@@ -4,7 +4,11 @@
 \alias{get_music}
 \title{get_music}
 \usage{
+<<<<<<< HEAD
 get_music(music_id, port = NULL, ua = ua_default)
+=======
+get_music(music_id)
+>>>>>>> 16eb9ca88d97851895eba630e32e62f679ed8cf8
 }
 \description{
 Function to get information on a given piece of music

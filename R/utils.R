@@ -63,17 +63,17 @@ parse_json_structure <- function(x){
     dplyr::bind_cols(dplyr::select_if(x, ~!is.data.frame(.x)))
 }
 
-#' init_tiktokr
+#' tk_init
 #' @description Intitalize puppeeter browser in the reticulate session
 #' @export
-init_tiktokr <- function(){
+tk_init <- function(){
   reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/browser.py")
 }
 
-#' install_tiktokr
+#' tk_install
 #' @description Install needed python libraries
 #' @export
-install_tiktokr <- function(){
+tk_install <- function(){
   reticulate::py_install(c("pyppeteer", "pyppeteer_stealth", "asyncio"), pip = T)
 }
 
@@ -84,7 +84,7 @@ install_tiktokr <- function(){
 #' @export
 #' @param url url of tiktok to scrape
 #' @param path path to download tiktok video to
-download_video <- function(url, path){
+tk_dl_video <- function(url, path){
   raw_video <- get_data(url, parse = F)
   writeBin(raw_video, path)
 }

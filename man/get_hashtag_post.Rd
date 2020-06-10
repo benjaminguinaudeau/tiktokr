@@ -4,6 +4,7 @@
 \alias{get_hashtag_post}
 \title{get_hashtag_post}
 \usage{
+<<<<<<< HEAD
 get_hashtag_post(
   hashtag,
   n = 10000,
@@ -13,6 +14,9 @@ get_hashtag_post(
   ua = default_ua,
   ...
 )
+=======
+get_hashtag_post(count, hashtag, ...)
+>>>>>>> 16eb9ca88d97851895eba630e32e62f679ed8cf8
 }
 \arguments{
 \item{hashtag}{Hashtag to scrape}
