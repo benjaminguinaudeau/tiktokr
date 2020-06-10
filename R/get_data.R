@@ -46,7 +46,7 @@ get_n <- function(type, n = 10000, cursor = 0, ua = default_ua, port = NULL, que
     }
 
     response <- dplyr::bind_rows(response, data) %>%
-      dplyr::distinct_at(vars(contains("id")), .keep_all = T)
+      dplyr::distinct_at(dplyr::vars(dplyr::contains("id")), .keep_all = T)
 
     max_cursor = as.character(out$maxCursor)
 
