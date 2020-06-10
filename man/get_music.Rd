@@ -4,7 +4,7 @@
 \alias{get_music}
 \title{get_music}
 \usage{
-get_music(music_id, port = NULL)
+get_music(music_id)
 }
 \description{
 Function to get information on a given piece of music
