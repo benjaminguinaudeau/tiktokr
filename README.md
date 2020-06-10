@@ -29,7 +29,6 @@ Load library
 
 ``` r
 library(tiktokr)
-## basic example code
 ```
 
 Make sure to use your preferred Python installation
@@ -43,7 +42,7 @@ use_python(py_config()$python)
 Install necessary Python libraries
 
 ``` r
-install_tiktokr()
+tk_install()
 ```
 
 ## Examples
@@ -51,7 +50,7 @@ install_tiktokr()
 First you need to initialize `tiktokr`
 
 ``` r
-init_tiktokr()
+tk_init()
 ```
 
 ### Get TikTok trends
@@ -60,45 +59,61 @@ Returns a tibble with trends.
 
 ``` r
 # Trend
-trends <- get_trending(200)
+trends <- tk_posts(scope = "trends", n = 200)
 ```
 
-### Get TikToks from user name
+### Get TikToks from User
+
+Note: User query often only provides 2k hits but limit is unclear.
+Sample seems to be from most recent to oldest.
 
 ``` r
-# Username
-user <- get_username("willsmith")
-user_posts <- get_user_post(200, "willsmith")
+user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50)
 ```
 
 ### Get TikToks from hashtag
 
-``` r
-hash <- get_hashtag("maincharacter")
-hash_post <- get_hashtag_post(100, "maincharacter")
+Note: Hashtags query only provides 2k hits, which are not drawn randomly
+or based on the most recent post date but rather **some mix of recency
+and popularity** of TikToks.
 
-discover_hashtags()
+``` r
+hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 100)
+```
+
+### Discover Hashtags
+
+``` r
+tk_discover(scope = "hashtag")
+```
+
+### Discover Music
+
+``` r
+tk_discover(scope = "music")
 ```
 
 ### Download TikTok Videos
 
+With `tk_dl_video` you can download videos from TikTok.
+
 From Trends:
 
 ``` r
-trends <- get_trending(200)
+trends <- tk_posts(scope = "trends", n = 5)
 
 trends %>%
   split(1:nrow(.)) %>% 
-  purrr::walk(~{download_video(.x$downloadAddr, paste0("video/", .x$id, ".mp4"))})
+  purrr::walk(~{tk_dl_video(.x$downloadAddr, paste0("video/", .x$id, ".mp4"))})
 ```
 
 From hashtag:
 
 ``` r
 
-hash <- get_hashtag_post(20, "trump2020")
+hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 5)
 
-hash %>%
+hash_post %>%
   split(1:nrow(.)) %>% 
-  purrr::walk(~{download_video(.x$downloadAddr, paste0("video/hashtag/", .x$id, ".mp4"))})
+  purrr::walk(~{tk_dl_video(.x$downloadAddr, paste0("video/hashtag/", .x$id, ".mp4"))})
 ```

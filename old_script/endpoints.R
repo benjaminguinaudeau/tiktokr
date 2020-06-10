@@ -14,7 +14,7 @@ get_user_post <- function(username, n = 10000, save_dir = NULL, port = NULL, ua 
 
   if(length(user) == 0){message(glue::glue("{username} was not found")) ; return(tibble::tibble())}
 
-  get_n(type = "user_post", n = n, user_id = user$id, sec_uid = user$secUid, query = username, save_dir = save_dir, port = port, ua = ua, ...)
+
 }
 
 #' get_music_post
@@ -33,10 +33,10 @@ get_music_post <- function(music_id, n = 10000, port = NULL, ua = default_ua,  .
 #' @param n Number of tiktoks to retrieve
 #' @export
 get_hashtag_post <- function(hashtag, n = 10000, cursor = 0, save_dir = NULL,  port = NULL, ua = default_ua){
-  hash <- get_hashtag(hashtag, port = port, ua = ua)
+  hash <- get_hashtag(hashtag, port = port, ua = default_ua)
 
   get_n(type = "hashtag_post", n = n, cursor = cursor, hash_id = hash$challengeInfo.challenge.id, query = hashtag,
-        save_dir = save_dir, port = port, ua = ua )
+        save_dir = save_dir, port = port, ua = ua)
 }
 
 #' discover_hashtags

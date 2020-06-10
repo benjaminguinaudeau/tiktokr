@@ -4,21 +4,17 @@
 \alias{get_n}
 \title{get_n}
 \usage{
-<<<<<<< HEAD:man/get_n.Rd
 get_n(
   type,
   n = 10000,
   cursor = 0,
   ua = default_ua,
   port = NULL,
-  ...,
+  query_1 = NULL,
+  query_2 = NULL,
   save_dir = NULL,
   query = NULL
 )
-=======
-get_count(type, cursor = 0, port = NULL, ..., count = 1, save = F,
-  path = NULL, query = NULL)
->>>>>>> 16eb9ca88d97851895eba630e32e62f679ed8cf8:man/get_count.Rd
 }
 \description{
 Main function to get data from tiktok
