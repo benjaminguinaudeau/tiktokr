@@ -16,17 +16,17 @@ tk_posts <- function(scope, query, n = 10000, cursor = 0, save_dir = NULL, port 
     "user" = {
       user <- tk_info(scope = scope, query)
       if(length(user) == 0){message(glue::glue("{query} was not found")) ; return(tibble::tibble())}
-      get_n(type = "user_post", n = n, user_id = user$id, sec_uid = user$secUid, query = query,
+      get_n(type = "user_post", n = n, query_1 = user$id, query_2 = user$secUid, query = query,
                       save_dir = save_dir, port = port, ua = ua)
     },
     "hashtag" = {
       hash <- tk_info(scope = scope, query)
       ## TODO: hash$challengeInfo.challenge.id this probably needs to be a better variable name!
-      get_n(type = "hashtag_post", n = n, cursor = cursor, hash_id = hash$challengeInfo.challenge.id, query = query,
+      get_n(type = "hashtag_post", n = n, cursor = cursor, query_1 = hash$challengeInfo.challenge.id, query = query,
                       save_dir = save_dir, port = port, ua = ua )
     },
     "music" = {
-      get_n("music_post", n = n, music_id = query, query = query,
+      get_n("music_post", n = n, query_1 = query, query = query,
                     save_dir = save_dir, port = port, ua = ua)
     },
     "trends" = {

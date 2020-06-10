@@ -10,7 +10,8 @@ get_n(
   cursor = 0,
   ua = default_ua,
   port = NULL,
-  ...,
+  query_1 = NULL,
+  query_2 = NULL,
   save_dir = NULL,
   query = NULL
 )

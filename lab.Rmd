@@ -26,6 +26,11 @@ out
 tk_posts("user", ".rebemb", n = 200)
 tk_posts("hashtag", "maincharacter", n = 200)
 
+verify <- "verify_kay1yvq6_an5HqH2M_Zzjt_4hFz_8j6m_3qlCUNrgSeZj"
+id_cookie <-  "sid_guard=35bf8323c960acb13c82431d1603eacf%7C1591122635%7C5184000%7CSat%2C+01-Aug-2020+18%3A30%3A35+GMT"
+
+tk_comment(post_id = "6826034192380431622", verify = verify,id_cookie = id_cookie)
+
 ```
 
 
