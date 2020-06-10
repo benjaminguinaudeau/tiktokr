@@ -4,7 +4,15 @@
 \alias{tk_posts}
 \title{tk_posts}
 \usage{
-tk_posts(scope, query, n, ...)
+tk_posts(
+  scope,
+  query,
+  n = 10000,
+  cursor = 0,
+  save_dir = NULL,
+  port = NULL,
+  ua = default_ua
+)
 }
 \arguments{
 \item{scope}{Character indicating the endpoint to scrape (must be "user", "hashtag", "music" or "trends")}

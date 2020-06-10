@@ -5,21 +5,21 @@
 #' @param query Character indicating the username/hashtag/music_id to scrape
 #'   or "music")
 #' @export
-tk_info <- function(scope, query, ua = default_ua){
+tk_info <- function(scope, query, ua = default_ua, port = NULL){
 
   res <- switch(
     scope,
     "user" = {
       url <- get_url("username", username = query)
-      get_data(url, ua = ua)$userInfo$user
+      get_data(url, ua = ua, port = port)$userInfo$user
     },
     "hashtag" = {
       url <- get_url("hashtag", hashtag = query)
-      get_data(url, ua = ua)
+      get_data(url, ua = ua, port = port)
     },
     "music" = {
       url <- get_url("music", music_id = query)
-      get_data(url, ua = ua)
+      get_data(url, ua = ua, port = port)
     }
   )
 

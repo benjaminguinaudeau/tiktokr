@@ -4,7 +4,7 @@
 \alias{tk_discover}
 \title{tk_discover}
 \usage{
-tk_discover(scope)
+tk_discover(scope, save_dir = NULL, port = NULL, ua = default_ua)
 }
 \arguments{
 \item{scope}{Character indicating the endpoint to scrape (must be "hashtag" or "music")}

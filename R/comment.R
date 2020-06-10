@@ -1,5 +1,5 @@
 #' @export
-get_comment <- function(post_id, ua, verify = "", id_cookie = "", port = NULL){
+tk_comment <- function(post_id, ua, verify = "", id_cookie = "", port = NULL){
 
   response <- tibble::tibble()
   count <- sample(50:100, 1)
@@ -54,7 +54,7 @@ get_comment <- function(post_id, ua, verify = "", id_cookie = "", port = NULL){
 }
 
 #' @export
-get_reply <- function(comment_id, post_id, ua, verify, id_cookie, port = NULL){
+tk_reply <- function(comment_id, post_id, ua, verify, id_cookie, port = NULL){
 
   response <- tibble::tibble()
   count <- sample(50:100, 1)
@@ -66,7 +66,6 @@ get_reply <- function(comment_id, post_id, ua, verify, id_cookie, port = NULL){
     cat("\rCursor: ", max_cursor, "  Comments: ", nrow(response))
     urls <- get_url("reply", comment_id = comment_id, post_id = post_id, n = count, cursor = cursor, verify = verify)
     fins <- get_signature(urls, ua, port = port)
-    # fin <- get_signature(urls[1], ua)
 
     index <- 1
 
