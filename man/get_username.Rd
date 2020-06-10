@@ -4,7 +4,7 @@
 \alias{get_username}
 \title{get_username}
 \usage{
-get_username(username, port = NULL)
+get_username(username)
 }
 \description{
 Function to get information on a given username
