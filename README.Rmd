@@ -77,6 +77,8 @@ trends <- tk_posts(scope = "trends", n = 200)
 
 ### Get TikToks from User
 
+Note: User query often only provides 2k hits but limit is unclear. Sample seems to be from most recent to oldest.
+
 ```{r, eval = F}
 user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50)
 
@@ -84,6 +86,8 @@ user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50)
 
 
 ### Get TikToks from hashtag
+
+Note: Hashtags query only provides 2k hits, which are not drawn randomly or based on the most recent post date but rather **some mix of recency and popularity** of TikToks.
 
 ```{r, eval = F}
 hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 100)
