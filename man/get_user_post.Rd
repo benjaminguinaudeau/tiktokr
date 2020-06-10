@@ -4,12 +4,27 @@
 \alias{get_user_post}
 \title{get_user_post}
 \usage{
+<<<<<<< HEAD
+<<<<<<< HEAD
+get_user_post(
+  username,
+  n = 10000,
+  save_dir = NULL,
+  port = NULL,
+  ua = default_ua,
+  ...
+)
+=======
 get_user_post(count, username, ...)
+>>>>>>> 16eb9ca88d97851895eba630e32e62f679ed8cf8
+=======
+get_user_post(count, username, save = F, path = NULL, port = NULL, ...)
+>>>>>>> 5aea75f85e35f9e94fcecf3b8ebdf3d43888f62d
 }
 \arguments{
-\item{count}{Numeric indicating the number of tiktoks to scrape}
-
 \item{username}{Character indicating the username to scrape}
+
+\item{n}{Numeric indicating the number of tiktoks to scrape}
 }
 \description{
 Function to get tiktoks from a given username

@@ -2,8 +2,10 @@
 #' @description handle the api url based on a given type
 #' @export
 
-get_url <- function(type, count = NULL,
+get_url <- function(type, n = NULL, cursor = NULL,
+                    verify = NULL,
                     username = NULL, user_id = NULL, sec_uid = NULL,
+                    comment_id = NULL, post_id = NULL,
                     hashtag = NULL, hash_id = NULL,
                     music_id = NULL,
                     max = 0, min =0){
@@ -11,10 +13,10 @@ get_url <- function(type, count = NULL,
   switch(
     type,
     "trending" = {
-      glue::glue("https://m.tiktok.com/api/item_list/?count={count}&id=1&type=5&secUid=&maxCursor={max}&minCursor={min}&sourceType=12&appId=1233&verifyFp=")
+      glue::glue("https://m.tiktok.com/api/item_list/?count={n}&id=1&type=5&secUid=&maxCursor={max}&minCursor={min}&sourceType=12&appId=1233&verifyFp=")
     },
     "user_post" = {
-      glue::glue("https://m.tiktok.com/api/item_list/?count={count}&id={user_id}&type=1&secUid={sec_uid}&maxCursor={max}&minCursor={min}&sourceType=8&appId=1233&region=US&language=en&verifyFp=")
+      glue::glue("https://m.tiktok.com/api/item_list/?count={n}&id={user_id}&type=1&secUid={sec_uid}&maxCursor={max}&minCursor={min}&sourceType=8&appId=1233&region=US&language=en&verifyFp=")
     },
     "username" = {
       glue::glue("https://m.tiktok.com/api/user/detail/?uniqueId={username}&language=en&verifyFp=")
@@ -23,19 +25,25 @@ get_url <- function(type, count = NULL,
       glue::glue("https://m.tiktok.com/api/challenge/detail/?verifyFP=&challengeName={hashtag}&language=en")
     },
     "hashtag_post" = {
-      glue::glue("https://m.tiktok.com/share/item/list?secUid=&id={hash_id}&type=3&count={count}&minCursor={min}&maxCursor={max}&shareUid=&lang=en&verifyFp=")
+      glue::glue("https://m.tiktok.com/share/item/list?secUid=&id={hash_id}&type=3&count={n}&minCursor={min}&maxCursor={max}&shareUid=&lang=en&verifyFp=")
     },
     "discover_hash" = {
-      glue::glue("https://m.tiktok.com/node/share/discover?noUser=1&userCount={count}&scene=0&verifyFp=")
+      glue::glue("https://m.tiktok.com/node/share/discover?noUser=1&userCount={n}&scene=0&verifyFp=")
     },
     "music" = {
       glue::glue("https://m.tiktok.com/api/music/detail/?musicId={music_id}&language=en&verifyFp=")
     },
     "music_post" = {
-      glue::glue("https://m.tiktok.com/share/item/list?secUid=&id={music_id}&type=4&count={count}&minCursor={min}&maxCursor={max}&shareUid=&lang=en&verifyFp=")
+      glue::glue("https://m.tiktok.com/share/item/list?secUid=&id={music_id}&type=4&count={n}&minCursor={min}&maxCursor={max}&shareUid=&lang=en&verifyFp=")
     },
     "discover_music" = {
       glue::glue("https://m.tiktok.com/node/share/discover?noUser=1&userCount=30&scene=0&verifyFp=")
+    },
+    "comment" = {
+      glue::glue("https://www.tiktok.com/api/comment/list/?aweme_id={post_id}&cursor={cursor}&count={n}&aid=1988&app_language=fr&device_platform=web_pc&current_region=CA&fromWeb=1&channel_id=5&verifyFp={verify}")
+    },
+    "reply" = {
+      glue::glue("https://www.tiktok.com/api/comment/list/reply/?comment_id={comment_id}&item_id={post_id}&cursor={cursor}&count={n}&aid=1988&app_language=fr&device_platform=web_pc&current_region=CA&fromWeb=1&channel_id=5&verifyFp={verify}")
     }
   )
 }
@@ -55,17 +63,17 @@ parse_json_structure <- function(x){
     dplyr::bind_cols(dplyr::select_if(x, ~!is.data.frame(.x)))
 }
 
-#' tk_init
+#' init_tiktokr
 #' @description Intitalize puppeeter browser in the reticulate session
 #' @export
-tk_init <- function(){
+init_tiktokr <- function(){
   reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/browser.py")
 }
 
-#' tk_install
+#' install_tiktokr
 #' @description Install needed python libraries
 #' @export
-tk_install <- function(){
+install_tiktokr <- function(){
   reticulate::py_install(c("pyppeteer", "pyppeteer_stealth", "asyncio"), pip = T)
 }
 
@@ -76,7 +84,7 @@ tk_install <- function(){
 #' @export
 #' @param url url of tiktok to scrape
 #' @param path path to download tiktok video to
-tk_dl_video <- function(url, path){
+download_video <- function(url, path){
   raw_video <- get_data(url, parse = F)
   writeBin(raw_video, path)
 }

@@ -9,10 +9,9 @@ get_comment <- function(post_id, ua, verify = "", id_cookie = "", port = NULL){
   while(has_more){
     cursor <- seq(max_cursor - 1000, max_cursor - 1, 50)
     cat("\rCursor: ", max_cursor, "  Comments: ", nrow(response))
-    urls <- glue::glue("https://www.tiktok.com/api/comment/list/?aweme_id={post_id}&cursor={cursor}&count={count}&aid=1988&app_language=fr&device_platform=web_pc&current_region=CA&fromWeb=1&channel_id=5&verifyFp={verify}")
-    fins <- get_signature(urls, ua, port = port)
-    # fin <- get_signature(url, ua)
 
+    urls <- get_url("comment", post_id = post_id, n = count, cursor = cursor, verify = verify)
+    fins <- get_signature(urls, ua, port = port)
 
     index <- 1
     while(has_more & index <= 20){
@@ -25,8 +24,6 @@ get_comment <- function(post_id, ua, verify = "", id_cookie = "", port = NULL){
         .[["content"]] %>%
         rawToChar %>%
         jsonlite::fromJSON()
-
-
 
       data <- try({
         res %>%
@@ -67,7 +64,7 @@ get_reply <- function(comment_id, post_id, ua, verify, id_cookie, port = NULL){
   while(has_more){
     cursor <- seq(max_cursor - 1000, max_cursor - 1, 50)
     cat("\rCursor: ", max_cursor, "  Comments: ", nrow(response))
-    urls <- glue::glue("https://www.tiktok.com/api/comment/list/reply/?comment_id={comment_id}&item_id={post_id}&cursor={cursor}&count={count}&aid=1988&app_language=fr&device_platform=web_pc&current_region=CA&fromWeb=1&channel_id=5&verifyFp={verify}")
+    urls <- get_url("reply", comment_id = comment_id, post_id = post_id, n = count, cursor = cursor, verify = verify)
     fins <- get_signature(urls, ua, port = port)
     # fin <- get_signature(urls[1], ua)
 

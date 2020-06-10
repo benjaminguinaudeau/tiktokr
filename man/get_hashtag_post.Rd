@@ -4,12 +4,36 @@
 \alias{get_hashtag_post}
 \title{get_hashtag_post}
 \usage{
+<<<<<<< HEAD
+<<<<<<< HEAD
+get_hashtag_post(
+  hashtag,
+  n = 10000,
+  cursor = 0,
+  save_dir = NULL,
+  port = NULL,
+  ua = default_ua,
+  ...
+)
+=======
 get_hashtag_post(count, hashtag, ...)
+>>>>>>> 16eb9ca88d97851895eba630e32e62f679ed8cf8
+=======
+get_hashtag_post(
+  count,
+  hashtag,
+  cursor = 0,
+  save = F,
+  path = NULL,
+  port = NULL,
+  ...
+)
+>>>>>>> 5aea75f85e35f9e94fcecf3b8ebdf3d43888f62d
 }
 \arguments{
-\item{count}{Number of tiktoks to retrieve}
-
 \item{hashtag}{Hashtag to scrape}
+
+\item{n}{Number of tiktoks to retrieve}
 }
 \description{
 Function to get tiktoks from a given hashtag

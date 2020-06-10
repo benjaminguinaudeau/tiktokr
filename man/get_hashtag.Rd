@@ -4,7 +4,15 @@
 \alias{get_hashtag}
 \title{get_hashtag}
 \usage{
+<<<<<<< HEAD
+<<<<<<< HEAD
+get_hashtag(hashtag, port = NULL, ua = ua_default)
+=======
 get_hashtag(hashtag)
+>>>>>>> 16eb9ca88d97851895eba630e32e62f679ed8cf8
+=======
+get_hashtag(hashtag, port = NULL)
+>>>>>>> 5aea75f85e35f9e94fcecf3b8ebdf3d43888f62d
 }
 \description{
 Function to get information on a given hashtag

@@ -1,49 +1,58 @@
-#' get_count
+#' get_n
 #' @description Main function to get data from tiktok
 #' @export
 
-get_count <- function(type, cursor = 0, port = NULL, ..., count = 1, save = F, path = NULL, query = NULL){
+get_n <- function(type, n = 10000, cursor = 0, ua = default_ua, port = NULL, ..., save_dir = NULL, query = NULL){
   response <- tibble::tibble()
-  max_count <- 99
+  max_n <- 99
   max_cursor <- cursor
   min_cursor <- cursor
 
-  while(nrow(response) < count){
+  while(nrow(response) < n){
     cat("\rCursor: ", max_cursor, "  TikToks: ", nrow(response))
 
-    url <- get_url(type, count = 99, min = min_cursor, max = max_cursor, ...)
-    # url <- get_url(type, count = 99, user_id = user_id, sec_uid = sec_uid, min = min_cursor, max = max_cursor)
-    # url <- get_url(type, count = real_count, hash_id = hash_id, min = min_cursor, max = max_cursor)
+    url <- get_url(type, n = 99, min = min_cursor, max = max_cursor, ...)
+    # url <- get_url(type, n = 99, user_id = user_id, sec_uid = sec_uid, min = min_cursor, max = max_cursor)
+    # url <- get_url(type, n = 99, hash_id = hash_id, min = min_cursor, max = max_cursor)
 
-    out <- get_data(url, port = port)
+    out <- get_data(url, ua = ua, port = port, parse = T)
 
     if(type %in% c("hashtag_post", "sound_post")){
       out$items <- out$body$itemListData
     }
 
     if(stringr::str_detect(type, "discover")){
+
       data <- out$body$exploreList %>%
         purrr::compact() %>%
         purrr::map_dfr(parse_json_structure)
 
       return(data)
+
     } else {
+
       data <- out$items %>% parse_json_structure
+
       if(length(data) == 0){
+
         message("\nReached end of query or no more TikToks available.")
-        if(save){
-          if(!dir.exists(path)){dir.create(path)}
-          saveRDS(data, glue::glue("{path}/{query}.rds"))
-          return(T)
+
+        if(!is.null(save_dir)){
+
+          if(!dir.exists(save_dir)){dir.create(save_dir)}
+          saveRDS(response, glue::glue("{save_dir}/{query}_{as.numeric(Sys.time())}.rds"))
+
         }
+
         return(response)
       }
     }
 
     response <- dplyr::bind_rows(response, data) %>%
-      dplyr::distinct_at(1, .keep_all = T)
+      dplyr::distinct_at(vars(contains("id")), .keep_all = T)
 
     max_cursor = as.character(out$maxCursor)
+
     if(length(max_cursor) == 0){
       out <- out$body
       max_cursor <- out$maxCursor
@@ -55,22 +64,21 @@ get_count <- function(type, cursor = 0, port = NULL, ..., count = 1, save = F, p
     if("hasMore" %in% names(out)){
       if(!out$hasMore){
         message("\nReached end of query or no more TikToks available.")
-        if(save){
-          if(!dir.exists(path)){dir.create(path)}
-          readr::write_rds(data, glue::glue("{path}/{query}.rds"))
-          return(T)
+        if(!is.null(save_dir)){
+          if(!dir.exists(save_dir)){dir.create(save_dir)}
+          saveRDS(response, glue::glue("{save_dir}/{query}_{as.numeric(Sys.time())}.rds"))
         }
         return(response)
       }
     }
   }
 
-  if(save){
-    if(!dir.exists(path)){dir.create(path)}
-    saveRDS(data, glue::glue("{path}/{query}.rds"))
-    return(T)
+  if(!is.null(save_dir)){
+    if(!dir.exists(save_dir)){dir.create(save_dir)}
+    saveRDS(response, glue::glue("{save_dir}/{query}_{as.numeric(Sys.time())}.rds"))
   }
-    return(response)
+
+  return(response)
 
 }
 
@@ -81,14 +89,13 @@ get_count <- function(type, cursor = 0, port = NULL, ..., count = 1, save = F, p
 #' @export
 get_data <- function(url, ua = default_ua, parse = T, port = NULL){
 
-  final_url = get_signature(url, ua, port = port)
+  final_url = get_signature(url, ua = ua, port = port)
 
   .GlobalEnv[["test_req"]] <- req <- try({
     httr::GET(final_url, httr::add_headers(
-
       `method`= "GET",
       `accept-encoding` = "gzip, deflate, br",
-      `referrer` = "https://www.tiktok.com/tag/jakefromstate?lang=en",
+      `referrer` = "https://www.tiktok.com/trending?lang=en",
       `user-agent` = ua))
   })
 
@@ -99,7 +106,6 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL){
   content <- rawToChar(req$content)
 
   if(content == "") content <- "{}"
-
 
   out <- content %>%
     jsonlite::fromJSON()

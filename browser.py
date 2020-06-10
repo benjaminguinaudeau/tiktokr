@@ -42,33 +42,21 @@ class browser:
 
         await self.page.setUserAgent(self.userAgent)
         
-        # await self.page.evaluate('''() => {
-        #     document.setCookie = 'sid_guard=de3a7d545d4bc49a1764a0f003df17fa%7C1590933930%7C5184000%7CThu%2C+30-Jul-2020+14%3A05%3A30+GMT'
-        #     }''')
-        # await self.page.evaluate('''() => {
-        #     return document.cookie
-        # }''')
-        # await self.page.setCookie({'sid_guard'='de3a7d545d4bc49a1764a0f003df17fa%7C1590933930%7C5184000%7CThu%2C+30-Jul-2020+14%3A05%3A30+GMT'})
-
         await self.page.goto("https://www.tiktok.com/trending?lang=en", {
             'waitUntil': "load"
         })
 
         self.signature = await self.page.evaluate('''() => {
-          //var t = {}
-          // webpackJsonp.filter(x => typeof x[1]['duD4'] === "function")[0][1].duD4(null, t)
           var urls = ["''' + self.url + '''"]
           var token = urls.map(x => window.byted_acrawler.sign({ url: x}))
+          
+          // var t = {}
+          // webpackJsonp.filter(x => typeof x[1]['duD4'] === "function")[0][1].duD4(null, t)
+          // var token = urls.map(x => t.sign({ url: x}))
+         
           return token;
           }''')
 
-        # self.signature = await self.page.evaluate('''() => {
-        #   var t = {}
-        #   webpackJsonp.filter(x => typeof x[1]['duD4'] === "function")[0][1].duD4(null, t)
-        #   var url = "''' + self.url + '''"
-        #   var token = t.sign({url: url})
-        #   return token;
-        #   }''')
         await self.browser.close()
 
 

@@ -4,10 +4,10 @@
 \alias{get_trending}
 \title{get_trending}
 \usage{
-get_trending(count)
+get_trending(n = 10000, ua = default_ua)
 }
 \arguments{
-\item{count}{A numeric scalar indicating the number of tiktoks to scrape}
+\item{n}{A numeric scalar indicating the number of tiktoks to scrape}
 }
 \description{
 Function to get trending tiktoks
