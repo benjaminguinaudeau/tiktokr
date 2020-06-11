@@ -10,15 +10,15 @@ tk_info <- function(scope, query, ua = default_ua, port = NULL){
   res <- switch(
     scope,
     "user" = {
-      url <- get_url("username", query_1 = query, port = port)
+      url <- get_url("username", query_1 = query)
       get_data(url, ua = ua, port = port)$userInfo$user
     },
     "hashtag" = {
-      url <- get_url("hashtag", query_1 = query, port = port)
+      url <- get_url("hashtag", query_1 = query)
       get_data(url, ua = ua, port = port)
     },
     "music" = {
-      url <- get_url("music", query_1 = query, port = port)
+      url <- get_url("music", query_1 = query)
       get_data(url, ua = ua, port = port)
     }
   )
