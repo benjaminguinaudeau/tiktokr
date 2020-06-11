@@ -68,7 +68,6 @@ tk_reply <- function(comment_id, post_id, ua = default_ua, verify, id_cookie, po
     fins <- get_signature(urls, ua, port = port)
 
     index <- 1
-
     while(has_more & index <= 20){
       res <- httr::GET(fins[index],
                        httr::add_headers(.headers = c(
