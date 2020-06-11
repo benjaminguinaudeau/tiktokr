@@ -68,10 +68,13 @@ get_url <- function(type, n = NULL, cursor = NULL,
 #' @param x json to be parsed
 parse_json_structure <- function(x){
   if(is.null(x)){return(tibble::tibble())}
-  suppressMessages({ x %>%
+  suppressMessages({
+    x %>%
       dplyr::select_if(is.data.frame) %>%
-      purrr::map_dfc(~{
-        if(!any(purrr::map_lgl(.x, is.data.frame))){return(.x)}
+      purrr::imap_dfc(~{
+        if(!any(purrr::map_lgl(.x, is.data.frame))){
+          return(purrr::set_names(.x, paste(.y, names(.x), sep = "_")))
+        }
         parse_json_structure(.x)
       }) %>%
       dplyr::bind_cols(dplyr::select_if(x, ~!is.data.frame(.x)))
