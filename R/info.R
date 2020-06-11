@@ -11,7 +11,7 @@ tk_info <- function(scope, query, ua = default_ua, port = NULL){
     scope,
     "user" = {
       url <- get_url("username", query_1 = query)
-      get_data(url, ua = ua, port = port)$userInfo$user
+      get_data(url, ua = ua, port = port)$userInfo
     },
     "hashtag" = {
       url <- get_url("hashtag", query_1 = query)

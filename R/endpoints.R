@@ -16,8 +16,9 @@ tk_posts <- function(scope, query, n = 10000, cursor = 0, save_dir = NULL, port 
     "user" = {
       user <- tk_info(scope = scope, query, port = port, ua = ua)
       if(length(user) == 0){message(glue::glue("{query} was not found")) ; return(tibble::tibble())}
-      get_n(type = "user_post", n = n, query_1 = user$id, query_2 = user$secUid, query = query,
-                      save_dir = save_dir, port = port, ua = ua)
+      get_n(type = "user_post", n = n, query_1 = user$user.id, query_2 = user$user.secUid, query = query,
+            save_dir = save_dir, port = port, ua = ua) %>%
+        bind_cols(user)
     },
     "hashtag" = {
       hash <- tk_info(scope = scope, query, port = port, ua = ua)

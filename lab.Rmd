@@ -14,12 +14,14 @@ reticulate::use_python("/usr/local/bin/python3")
 library(reticulate)
 devtools::load_all()
 
-init_tiktokr()
+tk_init()
 
 get_user_post(username =  ".rebemb", 200)
 hash_post <- get_hashtag_post(hashtag = "maincharacter", 200)
 
 hash_post
+
+
 out
 
 
@@ -42,6 +44,21 @@ tk_comment(post_id = "6826034192380431622", verify = verify,id_cookie = id_cooki
       }) %>%
       dplyr::bind_cols(dplyr::select_if(x, ~!is.data.frame(.x)))
 
+   
+url <- get_url("username", query_1 = "joshua4congress")
+a <- get_data(url, port = NULL)
+
+user <- a$userInfo %>% 
+  rlist::list.flatten() %>% purrr::imap_dfc(~purrr::set_names(tibble::tibble(.x), 
+        .y)) %>%
+  glimpse
+   
+
+ get_n(type = "user_post", n = n, query_1 = user$user.id, query_2 = user$user.secUid, query = query,
+                      save_dir = save_dir, port = port, ua = ua)
+
+user
+   
 ```
 
 
