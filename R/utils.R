@@ -77,7 +77,8 @@ parse_json_structure <- function(x){
         }
         parse_json_structure(.x)
       }) %>%
-      dplyr::bind_cols(dplyr::select_if(x, ~!is.data.frame(.x)))
+      dplyr::bind_cols(dplyr::select_if(x, ~!is.data.frame(.x))) %>%
+      dplyr::mutate_if(is.list, as.character)
   })
 }
 
