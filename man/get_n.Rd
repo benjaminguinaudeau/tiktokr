@@ -13,7 +13,8 @@ get_n(
   query_1 = NULL,
   query_2 = NULL,
   save_dir = NULL,
-  query = NULL
+  query = NULL,
+  vpn = F
 )
 }
 \description{

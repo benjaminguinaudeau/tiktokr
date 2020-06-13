@@ -2,7 +2,7 @@
 #' @description Main function to get data from tiktok
 #' @export
 
-get_n <- function(type, n = 10000, cursor = 0, ua = default_ua, port = NULL, query_1 = NULL, query_2 = NULL, save_dir = NULL, query = NULL){
+get_n <- function(type, n = 10000, cursor = 0, ua = default_ua, port = NULL, query_1 = NULL, query_2 = NULL, save_dir = NULL, query = NULL, vpn = F){
   response <- tibble::tibble()
   max_n <- 99
   max_cursor <- cursor
@@ -12,7 +12,7 @@ get_n <- function(type, n = 10000, cursor = 0, ua = default_ua, port = NULL, que
     cat("\rCursor: ", max_cursor, "  TikToks: ", nrow(response))
 
     url <- get_url(type, n = 99, min = min_cursor, max = max_cursor, query_1 = query_1, query_2 = query_2)
-    out <- get_data(url, ua = ua, port = port, parse = T)
+    out <- get_data(url, ua = ua, port = port, parse = T, vpn = vpn)
 
     if(type %in% c("hashtag_post", "sound_post")){
       out$items <- out$body$itemListData
@@ -84,17 +84,21 @@ get_n <- function(type, n = 10000, cursor = 0, ua = default_ua, port = NULL, que
 #' @param url url to visit and get data from
 #' @param parse logical. whether to return parsed data or not. Defautls to \code{TRUE}.
 #' @export
-get_data <- function(url, ua = default_ua, parse = T, port = NULL){
+get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F){
 
   final_url = get_signature(url, ua = ua, port = port)
 
-  .GlobalEnv[["test_req"]] <- req <- try({
-    httr::GET(final_url, httr::add_headers(
-      `method`= "GET",
-      `accept-encoding` = "gzip, deflate, br",
-      `referrer` = "https://www.tiktok.com/trending?lang=en",
-      `user-agent` = ua))
-  })
+  if(vpn){
+    req <- try(get_vpn_data(final_url, ua))
+  } else {
+    .GlobalEnv[["test_req"]] <- req <- try({
+      httr::GET(final_url, httr::add_headers(
+        `method`= "GET",
+        `accept-encoding` = "gzip, deflate, br",
+        `referrer` = "https://www.tiktok.com/trending?lang=en",
+        `user-agent` = ua))
+    })
+  }
 
   if(inherits(req, "try-error")){stop("Error happened while requesting")}
 

@@ -15,15 +15,41 @@ library(reticulate)
 devtools::load_all()
 
 tk_init()
+hash <- tk_posts(scope = "hashtag", query = "voteblue", n = 10000, port = NULL)
 
+url <- final_url
+head <- list(
+      `method`= "GET",
+      `accept-encoding` = "gzip, deflate, br",
+      `referrer` = "https://www.tiktok.com/trending?lang=en",
+      `user-agent` = "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"
+      )
+head_ <- as.character(head)
+names(head_) <- names(head)
+
+data <- list(url = final_url, head = head)
+
+res <- httr::POST("http://192.168.1.2:5000/get", body = jsonlite::toJSON(data),  encode = "json")
+jsonlite::fromJSON(rawToChar(res$content))
+jsonlite::fromJSON(jsonlite::fromJSON(rawToChar(res$content))
+
+```
+
+
+```{r}
 get_user_post(username =  ".rebemb", 200)
 hash_post <- get_hashtag_post(hashtag = "maincharacter", 200)
 
-hash_post
+ua <- default_ua
+ httr::GET(final_url, httr::add_headers(
+      `method`= "GET",
+      `accept-encoding` = "gzip, deflate, br",
+      `referrer` = "https://www.tiktok.com/trending?lang=en",
+      `user-agent` = ua))
 
-
-out
-
+make_request <- function(url, headers = NULL){
+  
+}
 
 tk_posts(scope = "user",query =  ".rebemb", n = 200)
 tk_posts("hashtag", "maincharacter", n = 200)
@@ -57,8 +83,12 @@ user <- a$userInfo %>%
  get_n(type = "user_post", n = n, query_1 = user$user.id, query_2 = user$user.secUid, query = query,
                       save_dir = save_dir, port = port, ua = ua)
 
-user
-   
+  hash <- tk_posts(scope = "hashtag", query = "votebiden", n = 10000, port = NULL) %>%
+          mutate(timestamp = Sys.time()) %>%
+          parse_output %>%
+          filter(!id %in% already)
+
+     
 ```
 
 

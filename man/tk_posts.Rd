@@ -11,7 +11,8 @@ tk_posts(
   cursor = 0,
   save_dir = NULL,
   port = NULL,
-  ua = default_ua
+  ua = default_ua,
+  vpn = F
 )
 }
 \arguments{
