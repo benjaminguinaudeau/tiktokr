@@ -15,7 +15,7 @@ library(reticulate)
 devtools::load_all()
 
 tk_init()
-hash <- tk_posts(scope = "hashtag", query = "voteblue", n = 10000, port = NULL)
+hash <- tk_posts(scope = "hashtag", query = "obama", n = 200, port = NULL)
 
 url <- final_url
 head <- list(
