@@ -84,12 +84,12 @@ get_n <- function(type, n = 10000, cursor = 0, ua = default_ua, port = NULL, que
 #' @param url url to visit and get data from
 #' @param parse logical. whether to return parsed data or not. Defautls to \code{TRUE}.
 #' @export
-get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F){
+get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, vpn_host = ""){
 
   final_url = get_signature(url, ua = ua, port = port)
 
   if(vpn){
-    req <- try(get_vpn_data(final_url, ua))
+    req <- try(get_vpn_data(final_url, ua, vpn_host = ""))
   } else {
     .GlobalEnv[["test_req"]] <- req <- try({
       httr::GET(final_url, httr::add_headers(

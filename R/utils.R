@@ -104,8 +104,8 @@ tk_install <- function(){
 #' @export
 #' @param url url of tiktok to scrape
 #' @param path path to download tiktok video to
-tk_dl_video <- function(url, path){
-  raw_video <- get_data(url, parse = F)
+tk_dl_video <- function(url, path, ua = default_ua, port = NULL, vpn = F, vpn_host = ""){
+  raw_video <- get_data(url, parse = F, ua = default_ua, port = NULL, vpn = F, vpn_host = "")
   writeBin(raw_video, path)
 }
 
