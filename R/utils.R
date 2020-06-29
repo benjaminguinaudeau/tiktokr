@@ -16,7 +16,7 @@ NULL
 #' @export
 
 get_url <- function(type, n = NULL, cursor = NULL,
-                    verify = NULL,
+                    verify = "",
                     query_1 = NULL, query_2 = NULL,
                     # username = NULL, user_id = NULL, sec_uid = NULL,
                     # comment_id = NULL, post_id = NULL,
@@ -58,6 +58,9 @@ get_url <- function(type, n = NULL, cursor = NULL,
     },
     "reply" = {
       glue::glue("https://www.tiktok.com/api/comment/list/reply/?comment_id={query_1}&item_id={query_2}&cursor={cursor}&count={n}&aid=1988&app_language=fr&device_platform=web_pc&current_region=CA&fromWeb=1&channel_id=5&verifyFp={verify}")
+    },
+    "post" = {
+      glue::glue("https://m.tiktok.com/api/item/detail/?itemId={query_1}&language=en&verifyFp={verify}")
     }
   )
 }

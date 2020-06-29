@@ -35,6 +35,31 @@ jsonlite::fromJSON(jsonlite::fromJSON(rawToChar(res$content))
 
 ```
 
+```{r}
+
+query <- "6836185018620988677"
+
+verify <- "verify_kay1yvq6_an5HqH2M_Zzjt_4hFz_8j6m_3qlCUNrgSeZj"
+
+url <- get_url("post", query_1 = query, verify = verify)
+a <- get_data(url, ua = default_ua, port = NULL, vpn = F)
+
+a
+
+#
+#
+# "id" = {
+#
+#
+#   def getTikTokById(self, id, language='en', proxy=None):
+#
+#     b = browser(api_url, proxy=proxy)
+#     return self.getData(api_url, b, proxy=proxy)
+# }
+
+```
+
+
 
 ```{r}
 get_user_post(username =  ".rebemb", 200)
