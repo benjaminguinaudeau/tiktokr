@@ -29,7 +29,13 @@ tk_info <- function(scope, query, ua = default_ua, port = NULL, vpn = F){
 
   out <- res %>%
     rlist::list.flatten() %>%
-    purrr::imap_dfc(~purrr::set_names(tibble::tibble(.x), .y))
+    purrr::imap_dfc(~{
+      if(length(.x) == 1){
+        return(tibble::tibble(.x) %>% purrr::set_names(.y))
+      } else {
+        return(tibble::tibble(list(.x)) %>% purrr::set_names(.y))
+      }
+    })
 
   return(out)
 }
