@@ -90,6 +90,7 @@ parse_json_structure <- function(x){
 #' @description Intitalize puppeeter browser in the reticulate session
 #' @export
 tk_init <- function(){
+  reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/stealth.py")
   reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/browser.py")
 }
 
