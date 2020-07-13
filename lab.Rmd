@@ -32,6 +32,9 @@ data <- list(url = final_url, head = head)
 res <- httr::POST("http://192.168.1.2:5000/get", body = jsonlite::toJSON(data),  encode = "json")
 jsonlite::fromJSON(rawToChar(res$content))
 jsonlite::fromJSON(jsonlite::fromJSON(rawToChar(res$content))
+                   
+source_python("https://raw.githubusercontent.com/davidteather/TikTok-Api/master/TikTokApi/stealth.py")
+source_python("browser_3.py")
 
 ```
 
@@ -232,6 +235,12 @@ chrome <- docker$new(
   
   # Name you want to use
 )
+library(reticulate)
+
+reticulate::source_python("https://raw.githubusercontent.com/davidteather/TikTok-Api/master/TikTokApi/stealth.py")
+reticulate::source_python("stealth.py")
+reticulate::source_python("browser_3.py")
+
 ```
 
 ```{r}
@@ -252,4 +261,14 @@ chrome <- chrome_init(cache = "tiktokr")
 
 ```
 
+
++ What are the Huber countries exactly? 
+
+
++ How much of the results migth be driven by CMP measurement's error? 
+
++ Manifesto getting longer and less precise about actual position of parties
+
+
++ Convergence of mainstream parties => less polarisation => less reponsiveness
 
