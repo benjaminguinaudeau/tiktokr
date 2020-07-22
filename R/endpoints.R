@@ -16,7 +16,7 @@ tk_posts <- function(scope, query, n = 10000, cursor = 0, save_dir = NULL, port 
     "user" = {
       user <- tk_info(scope = scope, query, port = port, ua = ua, vpn = vpn)
       if(length(user) == 0){message(glue::glue("{query} was not found")) ; return(tibble::tibble())}
-      if(user$stats.videoCount == 0){return(user)}
+      if(user$stats.videoCount == 0 | user$user.secret){return(user)}
       get_n(type = "user_post", n = n, query_1 = user$user.id, query_2 = user$user.secUid, query = query,
             save_dir = save_dir, port = port, ua = ua, vpn = vpn) %>%
         bind_cols(user)
