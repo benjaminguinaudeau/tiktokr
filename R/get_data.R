@@ -2,16 +2,16 @@
 #' @description Main function to get data from tiktok
 #' @export
 
-get_n <- function(type, n = 10000, cursor = 0, ua = default_ua, port = NULL, query_1 = NULL, query_2 = NULL, save_dir = NULL, query = NULL, vpn = F){
+get_n <- function(type, n = 10000, cursor = 0, ua = default_ua, port = NULL, query_1 = NULL, query_2 = NULL, save_dir = NULL, query = NULL, vpn = F, verify = ""){
   response <- tibble::tibble()
-  max_n <- 99
+  max_n <- 50
   max_cursor <- cursor
   min_cursor <- cursor
 
   while(nrow(response) < n){
-    cat("\rCursor: ", max_cursor, "  TikToks: ", nrow(response))
+    # cat("\rCursor: ", max_cursor, "  TikToks: ", nrow(response))
 
-    url <- get_url(type, n = 99, min = min_cursor, max = max_cursor, query_1 = query_1, query_2 = query_2)
+    url <- get_url(type, n = 50, min = min_cursor, max = max_cursor, query_1 = query_1, query_2 = query_2, verify = verify)
     out <- get_data(url, ua = ua, port = port, parse = T, vpn = vpn)
 
     if(type %in% c("hashtag_post", "sound_post")){

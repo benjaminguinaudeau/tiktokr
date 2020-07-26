@@ -27,28 +27,28 @@ get_url <- function(type, n = NULL, cursor = NULL,
   switch(
     type,
     "trending" = {
-      glue::glue("https://m.tiktok.com/api/item_list/?count={n}&id=1&type=5&secUid=&maxCursor={max}&minCursor={min}&sourceType=12&appId=1233&verifyFp=")
+      glue::glue("https://m.tiktok.com/api/item_list/?count={n}&id=1&type=5&secUid=&maxCursor={max}&minCursor={min}&sourceType=12&appId=1233")
     },
     "user_post" = {
-      glue::glue("https://m.tiktok.com/api/item_list/?count={n}&id={query_1}&type=1&secUid={query_2}&maxCursor={max}&minCursor={min}&sourceType=8&appId=1233&region=US&language=en&verifyFp=")
+      glue::glue("https://m.tiktok.com/api/item_list/?count={n}&id={query_1}&type=1&secUid={query_2}&maxCursor={max}&minCursor={min}&sourceType=8&appId=1233")
     },
     "username" = {
-      glue::glue("https://m.tiktok.com/api/user/detail/?uniqueId={query_1}&language=en&verifyFp=")
+      glue::glue("https://m.tiktok.com/api/user/detail/?uniqueId={query_1}")
     },
     "hashtag" = {
       glue::glue("https://m.tiktok.com/api/challenge/detail/?verifyFP=&challengeName={query_1}&language=en")
     },
     "hashtag_post" = {
-      glue::glue("https://m.tiktok.com/share/item/list?secUid=&id={query_1}&type=3&count={n}&minCursor={min}&maxCursor={max}&shareUid=&lang=en&verifyFp=")
+      glue::glue("https://m.tiktok.com/share/item/list?secUid=&id={query_1}&type=3&count={n}&minCursor={min}&maxCursor={max}&shareUid=&lang=en")
     },
     "discover_hash" = {
-      glue::glue("https://m.tiktok.com/node/share/discover?noUser=1&userCount={n}&scene=0&verifyFp=")
+      glue::glue("https://m.tiktok.com/node/share/discover?noUser=1&userCount={n}&scene=0")
     },
     "music" = {
-      glue::glue("https://m.tiktok.com/api/music/detail/?musicId={query_1}&language=en&verifyFp=")
+      glue::glue("https://m.tiktok.com/api/music/detail/?musicId={query_1}&language=en")
     },
     "music_post" = {
-      glue::glue("https://m.tiktok.com/share/item/list?secUid=&id={query_1}&type=4&count={n}&minCursor={min}&maxCursor={max}&shareUid=&lang=en&verifyFp=")
+      glue::glue("https://m.tiktok.com/share/item/list?secUid=&id={query_1}&type=4&count={n}&minCursor={min}&maxCursor={max}&shareUid=&lang=en")
     },
     "discover_music" = {
       glue::glue("https://m.tiktok.com/node/share/discover?noUser=1&userCount=30&scene=0&verifyFp=")
@@ -136,6 +136,9 @@ default_ua <- "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKi
 
 #' @export
 get_signature <- function(urls, ua, port = NULL){
+  verify <- get_verify()
+  urls <- paste0(urls, "&verifyFp=", verify)
+
   if(!is.null(port)){
       out <- urls %>%
         purrr::map_chr(get_docker_signature, port = port)
@@ -144,6 +147,11 @@ get_signature <- function(urls, ua, port = NULL){
   }
 
   paste0(urls, "&_signature=", out)
+}
+
+#' @export
+get_verify <- function(){
+  paste(sample(c(letters, LETTERS, as.character(1:9)), size = 16, replace = T), collapse = "")
 }
 
 #' @export
