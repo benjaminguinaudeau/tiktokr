@@ -174,3 +174,10 @@ get_docker_signature <- function(url, port = 8080){
   res <- httr::POST(url  = glue::glue("localhost:{port}/signature"), body = url)
   jsonlite::fromJSON(rawToChar(res$content))$signature
 }
+
+#' @export
+predict_date <- function(tt_id) {
+
+  from_unix(predict(date_tbl, newdata = tibble(post_id = as.numeric(tt_id))))
+
+}

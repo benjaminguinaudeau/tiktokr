@@ -2,7 +2,7 @@
 #' @description Main function to get data from tiktok
 #' @export
 
-get_n <- function(type, n = 10000, cursor = 0, ua = default_ua, port = NULL, query_1 = NULL, query_2 = NULL, save_dir = NULL, query = NULL, vpn = F, verify = ""){
+get_n <- function(type, n = 10000, start_date = lubridate::dmy("01-01-1900"),cursor = 0, ua = default_ua, port = NULL, query_1 = NULL, query_2 = NULL, save_dir = NULL, query = NULL, vpn = F, verify = ""){
   response <- tibble::tibble()
   max_n <- 50
   max_cursor <- cursor
@@ -56,7 +56,7 @@ get_n <- function(type, n = 10000, cursor = 0, ua = default_ua, port = NULL, que
     }
     if(type != "user_post"){ min_cursor = as.character(out$minCursor)}
 
-    utils::flush.console()
+    # utils::flush.console()
 
     if("hasMore" %in% names(out)){
       if(!out$hasMore){
@@ -66,6 +66,15 @@ get_n <- function(type, n = 10000, cursor = 0, ua = default_ua, port = NULL, que
           saveRDS(response, glue::glue("{save_dir}/{query}_{as.numeric(Sys.time())}.rds"))
         }
         return(response)
+      }
+    }
+
+    if(type == "user_post"){
+      if(min(from_unix(response$createTime)) < start_date){
+        response <- response %>%
+          dplyr::filter(from_unix(createTime) < start_date)
+
+        n <- 0
       }
     }
   }
@@ -84,19 +93,25 @@ get_n <- function(type, n = 10000, cursor = 0, ua = default_ua, port = NULL, que
 #' @param url url to visit and get data from
 #' @param parse logical. whether to return parsed data or not. Defautls to \code{TRUE}.
 #' @export
-get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, vpn_host = ""){
+get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_cookie = "", signed = F){
 
-  final_url = get_signature(url, ua = ua, port = port)
+  if(!signed){
+    final_url = get_signature(url, ua = ua, port = port)
+  } else {
+    final_url <- url
+  }
 
   if(vpn){
-    req <- try(get_vpn_data(final_url, ua, vpn_host = ""))
+    req <- try(get_vpn_data(final_url, ua, id_cookie = id_cookie))
   } else {
     .GlobalEnv[["test_req"]] <- req <- try({
-      httr::GET(final_url, httr::add_headers(
-        `method`= "GET",
-        `accept-encoding` = "gzip, deflate, br",
-        `referrer` = "https://www.tiktok.com/trending?lang=en",
-        `user-agent` = ua))
+      httr::GET(final_url,
+                httr::add_headers(.headers = c(
+                  method = "GET",
+                  referer = "https://www.tiktok.com/trending?lang=en",
+                  `user-agent` = ua,
+                  cookie = id_cookie
+                )))
     })
   }
 
@@ -112,4 +127,30 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, vpn_
     jsonlite::fromJSON()
 
   return(out)
+}
+
+get_vpn_data <- function(final_url, ua = default_ua, vpn_host = "", vpn_port = "", id_cookie = ""){
+
+  if(vpn_host == ""){
+    vpn_host <- Sys.getenv("tiktok_vpn_host")
+  }
+
+  if(vpn_port == ""){
+    vpn_port <- Sys.getenv("tiktok_vpn_port")
+  }
+
+  head <- list(
+    method = "GET",
+    referer = "https://www.tiktok.com/trending?lang=en",
+    `user-agent` = ua,
+    cookie = id_cookie
+  )
+
+  data <- list(url = final_url, head = head)
+
+  req <- try({
+    httr::POST(glue::glue("http://{vpn_host}:{vpn_port}/get"), body = data,  encode = "json")
+  })
+
+  return(req)
 }

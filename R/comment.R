@@ -1,5 +1,5 @@
 #' @export
-tk_comment <- function(post_id, ua = default_ua, verify = "", id_cookie = "", port = NULL){
+tk_comment <- function(post_id, ua = default_ua, verify = "", id_cookie = "", port = NULL, vpn = F, verbose = T){
 
   response <- tibble::tibble()
   count <- sample(50:100, 1)
@@ -8,22 +8,13 @@ tk_comment <- function(post_id, ua = default_ua, verify = "", id_cookie = "", po
 
   while(has_more){
     cursor <- seq(max_cursor - 1000, max_cursor - 1, 50)
-    cat("\rCursor: ", max_cursor, "  Comments: ", nrow(response))
 
     urls <- get_url("comment", query_1 = post_id, n = count, cursor = cursor, verify = verify)
     fins <- get_signature(urls, ua, port = port)
 
     index <- 1
     while(has_more & index <= 20){
-      res <- httr::GET(fins[index],
-                       httr::add_headers(.headers = c(
-                         referer = "https://www.tiktok.com/trending/?lang=fr",
-                         `user-agent` = ua,
-                         cookie = id_cookie)
-                       )) %>%
-        .[["content"]] %>%
-        rawToChar %>%
-        jsonlite::fromJSON()
+      res <- get_data(fins[index], ua = ua, port = port, vpn = vpn, id_cookie = id_cookie, signed = T)
 
       data <- try({
         res %>%
@@ -32,11 +23,17 @@ tk_comment <- function(post_id, ua = default_ua, verify = "", id_cookie = "", po
       })
 
       if(inherits(data, "try-error")){
+        if(verbose){
+            cli::cli_alert_success("[{Sys.time()}] c-{post_id} ({nrow(response)})")
+        }
         return(response)
       }
 
       if(length(data) == 0){
         message("\nReached end of comments or no more comments available.")
+        if(verbose){
+          cli::cli_alert_success("[{Sys.time()}] c-{post_id} ({nrow(response)})")
+        }
         return(response)
       }
 
@@ -49,12 +46,15 @@ tk_comment <- function(post_id, ua = default_ua, verify = "", id_cookie = "", po
     max_cursor <- max_cursor + 1000
   }
 
+  if(verbose){
+    cli::cli_alert_success("[{Sys.time()}] c-{post_id} ({nrow(response)})")
+  }
   return(response)
 
 }
 
 #' @export
-tk_reply <- function(comment_id, post_id, ua = default_ua, verify, id_cookie, port = NULL){
+tk_reply <- function(comment_id, post_id, ua = default_ua, verify, id_cookie, port = NULL, verbose = T){
 
   response <- tibble::tibble()
   count <- sample(50:100, 1)
@@ -84,7 +84,11 @@ tk_reply <- function(comment_id, post_id, ua = default_ua, verify, id_cookie, po
         parse_json_structure
 
       if(length(data) == 0){
-        message("\nReached end of comments or no more comments available.")
+        # message("\nReached end of comments or no more comments available.")
+        if(verbose){
+          cli::cli_alert_success("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} ({nrow(response)})")
+        }
+
         return(response)
       }
 
@@ -97,6 +101,15 @@ tk_reply <- function(comment_id, post_id, ua = default_ua, verify, id_cookie, po
 
     max_cursor <- max_cursor + 1000
 
+  }
+
+  if(verbose){
+    if(inherits(response, "try-error")){
+      cli::cli_alert_danger("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query}")
+      return(tibble::tibble())
+    } else {
+      cli::cli_alert_success("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} ({nrow(response)})")
+    }
   }
 
   return(response)

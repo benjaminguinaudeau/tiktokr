@@ -11,12 +11,13 @@ import requests
 
 
 class browser:
-    def __init__(self, url, api_url = None, language='en', ua = "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"):
+    def __init__(self, url, api_url = None, language='en', ua = "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1", verify = None):
         self.url = url
         self.userAgent = ua
         self.api_url = api_url
         self.referrer = "https://www.tiktok.com/"
         self.language = language
+        self.verify = verify
         self.args = [
             "--no-sandbox",
             "--disable-setuid-sandbox",
@@ -62,9 +63,7 @@ class browser:
     
             await self.page.setUserAgent(self.userAgent)
             await self.page.goto("https://www.bing.com/")
-            
-            self.verifyFp = None
-            
+
             if self.verifyFp == None:
 
                   key = ''
@@ -96,4 +95,5 @@ class browser:
             await self.browser.close()
 
     def __get_js(self, proxy=None):
-        return requests.get("https://sf16-muse-va.ibytedtos.com/obj/rc-web-sdk-gcs/acrawler.js").text
+        # return requests.get("https://sf16-muse-va.ibytedtos.com/obj/rc-web-sdk-gcs/acrawler.js").text
+        return requests.get("https://sf-tk-sg.ibytedtos.com/obj/rc-web-sdk-sg/acrawler.js").text

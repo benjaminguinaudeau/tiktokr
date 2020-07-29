@@ -7,6 +7,7 @@
 get_n(
   type,
   n = 10000,
+  start_date = lubridate::dmy("01-01-1900"),
   cursor = 0,
   ua = default_ua,
   port = NULL,
@@ -14,7 +15,8 @@ get_n(
   query_2 = NULL,
   save_dir = NULL,
   query = NULL,
-  vpn = F
+  vpn = F,
+  verify = ""
 )
 }
 \description{

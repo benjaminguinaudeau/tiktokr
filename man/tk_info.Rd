@@ -7,10 +7,10 @@
 tk_info(scope, query, ua = default_ua, port = NULL, vpn = F)
 }
 \arguments{
-\item{scope}{Character indicating the endpoint to scrape (must be "hashtag", "user"}
-
-\item{query}{Character indicating the username/hashtag/music_id to scrape
+\item{scope}{Character indicating the endpoint to scrape (must be "hashtag", "user"
 or "music")}
+
+\item{query}{Character indicating the username/hashtag/music_id to scrape}
 }
 \description{
 Function to get information on a given user/hashtag/piece of music
