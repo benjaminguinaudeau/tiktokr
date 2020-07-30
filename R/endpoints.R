@@ -48,7 +48,7 @@ tk_posts <- function(scope, query, n = 10000, start_date = lubridate::dmy("01-01
   } else {
     if(verbose){
       if(!any(str_detect(names(out), "stats"))){
-        cli::cli_alert_info("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (not found)")
+        cli::cli_alert_warning("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (not found)")
       } else if (unique(out$stats.videoCount) == 0){
         cli::cli_alert_info("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (no videos)")
       } else if(unique(out$user.secret)){
