@@ -28,7 +28,6 @@ tk_info <- function(scope, query, ua = default_ua, port = NULL, vpn = F){
   )
 
   if(is.null(res)){
-    cli::cli_alert_danger("{query}")
     return(tibble::tibble())
   }
 

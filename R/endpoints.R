@@ -16,11 +16,15 @@ tk_posts <- function(scope, query, n = 10000, start_date = lubridate::dmy("01-01
       scope,
       "user" = {
         user <- tk_info(scope = scope, query, port = port, ua = ua, vpn = vpn)
-        if(length(user) == 0){return(tibble::tibble(author_uniqueId = query, post_id = NA_character_))}
-        if(user$stats.videoCount == 0 | user$user.secret){return(user)}
-        get_n(type = "user_post", n = n, start_date = start_date, query_1 = user$user.id, query_2 = user$user.secUid, query = query,
-              save_dir = save_dir, port = port, ua = ua, vpn = vpn) %>%
-          bind_cols(user)
+        if(length(user) == 0){
+          tibble::tibble(author_uniqueId = query, id = NA_character_)
+        } else if(user$stats.videoCount == 0 | user$user.secret){
+          user
+        } else {
+          get_n(type = "user_post", n = n, start_date = start_date, query_1 = user$user.id, query_2 = user$user.secUid, query = query,
+                save_dir = save_dir, port = port, ua = ua, vpn = vpn) %>%
+            bind_cols(user)
+        }
       },
       "hashtag" = {
         hash <- tk_info(scope = scope, query, port = port, ua = ua, vpn = vpn)
@@ -39,16 +43,26 @@ tk_posts <- function(scope, query, n = 10000, start_date = lubridate::dmy("01-01
     )
   })
 
-  if(verbose){
-    if(inherits(out, "try-error")){
-      # cli::cli_alert_danger("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query}")
-      return(tibble::tibble())
-    } else {
-      cli::cli_alert_success("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} ({nrow(out)})")
+  if(inherits(out, "try-error")){
+    return(tibble::tibble())
+  } else {
+    if(verbose){
+      if(!any(str_detect(names(out), "stats"))){
+        cli::cli_alert_info("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (not found)")
+      } else if (unique(out$stats.videoCount) == 0){
+        cli::cli_alert_info("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (no videos)")
+      } else if(unique(out$user.secret)){
+        cli::cli_alert_info("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (private)")
+      } else {
+
+        cli::cli_alert_success("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} ({nrow(out)})")
+      }
     }
   }
   return(out)
 }
+
+
 
 #' tk_discover
 #' @param scope Character indicating the endpoint to scrape (must be "hashtag" or "music")
