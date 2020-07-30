@@ -16,7 +16,7 @@ tk_posts <- function(scope, query, n = 10000, start_date = lubridate::dmy("01-01
       scope,
       "user" = {
         user <- tk_info(scope = scope, query, port = port, ua = ua, vpn = vpn)
-        if(length(user) == 0){return(tibble::tibble(user.uniqueId = query, post_id = NA_character_))}
+        if(length(user) == 0){return(tibble::tibble(author_uniqueId = query, post_id = NA_character_))}
         if(user$stats.videoCount == 0 | user$user.secret){return(user)}
         get_n(type = "user_post", n = n, start_date = start_date, query_1 = user$user.id, query_2 = user$user.secUid, query = query,
               save_dir = save_dir, port = port, ua = ua, vpn = vpn) %>%
