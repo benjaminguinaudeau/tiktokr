@@ -21,9 +21,15 @@ tk_posts <- function(scope, query, n = 10000, start_date = lubridate::dmy("01-01
         } else if(user$stats.videoCount == 0 | user$user.secret){
           user
         } else {
-          get_n(type = "user_post", n = n, start_date = start_date, query_1 = user$user.id, query_2 = user$user.secUid, query = query,
+          tmp <- get_n(type = "user_post", n = n, start_date = start_date, query_1 = user$user.id, query_2 = user$user.secUid, query = query,
                 save_dir = save_dir, port = port, ua = ua, vpn = vpn) %>%
             dplyr::bind_cols(user)
+          if(nrow(tmp) == 0){
+            user$stats.videoCount <- 0
+            user
+          } else {
+            tmp
+          }
         }
       },
       "hashtag" = {
