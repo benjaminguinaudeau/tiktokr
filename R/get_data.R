@@ -32,7 +32,7 @@ get_n <- function(type, n = 10000, start_date = lubridate::dmy("01-01-1900"),cur
 
       if(length(data) == 0){
 
-        message("\nReached end of query or no more TikToks available.")
+        # message("\nReached end of query or no more TikToks available.")
 
         if(!is.null(save_dir)){
 
@@ -60,7 +60,7 @@ get_n <- function(type, n = 10000, start_date = lubridate::dmy("01-01-1900"),cur
 
     if("hasMore" %in% names(out)){
       if(!out$hasMore){
-        message("\nReached end of query or no more TikToks available.")
+        # message("\nReached end of query or no more TikToks available.")
         if(!is.null(save_dir)){
           if(!dir.exists(save_dir)){dir.create(save_dir)}
           saveRDS(response, glue::glue("{save_dir}/{query}_{as.numeric(Sys.time())}.rds"))
