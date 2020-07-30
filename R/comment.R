@@ -22,20 +22,8 @@ tk_comment <- function(post_id, ua = default_ua, verify = "", id_cookie = "", po
         parse_json_structure
       })
 
-      if(inherits(data, "try-error")){
-        if(verbose){
-            cli::cli_alert_success("[{Sys.time()}] c-{post_id} ({nrow(response)})")
-        }
-        return(response)
-      }
-
-      if(length(data) == 0){
-        message("\nReached end of comments or no more comments available.")
-        if(verbose){
-          cli::cli_alert_success("[{Sys.time()}] c-{post_id} ({nrow(response)})")
-        }
-        return(response)
-      }
+      if(inherits(data, "try-error")){ has_more <- F ; break }
+      if(length(data) == 0){ has_more <- F ; break }
 
       response <- dplyr::bind_rows(response, data) %>%
         dplyr::distinct(cid, .keep_all = T)
@@ -47,8 +35,9 @@ tk_comment <- function(post_id, ua = default_ua, verify = "", id_cookie = "", po
   }
 
   if(verbose){
-    cli::cli_alert_success("[{Sys.time()}] c-{post_id} ({nrow(response)})")
+      cli::cli_alert_success("[{Sys.time()}] c-{post_id} ({nrow(response)})")
   }
+
   return(response)
 
 }
