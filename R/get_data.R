@@ -129,6 +129,7 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_c
   return(out)
 }
 
+#' @export
 get_vpn_data <- function(final_url, ua = default_ua, vpn_host = "", vpn_port = "", id_cookie = ""){
 
   if(vpn_host == ""){
