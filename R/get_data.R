@@ -93,7 +93,7 @@ get_n <- function(type, n = 10000, start_date = lubridate::dmy("01-01-1900"),cur
 #' @param url url to visit and get data from
 #' @param parse logical. whether to return parsed data or not. Defautls to \code{TRUE}.
 #' @export
-get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_cookie = "", signed = F){
+get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_cookie = "", signed = F, time_out = 10){
 
   if(!signed){
     final_url = get_signature(url, ua = ua, port = port)
@@ -102,7 +102,7 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_c
   }
 
   if(vpn){
-    req <- try(get_vpn_data(final_url, ua, id_cookie = id_cookie))
+    req <- try(get_vpn_data(final_url, ua, id_cookie = id_cookie, time_out = time_out))
   } else {
     .GlobalEnv[["test_req"]] <- req <- try({
       httr::GET(final_url,
@@ -111,7 +111,8 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_c
                   referer = "https://www.tiktok.com/trending?lang=en",
                   `user-agent` = ua,
                   cookie = id_cookie
-                )))
+                ),
+                timeout = httr::timeout(time_out)))
     })
   }
 
@@ -130,7 +131,7 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_c
 }
 
 #' @export
-get_vpn_data <- function(final_url, ua = default_ua, vpn_host = "", vpn_port = "", id_cookie = ""){
+get_vpn_data <- function(final_url, ua = default_ua, vpn_host = "", vpn_port = "", id_cookie = "", time_out = 10){
 
   if(vpn_host == ""){
     vpn_host <- Sys.getenv("tiktok_vpn_host")
@@ -150,7 +151,7 @@ get_vpn_data <- function(final_url, ua = default_ua, vpn_host = "", vpn_port = "
   data <- list(url = final_url, head = head)
 
   req <- try({
-    httr::POST(glue::glue("http://{vpn_host}:{vpn_port}/get"), body = data,  encode = "json")
+    httr::POST(glue::glue("http://{vpn_host}:{vpn_port}/get"), body = data,  encode = "json", timeout = httr::timeout(time_out))
   })
 
   return(req)
