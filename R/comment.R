@@ -37,6 +37,9 @@ tk_comment <- function(post_id, ua = default_ua, verify = "", id_cookie = "", po
   if(verbose){
       cli::cli_alert_success("[{Sys.time()}] c-{post_id} ({nrow(response)})")
   }
+  if(nrow(response) == 0){
+    response <- tibble::tibble(aweme_id = post_id)
+  }
 
   return(response)
 

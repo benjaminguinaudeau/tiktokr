@@ -15,260 +15,67 @@ library(reticulate)
 devtools::load_all()
 
 tk_init()
-hash <- tk_posts(scope = "hashtag", query = "obama", n = 200, port = NULL)
 
-url <- final_url
-head <- list(
-      `method`= "GET",
-      `accept-encoding` = "gzip, deflate, br",
-      `referrer` = "https://www.tiktok.com/trending?lang=en",
-      `user-agent` = "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"
-      )
-head_ <- as.character(head)
-names(head_) <- names(head)
+post <-tk_info("post", "6841992950277311750")
+hash <- tk_posts(scope = "hashtag", query = "obama", n = 30, port = NULL, verbose = F)
+trig <- tk_posts(scope = "user", query = "ezekieltheladiesm", n = 30, port = NULL, verbose = T, start_date = lubridate::dmy("01-07-2020"))
+tiktokr::tk_posts(scope = "user", query = "dwightsetts", n = 10000, port = NULL, vpn = F, verbose = T)
+tiktokr::tk_posts(scope = "user", query = "dwightsettles", n = 10000, port = NULL, vpn = F, verbose = T)
 
-data <- list(url = final_url, head = head)
+br = py$browser("d", ua = default_ua)
+br$signature
 
-res <- httr::POST("http://192.168.1.2:5000/get", body = jsonlite::toJSON(data),  encode = "json")
-jsonlite::fromJSON(rawToChar(res$content))
-jsonlite::fromJSON(jsonlite::fromJSON(rawToChar(res$content))
-                   
-source_python("https://raw.githubusercontent.com/davidteather/TikTok-Api/master/TikTokApi/stealth.py")
-source_python("browser_3.py")
+Sys.setenv("tiktok_vpn_host" = "198.91.147.92", "tiktok_vpn_port" = "60003")
 
-```
+trig <- tk_posts(scope = "user", query = "mrs.jt", n = 200, port = NULL, verbose = T)
 
-```{r}
+verify <- "verify_kcz0vg19_eEzm6b6R_XRlA_4lLL_85mu_iL0JG0gbmt2l"
+id_cookie <-  "sid_guard=2555fb582f00401d62c180f491cdf712%7C1595547871%7C5184000%7CMon%2C+21-Sep-2020+23%3A44%3A31+GMT"
+Sys.setenv("tiktok_vpn_host" = "192.168.1.6", "tiktok_vpn_port" = "5000")
 
-query <- "6836185018620988677"
+a <- tk_comment(post_id = "6826825525630078213", verify = verify, id_cookie = id_cookie, vpn = F, verbose = T)
+a 
+a <- tk_comment("6855303947880582406", verify, id_cookie = id_cookie, port = NULL, vpn = F, verbose = T) 
 
-verify <- "verify_kay1yvq6_an5HqH2M_Zzjt_4hFz_8j6m_3qlCUNrgSeZj"
+tk_comment(post_id = "6855303947880582406", verify = verify, id_cookie = id_cookie, port = NULL, vpn = T, verbose = T)
 
-url <- get_url("post", query_1 = query, verify = verify)
-a <- get_data(url, ua = default_ua, port = NULL, vpn = F)
+verify <- "verify_kcz0vg19_eEzm6b6R_XRlA_4lLL_85mu_iL0JG0gbmt2l"
+id_cookie <-  "sid_guard=2555fb582f00401d62c180f491cdf712%7C1595547871%7C5184000%7CMon%2C+21-Sep-2020+23%3A44%3A31+GMT"
+Sys.setenv("tiktok_vpn_host" = "192.168.1.14", "tiktok_vpn_port" = "5000")
 
-a
+test <- tk_comment(post_id = post_id, verify = verify, id_cookie = id_cookie, port = NULL, vpn = T, verbose = T) %>%
+    mutate(timestamp = as.numeric(Sys.time()), 
+           query = post_id)
 
-#
-#
-# "id" = {
-#
-#
-#   def getTikTokById(self, id, language='en', proxy=None):
-#
-#     b = browser(api_url, proxy=proxy)
-#     return self.getData(api_url, b, proxy=proxy)
-# }
-
-```
+test
 
 
 
-```{r}
-get_user_post(username =  ".rebemb", 200)
-hash_post <- get_hashtag_post(hashtag = "maincharacter", 200)
 
-ua <- default_ua
- httr::GET(final_url, httr::add_headers(
-      `method`= "GET",
-      `accept-encoding` = "gzip, deflate, br",
-      `referrer` = "https://www.tiktok.com/trending?lang=en",
-      `user-agent` = ua))
+predict_date("6854725458395680006")
+query <- "_______________aziah"
 
-make_request <- function(url, headers = NULL){
-  
+query <- "avathehuman2"      
+start <- "1594247288"
+
+tk_posts(scope = "user", query = query, n = 10000, port = NULL, vpn = F, verbose = T, start_date = from_unix(start))
+"6846125155446557957" "6844234408577223942"
+kk <- 0
+break_meta <- T
+while(break_meta){
+  jj <- 0
+  while(jj < 10){
+    if(runif(1) > .5){
+      break_meta <- F
+      break
+    }
+    print(jj)
+    jj <- jj +1
+  }
+  kk <- kk +1
 }
 
-tk_posts(scope = "user",query =  "i.hate.capitalism", n = 200)
-tk_posts("hashtag", "maincharacter", n = 200)
-
-verify <- "verify_kay1yvq6_an5HqH2M_Zzjt_4hFz_8j6m_3qlCUNrgSeZj"
-id_cookie <-  "sid_guard=35bf8323c960acb13c82431d1603eacf%7C1591122635%7C5184000%7CSat%2C+01-Aug-2020+18%3A30%3A35+GMT"
-
-
-systemr::system_api("pwd", "193.196.39.229", 3000)
-
-tk_comment(post_id = "6826034192380431622", verify = verify,id_cookie = id_cookie)
-
-   x %>%
-      dplyr::select_if(is.data.frame) %>% #bashR::simule_map(1)
-      purrr::imap_dfc(~{
-        if(!any(purrr::map_lgl(.x, is.data.frame))){
-          # return(.x)
-          return(purrr::set_names(.x, paste(.y, names(.x), sep = "_")))
-        }
-        # parse_json_structure(.x)
-      }) %>%
-      dplyr::bind_cols(dplyr::select_if(x, ~!is.data.frame(.x)))
-
-   
-url <- get_url("username", query_1 = "joshua4congress")
-a <- get_data(url, port = NULL)
-
-user <- a$userInfo %>% 
-  rlist::list.flatten() %>% purrr::imap_dfc(~purrr::set_names(tibble::tibble(.x), 
-        .y)) %>%
-  glimpse
-   
-
- get_n(type = "user_post", n = n, query_1 = user$user.id, query_2 = user$user.secUid, query = query,
-                      save_dir = save_dir, port = port, ua = ua)
-
-  hash <- tk_posts(scope = "hashtag", query = "votebiden", n = 10000, port = NULL) %>%
-          mutate(timestamp = Sys.time()) %>%
-          parse_output %>%
-          filter(!id %in% already)
-
-     
-```
-
-
-```{r}
-test_req <- c()
-
-if(length(test_req$content) == 0){do_something}
-
-hash_post <- get_hashtag_post(count = 100000000, hashtag = "coronavirus", save = T, path = "video")
-hash_post <- get_hashtag_post(count = 400, hashtag = "plandemic")
-
-
-video <- hash_post[50,]
-
-download_video(video$playUrl)
-
-
-
-hash_post %>%
-    head(100) %>%
-    glimpse
-
-hash_post %>%
-    count(id)
-    filter(id == "6823804732973337862") %>%
-    select_if(~length(unique(.x))  > 1) %>%
-    .[[1]]
-    pull(url)
 
 ```
 
-
-```{r}
-trends <- get_trending(10)
-
-urls <- trends$downloadAddr
-url <- urls[1]
-
-
-
-
-
- #     b = browser(download_url)
-    #     return self.getBytes(download_url, b.signature, b.userAgent)
-```
-
-
-```{r}
- # def getBytes(self, api_url, signature, userAgent):
- #        url = api_url + \
- #            "&_signature=" + signature
- #        r = requests.get(url, headers={"method": "GET",
- #                                       "accept-encoding": "gzip, deflate, br",
- #                                       "referrer": self.referrer,
- #                                       "user-agent": userAgent,
- #                                       })
- #        return r.content
-
-    # def get_Video_By_TikTok(self, data):
-    #     api_url = data['video']['downloadAddr']
-    #     return self.get_Video_By_DownloadURL(api_url)
-    # 
-    # #
-    # # Downloads video from TikTok using download url in a tiktok object
-    # #
-
-    # def get_Video_By_DownloadURL(self, download_url):
-    #     b = browser(download_url)
-    #     return self.getBytes(download_url, b.signature, b.userAgent)
-    # 
-    # #
-    # # Gets the source url of a given url for a tiktok
-    # #
-    # # video_url - the url of the video
-    # # return_bytes - 0 is just the url, 1 is the actual video bytes
-    # # chromedriver_path - path to your chrome driver executible
-    # #
-
-
-    # def get_Video_By_Url(self, video_url, return_bytes=0, chromedriver_path=None):
-    #     if chromedriver_path != None:
-    #         driver = webdriver.Chrome(executable_path=chromedriver_path)
-    #     else:
-    #         driver = webdriver.Chrome()
-    #     driver.get(video_url)
-    #     time.sleep(5)
-    # 
-    #     soup = BeautifulSoup(driver.page_source, 'html.parser')
-    #     data = json.loads(soup.find_all(
-    #         'script', attrs={"id": "videoObject"})[0].text)
-    # 
-    #     if return_bytes == 0:
-    #         return data['contentUrl']
-    #     else:
-    #         r = requests.get(data['contentUrl'])
-    #         return r.content
-```
-
-
-
-
-
-```{r}
-library(dockeR)
-
-prune_containers()
-
-# First Container
-chrome <- docker$new(
-  image_src = "selenium/standalone-chrome-debug", #Image to be used (model for the container)
-  container_name = "chrome",
-  other_arguments = "-p 4446:4444 -p 4447:5900"
-  
-  # Name you want to use
-)
-library(reticulate)
-
-reticulate::source_python("https://raw.githubusercontent.com/davidteather/TikTok-Api/master/TikTokApi/stealth.py")
-reticulate::source_python("stealth.py")
-reticulate::source_python("browser_3.py")
-
-```
-
-```{r}
-list_container() %>%
-  dplyr::glimpse()
-```
-
-
-```{r}
-# chrome %>% get_port(filter_port = c(4444, 5900))
-
-library(tidyselenium)
-library(dockeR)
-
-
-
-chrome <- chrome_init(cache = "tiktokr")
-
-```
-
-
-+ What are the Huber countries exactly? 
-
-
-+ How much of the results migth be driven by CMP measurement's error? 
-
-+ Manifesto getting longer and less precise about actual position of parties
-
-
-+ Convergence of mainstream parties => less polarisation => less reponsiveness
 
