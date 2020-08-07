@@ -20,7 +20,7 @@ tk_comment <- function(post_id, ua = default_ua, verify = "", id_cookie = "", po
         res %>%
         .[["comments"]] %>%
         parse_json_structure
-      })
+      }, silent = T)
 
       if(inherits(data, "try-error")){ has_more <- F ; break }
       if(length(data) == 0){ has_more <- F ; break }
