@@ -25,7 +25,7 @@ tiktokr::tk_posts(scope = "user", query = "dwightsettles", n = 10000, port = NUL
 br = py$browser("d", ua = default_ua)
 br$signature
 
-Sys.setenv("tiktok_vpn_host" = "198.91.147.92", "tiktok_vpn_port" = "60003")
+Sys.setenv("tiktok_vpn_host" = "198.91.147.92", "tiktok_vpn_port" = "60002")
 
 trig <- tk_posts(scope = "user", query = "mrs.jt", n = 200, port = NULL, verbose = T)
 
@@ -33,7 +33,9 @@ verify <- "verify_kcz0vg19_eEzm6b6R_XRlA_4lLL_85mu_iL0JG0gbmt2l"
 id_cookie <-  "sid_guard=2555fb582f00401d62c180f491cdf712%7C1595547871%7C5184000%7CMon%2C+21-Sep-2020+23%3A44%3A31+GMT"
 Sys.setenv("tiktok_vpn_host" = "192.168.1.6", "tiktok_vpn_port" = "5000")
 
-a <- tk_comment(post_id = "6826825525630078213", verify = verify, id_cookie = id_cookie, vpn = F, verbose = T)
+a <- tk_comment(post_id = "66845236603477134597", verify = verify, id_cookie = id_cookie, vpn = T, verbose = T)
+
+
 a 
 a <- tk_comment("6855303947880582406", verify, id_cookie = id_cookie, port = NULL, vpn = F, verbose = T) 
 

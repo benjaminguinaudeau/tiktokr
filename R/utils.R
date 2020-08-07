@@ -108,10 +108,39 @@ tk_install <- function(){
 #' @export
 #' @param url url of tiktok to scrape
 #' @param path path to download tiktok video to
-tk_dl_video <- function(url, path, ua = default_ua, port = NULL, vpn = F, vpn_host = ""){
-  raw_video <- get_data(url, parse = F, ua = default_ua, port = NULL, vpn = F, vpn_host = "")
-  writeBin(raw_video, path)
+tk_dl_video <- function(post_id = NULL, url = NULL, path, ua = default_ua, port = NULL, vpn = F, verbose = T){
+  if(!is.null(post_id)){
+    post <-tk_info("post", post_id, ua = ua, port = port, vpn = vpn)
+    index <- 0
+    while(!any(str_detect(names(post), "itemInfo")) & index < 10){
+      post <-tk_info("post", post_id, ua = ua, port = port, vpn = vpn) #%>% glimpse
+      index <- index + 1
+      try(if(post$statusCode == "10201"){ index <- 10 }, silent = T)
+    }
+    if(index == 10){
+      write_rds(tibble::tibble(), str_replace(path, "mp4$", "rds$"))
+      if(verbose) cli::cli_alert('[{Sys.time()}] {str_replace(path, "mp4$", "rds$")}')
+      return(list())
+    } else {
+      url <- post$itemInfo.itemStruct.video.downloadAddr
+    }
+  }
+
+  out <- try({
+    # raw_video <- get_data(url, parse = F, ua = ua, port = port, vpn = vpn, signed = T)
+    # writeBin(raw_video, path)
+    download.file(url, path, quiet = T)
+  })
+
+  if(inherits(out, "try-error")){
+    write_rds(tibble::tibble(), str_replace(path, "mp4$", "rds"))
+    if(verbose) cli::cli_alert(sglue::glue("[{Sys.time()}] {path}"))
+  } else {
+    if(verbose) cli::cli_alert_success(glue::glue("[{Sys.time()}] {path}"))
+  }
+
 }
+
 
 #' quiet
 #' @export
