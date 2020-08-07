@@ -119,7 +119,7 @@ tk_dl_video <- function(post_id = NULL, url = NULL, path, ua = default_ua, port 
     }
     if(index == 10){
       write_rds(tibble::tibble(), str_replace(path, "mp4$", "rds$"))
-      if(verbose) cli::cli_alert('[{Sys.time()}] {str_replace(path, "mp4$", "rds$")}')
+      if(verbose) cli::cli_alert('[{Sys.time()}] {str_replace(path, "mp4$", "rds")}')
       return(list())
     } else {
       url <- post$itemInfo.itemStruct.video.downloadAddr
