@@ -111,8 +111,8 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_c
                   referer = "https://www.tiktok.com/trending?lang=en",
                   `user-agent` = ua,
                   cookie = id_cookie
-                ),
-                timeout = httr::timeout(time_out)))
+                )),
+                timeout = httr::timeout(time_out))
     })
   }
 
