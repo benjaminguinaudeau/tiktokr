@@ -46,7 +46,7 @@ tk_comment <- function(post_id, ua = default_ua, verify = "", id_cookie = "", po
 }
 
 #' @export
-tk_reply <- function(comment_id, post_id, ua = default_ua, verify, id_cookie, port = NULL, verbose = T){
+tk_reply <- function(comment_id, post_id, ua = default_ua, verify, id_cookie, port = NULL, verbose = T, time_out = 10){
 
   response <- tibble::tibble()
   count <- sample(50:100, 1)
@@ -66,7 +66,8 @@ tk_reply <- function(comment_id, post_id, ua = default_ua, verify, id_cookie, po
                          referer = "https://www.tiktok.com/trending/?lang=fr",
                          `user-agent` = ua,
                          cookie = id_cookie)
-                       )) %>%
+                       ),
+                       timeout = httr::timeout(time_out)) %>%
         .[["content"]] %>%
         rawToChar %>%
         jsonlite::fromJSON()

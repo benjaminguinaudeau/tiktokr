@@ -104,7 +104,7 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_c
   if(vpn){
     req <- try(get_vpn_data(final_url, ua, id_cookie = id_cookie, time_out = time_out))
   } else {
-    .GlobalEnv[["test_req"]] <- req <- try({
+    req <- try({
       httr::GET(final_url,
                 httr::add_headers(.headers = c(
                   method = "GET",

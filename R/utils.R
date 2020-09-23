@@ -107,7 +107,7 @@ tk_install <- function(){
 #' @export
 #' @param url url of tiktok to scrape
 #' @param path path to download tiktok video to
-download_video <- function(url, path, ua = default_ua){
+download_video <- function(url, path, ua = default_ua, time_out = 10){
   req <- httr::GET(url,
                    httr::add_headers(.headers = c(
                      'Connection' = 'keep-alive' ,
@@ -119,7 +119,8 @@ download_video <- function(url, path, ua = default_ua){
                      'Referer' = 'https://www.tiktok.com/foryou?lang=fr' ,
                      'Accept-Language' = 'en-GB,en;q=0.9' ,
                      'Range' = 'bytes=0-'
-                   )))
+                   )),
+                   timeout = httr::timeout(time_out))
 
   writeBin(req$content, con = path)
 }
@@ -220,8 +221,8 @@ get_puppeteer_signature <- function(urls, ua){
 }
 
 #' @export
-get_docker_signature <- function(url, port = 8080){
-  res <- httr::POST(url  = glue::glue("localhost:{port}/signature"), body = url)
+get_docker_signature <- function(url, port = 8080, time_out = 10){
+  res <- httr::POST(url  = glue::glue("localhost:{port}/signature"), body = url, timeout = httr::timeout(time_out))
   jsonlite::fromJSON(rawToChar(res$content))$signature
 }
 
