@@ -222,7 +222,7 @@ get_puppeteer_signature <- function(urls, ua){
 
 #' @export
 get_docker_signature <- function(url, port = 8080, time_out = 10){
-  res <- httr::POST(url  = glue::glue("localhost:{port}/signature"), body = url, timeout = httr::timeout(time_out))
+  res <- httr::POST(url  = glue::glue("http://localhost:{port}/signature"), body = url, timeout = httr::timeout(time_out))
   jsonlite::fromJSON(rawToChar(res$content))$signature
 }
 
