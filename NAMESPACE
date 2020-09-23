@@ -3,6 +3,7 @@
 export("%>%")
 export(com_tmpl)
 export(default_ua)
+export(download_video)
 export(from_unix)
 export(get_data)
 export(get_docker_signature)

@@ -102,6 +102,29 @@ tk_install <- function(){
 }
 
 
+#' tk_dl_video
+#' @description Function that enable to download tiktoks
+#' @export
+#' @param url url of tiktok to scrape
+#' @param path path to download tiktok video to
+download_video <- function(url, path, ua = default_ua){
+  req <- httr::GET(url,
+                   httr::add_headers(.headers = c(
+                     'Connection' = 'keep-alive' ,
+                     'User-Agent' = ua,
+                     'Accept' = '*/*' ,
+                     'Sec-Fetch-Site' = 'cross-site' ,
+                     'Sec-Fetch-Mode' = 'no-cors' ,
+                     'Sec-Fetch-Dest' = 'video' ,
+                     'Referer' = 'https://www.tiktok.com/foryou?lang=fr' ,
+                     'Accept-Language' = 'en-GB,en;q=0.9' ,
+                     'Range' = 'bytes=0-'
+                   )))
+
+  writeBin(req$content, con = path)
+}
+
+
 
 #' tk_dl_video
 #' @description Function that enable to download tiktoks
@@ -110,7 +133,7 @@ tk_install <- function(){
 #' @param path path to download tiktok video to
 tk_dl_video <- function(post_id = NULL, url = NULL, path, ua = default_ua, port = NULL, vpn = F, verbose = T){
   if(!is.null(post_id)){
-    post <-tk_info("post", post_id, ua = ua, port = port, vpn = vpn)
+    post <- tk_info("post", post_id, ua = ua, port = port, vpn = vpn)
     index <- 0
     while(!any(str_detect(names(post), "itemInfo")) & index < 10){
       post <-tk_info("post", post_id, ua = ua, port = port, vpn = vpn) #%>% glimpse
@@ -127,14 +150,12 @@ tk_dl_video <- function(post_id = NULL, url = NULL, path, ua = default_ua, port 
   }
 
   out <- try({
-    # raw_video <- get_data(url, parse = F, ua = ua, port = port, vpn = vpn, signed = T)
-    # writeBin(raw_video, path)
-    download.file(url, path, quiet = T)
-  })
+    download_video(url, path, ua = ua)
+  }, silent = T)
 
   if(inherits(out, "try-error")){
     write_rds(tibble::tibble(), str_replace(path, "mp4$", "rds"))
-    if(verbose) cli::cli_alert(sglue::glue("[{Sys.time()}] {path}"))
+    if(verbose) cli::cli_alert(glue::glue("[{Sys.time()}] {path}"))
   } else {
     if(verbose) cli::cli_alert_success(glue::glue("[{Sys.time()}] {path}"))
   }

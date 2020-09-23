@@ -11,7 +11,8 @@ get_data(
   port = NULL,
   vpn = F,
   id_cookie = "",
-  signed = F
+  signed = F,
+  time_out = 10
 )
 }
 \arguments{
