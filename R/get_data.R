@@ -108,6 +108,8 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_c
     final_url <- url
   }
 
+  # final_url <- url
+
   if(vpn){
     req <- try(get_vpn_data(final_url, ua, id_cookie = id_cookie, time_out = time_out))
   } else {

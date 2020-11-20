@@ -22,14 +22,14 @@ hashtag <- tk_info(scope = "hashtag", query = "maincharacter") %>% glimpse
 music <- tk_info(scope = "music", query = "6782187241935505410") %>% glimpse
 post <- tk_info(scope = "post", query = "6826115812009495814") %>% glimpse
 
+user_posts <- tk_posts(scope = "user", query = "willsmith", n = 40) %>% glimpse
+user_posts <- tk_posts(scope = "user", query = "willsmith", n = 100) %>% glimpse
+
 trends <- tk_posts(scope = "trends", n = 25) %>% glimpse
 trends <- tk_posts(scope = "trends", n = 50) %>% glimpse
 
 music <- tk_posts(scope = "music", query = "6782187241935505410", n = 25) %>% glimpse
 music <- tk_posts(scope = "music", query = "6782187241935505410", n = 50) %>% glimpse
-
-user_posts <- tk_posts(scope = "user", query = "willsmith", n = 40) %>% glimpse
-user_posts <- tk_posts(scope = "user", query = "willsmith", n = 100) %>% glimpse
 
 hasgtag_posts <- tk_posts(scope = "hashtag", query = "maincharacter", n = 20) %>% glimpse
 hasgtag_posts <- tk_posts(scope = "hashtag", query = "maincharacter", n = 50) %>% glimpse

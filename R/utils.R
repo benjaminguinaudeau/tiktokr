@@ -34,7 +34,7 @@ get_url <- function(type, n = NULL, cursor = NULL,
                          maxCursor = max, minCursor = min, sourceType = "12")
 
       url_params %>%
-        imap_chr(~paste0("&", .y, "=", .x)) %>%
+        purrr::imap_chr(~paste0("&", .y, "=", .x)) %>%
         paste(collapse = "")  %>%
         paste0(base_url, .) %>%
         add_verify_ua(ua)
@@ -46,7 +46,7 @@ get_url <- function(type, n = NULL, cursor = NULL,
                          maxCursor = max, minCursor = min, sourceType = "8")
 
       url_params %>%
-        imap_chr(~paste0("&", .y, "=", .x)) %>%
+        purrr::imap_chr(~paste0("&", .y, "=", .x)) %>%
         paste(collapse = "")  %>%
         paste0(base_url, .) %>%
         add_verify_ua(ua)
@@ -67,7 +67,7 @@ get_url <- function(type, n = NULL, cursor = NULL,
                          cursor = min)
 
       url_params %>%
-        imap_chr(~paste0("&", .y, "=", .x)) %>%
+        purrr::imap_chr(~paste0("&", .y, "=", .x)) %>%
         paste(collapse = "")  %>%
         paste0(base_url, .) %>%
         add_verify_ua(ua)
@@ -85,7 +85,7 @@ get_url <- function(type, n = NULL, cursor = NULL,
       url_params <- list(musicID = query_1, count = n,cursor = min)
 
       url_params %>%
-        imap_chr(~paste0("&", .y, "=", .x)) %>%
+        purrr::imap_chr(~paste0("&", .y, "=", .x)) %>%
         paste(collapse = "")  %>%
         paste0(base_url, .) %>%
         add_verify_ua(ua)
@@ -178,7 +178,7 @@ tk_dl_video <- function(post_id = NULL, url = NULL, path, ua = default_ua, port 
   if(!is.null(post_id)){
     post <- tk_info("post", post_id, ua = ua, port = port, vpn = vpn)
     index <- 0
-    while(!any(str_detect(names(post), "itemInfo")) & index < 10){
+    while(!any(stringr::str_detect(names(post), "itemInfo")) & index < 10){
       post <-tk_info("post", post_id, ua = ua, port = port, vpn = vpn) #%>% glimpse
       index <- index + 1
       try(if(post$statusCode == "10201"){ index <- 10 }, silent = T)
@@ -228,27 +228,12 @@ default_ua <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_7) AppleWebKit/537.3
 
 #'@export
 encode_string <- function(string){
-  str_replace_all(string, c("\\s+" = "+", "/" = "%2F", ";" = "%3B" ))
+  stringr::str_replace_all(string, c("\\s+" = "+", "/" = "%2F", ";" = "%3B" ))
 }
 
 #'@export
 add_verify_ua <- function(url, ua){
   paste0(url, "&verifyFp=", paste0("verify_", get_verify()), "&user_agent=", encode_string(ua))
-}
-
-#'@export
-shape_query_user_post <- function(base_url, ua, n, min, max, query_1 = query_1, query_2 = query_2){
-  url_params <- list()
-  url_params$id <- query_1
-  url_params$secUid <- query_2
-  url_params$count <- n
-  url_params$maxCursor <- max
-  url_params$minCursor <- min
-  url_params$sourceType <- "8"
-  url_params$user_agent <- encode_string(ua)
-  url_params$verifyFp <- paste0("verify_", get_verify())
-
-  url_params %>% imap_chr(~paste0("&", .y, "=", .x)) %>% paste(collapse = "")  %>% paste0(base_url, .)
 }
 
 #' @export

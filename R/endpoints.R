@@ -5,7 +5,7 @@
 #' @param query Character indicating the username/hashtag/music_id to scrape
 #' @param n Numeric indicating the number of tiktoks to scrape
 #' @export
-tk_posts <- function(scope, query, n = 10000, start_date = lubridate::dmy("01-01-1900"), cursor = 0, save_dir = NULL, port = NULL, ua = default_ua, vpn = F, verbose = T){
+tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("01-01-1900"), cursor = 0, save_dir = NULL, port = NULL, ua = default_ua, vpn = F, verbose = T){
 
   if(!(scope %in% c("user", "hashtag", "music", "trends"))){
     stop("scope must be one of the following: user, hashtag, music or trends")
@@ -61,7 +61,7 @@ tk_posts <- function(scope, query, n = 10000, start_date = lubridate::dmy("01-01
         }
       } else {
 
-        if(!any(str_detect(names(out), "stats"))){
+        if(!any(stringr::str_detect(names(out), "stats"))){
           cli::cli_alert_warning("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (not found)")
         } else if ("stats.videoCount" %in% names(out)){
           if(unique(out[["stats.videoCount"]]) == 0){
