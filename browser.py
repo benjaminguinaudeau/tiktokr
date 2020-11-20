@@ -9,13 +9,14 @@ import requests
 import logging
 
 class browser:
-    def __init__(self, url, ua, language='en', proxy=None, find_redirect=False, api_url=None, debug=False):
+    def __init__(self, url, ua, verify = '', language='en', proxy=None, find_redirect=False, api_url=None, debug=False):
         self.url = url
         self.debug = debug
         self.proxy = proxy
         self.api_url = api_url
         self.referrer = "https://www.tiktok.com/"
         self.language = language
+        self.verify = verify
 
         self.userAgent = ua #"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.0 Safari/537.36)"
         self.args = [
@@ -87,7 +88,7 @@ class browser:
         # self.userAgent = await self.page.evaluate("""() => {return navigator.userAgent; }""")
         await self.page.setUserAgent(self.userAgent)
 
-        self.verifyFp = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase + string.digits) for i in range(16))
+        # self.verifyFp = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase + string.digits) for i in range(16))
 
         await self.page.evaluate("() => { " + self.__get_js(proxy=self.proxy) + " }")
         

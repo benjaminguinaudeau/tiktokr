@@ -34,6 +34,12 @@ music <- tk_posts(scope = "music", query = "6782187241935505410", n = 50) %>% gl
 hasgtag_posts <- tk_posts(scope = "hashtag", query = "maincharacter", n = 20) %>% glimpse
 hasgtag_posts <- tk_posts(scope = "hashtag", query = "maincharacter", n = 50) %>% glimpse
 
+url <- paste0("https://www.tiktok.com/node/share/user/@willsmith?aid=1988",
+              "&verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI", 
+              "&user_agent=Mozilla%2F5.0+(Macintosh%3B+Intel+Mac+OS+X+10_14_7)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F86.0.4240.198+Safari%2F537.36"
+
+"https://m.tiktok.com/api/item_list/?aid=1988&app_name=tiktok_web&device_platform=web&referer=&root_referer=https:%2F%2Fwww.tiktok.com%2Ffr%2F&user_agent=Mozilla%2F5.0+(Macintosh%3B+Intel+Mac+OS+X+10_15_7)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F86.0.4240.198+Safari%2F537.36&cookie_enabled=true&screen_width=1440&screen_height=900&browser_language=fr-FR&browser_platform=MacIntel&browser_name=Mozilla&browser_version=5.0+(Macintosh%3B+Intel+Mac+OS+X+10_15_7)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F86.0.4240.198+Safari%2F537.36&browser_online=true&ac=4g&timezone_name=America%2FToronto&page_referer=https:%2F%2Fwww.tiktok.com%2Fforyou%3Flang%3Dfr&priority_region=&verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI&appId=1233&region=CA&appType=m&isAndroid=false&isMobile=false&isIOS=false&OS=mac&did=6893606546577982982&count=30&id=6727327145951183878&secUid=MS4wLjABAAAA8ezUaW4ecJX222ObGXxt07F9BIh4QH3-g1P1DHyChT2LLi2cn-vAE2R53-H672ZO&maxCursor=1603245482000&minCursor=0&sourceType=8&language=fr&_signature=_02B4Z6wo00f011jYGtgAAICBTZxjuS56JQtY2R5AAImK83"
+
 
 
 ```
@@ -75,13 +81,65 @@ parse_curl_request <- function(){
 
 
 ```{r}
+
+get_verify()
+
+```
+
+
+```{r}
 source("https://gist.githubusercontent.com/benjaminguinaudeau/46652c61adee4469899a4026b873d07c/raw/5a3a46e99334990907b65a3d315680bf99e515d2/parse_curl_reqest.R")
 
 res <- parse_curl_request()
-
+res$r_code
 params <- str_split(res$url, "&")[[1]]
 
+url <- paste0("https://www.tiktok.com/node/share/user/@willsmith?aid=1988",
+              "&verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI", 
+              "&user_agent=Mozilla%2F5.0+(Macintosh%3B+Intel+Mac+OS+X+10_14_7)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F86.0.4240.198+Safari%2F537.36")
 
+ua <- "Mozilla Firefox Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0"
+
+
+session <- rvest::html_session("https://www.tiktok.com/node/share/user/@willsmith")
+session
+
+get_verify()
+verify
+get_signature("https://www.tiktok.com/node/share/user/@willsmith?&verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI", port = NULL, ua = ua)
+req <- try({
+      httr::GET("https://www.tiktok.com/node/share/user/@willsmith?&verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI&_signature=_02B4Z6wo00f01eyH-3wAAICBJtsTqMNVtynsp..AACSce7",
+                httr::add_headers(.headers = c(
+                  method = "GET",
+                  # referer = "https://www.tiktok.com/trending?lang=en",
+                  # authority = "www.tiktok.com", 
+                  # `cache-control` = "max-age=0", 
+                  # cookie = "s_v_web_id=verify_JGPNT5EB0kb9NiC_TByH_4TnB_EGoq_C2fXZ09otunV5",
+                  `user-agent` = ua
+                  
+                ))#,
+                # timeout = httr::timeout(time_out)
+                )
+    })
+
+httr::GET(url = "https://www.tiktok.com/node/share/user/@willsmith?aid=1988", 
+          httr::add_headers(.headers = c(
+            authority = "www.tiktok.com", 
+            `cache-control` = "max-age=0", 
+            `upgrade-insecure-requests` = "1", 
+            `user-agent` = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36", 
+            accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9", 
+            `sec-fetch-site` = "none", 
+            `sec-fetch-mode` = "navigate", 
+            `sec-fetch-user` = "?1", 
+            `sec-fetch-dest` = "document", 
+            `accept-language` = "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7,de;q=0.6", 
+            cookie = "s_v_web_id=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI",
+            `cp-extension-installed` = "Yes")))
+```
+
+
+```{r}
 query <- "mysterious_by_nature"
 
 shape_url <- function(){
