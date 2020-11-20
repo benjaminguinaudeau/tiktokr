@@ -6,7 +6,7 @@
 \usage{
 tk_posts(
   scope,
-  query,
+  query = "",
   n = 10000,
   start_date = lubridate::dmy("01-01-1900"),
   cursor = 0,

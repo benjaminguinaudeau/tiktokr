@@ -5,14 +5,14 @@
 \title{get_n}
 \usage{
 get_n(
-  type,
+  scope,
   n = 10000,
   start_date = lubridate::dmy("01-01-1900"),
   cursor = 0,
   ua = default_ua,
   port = NULL,
   query_1 = NULL,
-  query_2 = NULL,
+  query_2 = "",
   save_dir = NULL,
   query = NULL,
   vpn = F,

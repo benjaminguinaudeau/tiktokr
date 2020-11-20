@@ -4,7 +4,7 @@
 \alias{download_video}
 \title{tk_dl_video}
 \usage{
-download_video(url, path, ua = default_ua)
+download_video(url, path, ua = default_ua, time_out = 10)
 }
 \arguments{
 \item{url}{url of tiktok to scrape}
