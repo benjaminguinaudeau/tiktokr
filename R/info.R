@@ -24,7 +24,7 @@ tk_info <- function(scope, query, cookie, ua = default_ua, port = NULL, vpn = F)
       get_data(url, ua = ua, port = port, vpn = vpn)
     },
     "music" = {
-      tk_posts(scope = "music", query = "6782187241935505410", n = 1, port = port, vpn = vpn, ua = ua, cookie = cookie)
+      tk_posts(scope = "music", query = query, n = 1, port = port, vpn = vpn, ua = ua)
     },
     "post" = {
       url <- get_url("post", query_1 = query, verify = verify)
