@@ -5,23 +5,29 @@
 #'   or "music")
 #' @param query Character indicating the username/hashtag/music_id to scrape
 #' @export
-tk_info <- function(scope, query, ua = default_ua, port = NULL, vpn = F){
+tk_info <- function(scope, query, cookie, ua = default_ua, port = NULL, vpn = F){
+
+  if(stringr::str_detect(cookie, "verify_.")){
+    verify <- cookie %>% stringr::str_extract("verify_.*?(\\s|$)")
+  } else {
+    verify <- ""
+  }
 
   res <- switch(
     scope,
     "user" = {
-      url <- get_url("username", query_1 = query, ua = ua)
+      url <- get_url("username", query_1 = query, ua = ua, verify = verify)
       get_data(url, ua = ua, port = port, vpn = vpn)$userInfo
     },
     "hashtag" = {
-      url <- get_url("hashtag", query_1 = query, ua = ua)
+      url <- get_url("hashtag", query_1 = query, ua = ua, verify = verify)
       get_data(url, ua = ua, port = port, vpn = vpn)
     },
     "music" = {
-      tk_posts(scope = "music", query = "6782187241935505410", n = 1, port = port, vpn = vpn, ua = ua)
+      tk_posts(scope = "music", query = "6782187241935505410", n = 1, port = port, vpn = vpn, ua = ua, cookie = cookie)
     },
     "post" = {
-      url <- get_url("post", query_1 = query)
+      url <- get_url("post", query_1 = query, verify = verify)
       get_data(url, ua = ua, port = port, vpn = vpn)
     }
   )

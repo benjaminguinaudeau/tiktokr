@@ -5,7 +5,13 @@
 #' @param query Character indicating the username/hashtag/music_id to scrape
 #' @param n Numeric indicating the number of tiktoks to scrape
 #' @export
-tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("01-01-1900"), cursor = 0, save_dir = NULL, port = NULL, ua = default_ua, vpn = F, verbose = T){
+tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("01-01-1900"), cursor = 0, save_dir = NULL, port = NULL, ua = default_ua, vpn = F, verbose = T, cookie = ""){
+
+  if(stringr::str_detect(cookie, "verify_.")){
+    verify <- cookie %>% stringr::str_extract("verify_.*?(\\s|$)")
+  } else {
+    verify <- ""
+  }
 
   if(!(scope %in% c("user", "hashtag", "music", "trends"))){
     stop("scope must be one of the following: user, hashtag, music or trends")
@@ -15,14 +21,14 @@ tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("
     switch(
       scope,
       "user" = {
-        user <- tk_info(scope = scope, query, port = port, ua = ua, vpn = vpn)
+        user <- tk_info(scope = scope, query, port = port, ua = ua, vpn = vpn, cookie = cookie)
         if(length(user) == 0){
           tibble::tibble(author_uniqueId = query, id = NA_character_)
         } else if(user$stats.videoCount == 0 | user$user.privateAccount){
           user
         } else {
           tmp <- get_n("user_post", n = n, start_date = start_date, query_1 = user$user.id, query_2 = user$user.secUid, query = query,
-                       save_dir = save_dir, port = port, ua = ua, vpn = vpn) %>%
+                       save_dir = save_dir, port = port, ua = ua, vpn = vpn, verify = verify) %>%
             dplyr::bind_cols(user)
           if(nrow(tmp) == 0){
             user$stats.videoCount <- 0
@@ -33,18 +39,18 @@ tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("
         }
       },
       "hashtag" = {
-        hash <- tk_info(scope = scope, query, port = port, ua = ua, vpn = vpn)
+        hash <- tk_info(scope = scope, query, port = port, ua = ua, vpn = vpn, cookie = cookie)
         ## TODO: hash$challengeInfo.challenge.id this probably needs to be a better variable name!
         get_n("hashtag_post", n = n, cursor = cursor, query_1 = hash$challengeInfo.challenge.id, query = query,
-              save_dir = save_dir, port = port, ua = ua, vpn = vpn)
+              save_dir = save_dir, port = port, ua = ua, vpn = vpn, verify = verify)
       },
       "music" = {
         get_n("music_post", n = n, query_1 = query, query = query,
-              save_dir = save_dir, port = port, ua = ua, vpn = vpn)
+              save_dir = save_dir, port = port, ua = ua, vpn = vpn, verify = verify)
       },
       "trends" = {
         get_n("trending", n = n,
-              save_dir = save_dir, port = port, ua = ua, vpn = vpn)
+              save_dir = save_dir, port = port, ua = ua, vpn = vpn, verify = verify)
       }
     )
   })

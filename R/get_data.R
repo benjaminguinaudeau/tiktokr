@@ -117,9 +117,9 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_c
       httr::GET(final_url,
                 httr::add_headers(.headers = c(
                   method = "GET",
-                  referer = "https://www.tiktok.com/trending?lang=en",
+                  # referer = "https://www.tiktok.com/trending?lang=en",
                   `user-agent` = ua,
-                  cookie = id_cookie
+                  cookie = "s_v_web_id=verify_VzQUiCcjHlCdPyPz"
                 ))#,
                 # timeout = httr::timeout(time_out)
                 )
@@ -136,10 +136,17 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_c
     warning("illegal request")
     content <- "{}"
   }
-  if(content == "") content <- "{}"
+  if(content == ""){
+    warning("empty response ; something was probably wrong with the request")
+    content <- "{}"
+  }
 
   out <- content %>%
     jsonlite::fromJSON()
+
+  if(out$statusCode == "10000"){
+    stop("Captcha required. Please update the cookie file.")
+  }
 
   return(out)
 }

@@ -53,13 +53,32 @@ First you need to initialize `tiktokr`
 tk_init()
 ```
 
+## Authentification issue
+
+In November 2020, Tiktok increased its security issue. They now have a
+captcha, which easily triggered after a few request. This can be solved
+by specifying the cookie parameter. To get a cookie session:
+
+1.  Open a browser and go to “<http://tiktok.com>”
+2.  Scroll down a bit, to ensure, that you don’t get any captcha
+3.  Open the javascript console (in Chrome: View &gt; Developer &gt;
+    Javascript Console)
+4.  Run `document.cookie` and use the output as a cookie param when
+    querying
+
+[<img src="data/preview.png" width="50%">](https://youtu.be/kYMV2ugxacs)
+
+``` r
+cookie <- "<paste here the result from document.cookie>"
+```
+
 ### Get TikTok trends
 
 Returns a tibble with trends.
 
 ``` r
 # Trend
-trends <- tk_posts(scope = "trends", n = 200)
+trends <- tk_posts(scope = "trends", n = 200, cookie = cookie)
 ```
 
 ### Get TikToks from User
@@ -68,7 +87,7 @@ Note: User query often only provides 2k hits but limit is unclear.
 Sample seems to be from most recent to oldest.
 
 ``` r
-user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50)
+user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50, cookie = cookie)
 ```
 
 ### Get TikToks from hashtag
@@ -78,19 +97,7 @@ or based on the most recent post date but rather **some mix of recency
 and popularity** of TikToks.
 
 ``` r
-hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 100)
-```
-
-### Discover Hashtags
-
-``` r
-tk_discover(scope = "hashtag")
-```
-
-### Discover Music
-
-``` r
-tk_discover(scope = "music")
+hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 100, cookie = cookie)
 ```
 
 ### Download TikTok Videos
@@ -110,7 +117,7 @@ trends %>%
 From hashtag:
 
 ``` r
-hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 5)
+hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 5, cookie = cookie)
 
 hash_post %>%
   split(1:nrow(.)) %>% 

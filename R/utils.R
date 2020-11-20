@@ -37,7 +37,7 @@ get_url <- function(type, n = NULL, cursor = NULL,
         purrr::imap_chr(~paste0("&", .y, "=", .x)) %>%
         paste(collapse = "")  %>%
         paste0(base_url, .) %>%
-        add_verify_ua(ua)
+        add_verify_ua(ua, verify)
     },
     "user_post" = {
       base_url <- glue::glue("https://m.tiktok.com/api/item_list/?aid=1988")
@@ -49,16 +49,16 @@ get_url <- function(type, n = NULL, cursor = NULL,
         purrr::imap_chr(~paste0("&", .y, "=", .x)) %>%
         paste(collapse = "")  %>%
         paste0(base_url, .) %>%
-        add_verify_ua(ua)
+        add_verify_ua(ua, verify)
 
     },
     "username" = {
       glue::glue("https://www.tiktok.com/node/share/user/@{query_1}?aid=1988") %>%
-        add_verify_ua(ua)
+        add_verify_ua(ua, verify)
     },
     "hashtag" = {
       glue::glue("https://m.tiktok.com/api/challenge/detail/?challengeName={query_1}&language=en") %>%
-        add_verify_ua(ua)
+        add_verify_ua(ua, verify)
     },
     "hashtag_post" = {
       base_url <- "https://m.tiktok.com/api/challenge/item_list/?aid=1988"
@@ -70,14 +70,14 @@ get_url <- function(type, n = NULL, cursor = NULL,
         purrr::imap_chr(~paste0("&", .y, "=", .x)) %>%
         paste(collapse = "")  %>%
         paste0(base_url, .) %>%
-        add_verify_ua(ua)
+        add_verify_ua(ua, verify)
     },
     "discover_hash" = {
       glue::glue("https://m.tiktok.com/node/share/discover?noUser=1&userCount={n}&scene=0")
     },
     "music" = {
       glue::glue("https://m.tiktok.com/api/music/detail/?musicId={query_1}&language=en") %>%
-        add_verify_ua(ua)
+        add_verify_ua(ua, verify)
     },
     "music_post" = {
       base_url <- "https://m.tiktok.com/api/music/item_list/?aid=1988"
@@ -88,7 +88,7 @@ get_url <- function(type, n = NULL, cursor = NULL,
         purrr::imap_chr(~paste0("&", .y, "=", .x)) %>%
         paste(collapse = "")  %>%
         paste0(base_url, .) %>%
-        add_verify_ua(ua)
+        add_verify_ua(ua, verify)
     },
     "discover_music" = {
       glue::glue("https://m.tiktok.com/node/share/discover?noUser=1&userCount=30&scene=0&verifyFp=")
@@ -101,7 +101,7 @@ get_url <- function(type, n = NULL, cursor = NULL,
     },
     "post" = {
       glue::glue("https://m.tiktok.com/api/item/detail/?itemId={query_1}&language=en") %>%
-        add_verify_ua(ua)
+        add_verify_ua(ua, verify)
     }
   )
 }
@@ -232,14 +232,14 @@ encode_string <- function(string){
 }
 
 #'@export
-add_verify_ua <- function(url, ua){
-  paste0(url, "&verifyFp=", paste0("verify_", get_verify()), "&user_agent=", encode_string(ua))
+add_verify_ua <- function(url, ua, verify){
+  paste0(url, "&verifyFp=", verify, "&user_agent=", encode_string(ua))
 }
 
 #' @export
 get_signature <- function(urls, ua, port = NULL){
-  verify <- get_verify()
-  urls <- paste0(urls, "&verifyFp=", verify)
+  # verify <- get_verify()
+  # urls <- paste0(urls, "&verifyFp=", verify)
 
   if(!is.null(port)){
     out <- urls %>%
@@ -252,8 +252,40 @@ get_signature <- function(urls, ua, port = NULL){
 }
 
 #' @export
+base36encode <- function(number){
+  alphabet <- stringr::str_extract_all('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', ".")[[1]]
+
+  output <- c()
+  number <- round(as.numeric(number), 0)*1000
+
+  if(number > 0 & number < length(alphabet)){
+    output <- alphabet[i]
+  }
+
+  while(number != 0){
+    i <- round(number, 0) %% 36
+    number <- number %/% 36
+    output <- c(alphabet[i], output)
+  }
+
+  return(paste0(output, collapse = ""))
+}
+
+#' @export
 get_verify <- function(){
-  paste(sample(c(letters, LETTERS, as.character(1:9)), size = 16, replace = T), collapse = "")
+  chars <- stringr::str_extract_all("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", ".")[[1]]
+  title <- base36encode(lubridate::now())
+
+  ending <- 1:36 %>%
+    imap_chr(~{
+      if(.y == 1) return("0")
+      if(.y %in% c(8, 13, 18, 23)) return("_")
+      if(.y %in% c(14)) return("4")
+      return(sample(chars, 1))
+    }) %>%
+    paste(collapse = "")
+
+  paste0("verify_", title, ending)
 }
 
 #' @export
