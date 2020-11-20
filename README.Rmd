@@ -71,8 +71,6 @@ Returns a tibble with trends.
 # Trend
 trends <- tk_posts(scope = "trends", n = 200)
 
-
-
 ```
 
 
