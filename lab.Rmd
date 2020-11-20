@@ -9,6 +9,239 @@ knitr::opts_chunk$set(echo = TRUE)
 pacman::p_load(tidyverse)
 ```
 
+## Endpoints info
+
+
+```{r}
+devtools::load_all()
+
+tk_init()
+
+user <- tk_info(scope = "user", query = "willsmith") %>% glimpse
+hashtag <- tk_info(scope = "hashtag", query = "maincharacter") %>% glimpse
+music <- tk_info(scope = "music", query = "6782187241935505410") %>% glimpse
+post <- tk_info(scope = "post", query = "6826115812009495814") %>% glimpse
+
+trends <- tk_posts(scope = "trends", n = 25) %>% glimpse
+trends <- tk_posts(scope = "trends", n = 50) %>% glimpse
+
+music <- tk_posts(scope = "music", query = "6782187241935505410", n = 25) %>% glimpse
+music <- tk_posts(scope = "music", query = "6782187241935505410", n = 50) %>% glimpse
+
+user_posts <- tk_posts(scope = "user", query = "willsmith", n = 40) %>% glimpse
+user_posts <- tk_posts(scope = "user", query = "willsmith", n = 100) %>% glimpse
+
+hasgtag_posts <- tk_posts(scope = "hashtag", query = "maincharacter", n = 20) %>% glimpse
+hasgtag_posts <- tk_posts(scope = "hashtag", query = "maincharacter", n = 50) %>% glimpse
+
+
+
+```
+
+
+## Get individual tiktok
+
+
+```{r}
+parse_curl_request <- function(){
+  
+  req <- clipr::read_clip() #%>%
+    # stringr::str_split("\n") %>%
+    # .[[1]]
+  
+  url <- req %>% 
+    str_subset("^curl") %>%
+    str_extract("(?<=').*?(?=')")
+  
+  tmp <- req %>%
+    stringr::str_subset("-H") %>%
+    stringr::str_extract("(?<=').*?(?=')") %>%
+    stringr::str_split("\\:\\s+") 
+  
+  headers <- map_chr(tmp, 2)
+  names(headers) <- map_chr(tmp, 1)
+  
+  r_code <- glue::glue("httr::GET(url = {url}, httr::add_headers(.headers = {paste(capture.output(dput(headers)), collapse = '')}))")
+  
+  
+  req <- try(httr::GET(url = url, httr::add_headers(.headers = headers)))
+  
+  dt <- tibble(url = url, headers = list(headers), r_code, req = list(req)) 
+  
+  return(dt)
+  
+}
+```
+
+
+```{r}
+source("https://gist.githubusercontent.com/benjaminguinaudeau/46652c61adee4469899a4026b873d07c/raw/5a3a46e99334990907b65a3d315680bf99e515d2/parse_curl_reqest.R")
+
+res <- parse_curl_request()
+
+params <- str_split(res$url, "&")[[1]]
+
+
+query <- "mysterious_by_nature"
+
+shape_url <- function(){
+  
+  # base_url <- "https://m.tiktok.com/api/item_list/?aid=1988"
+  base_url <- "https://www.tiktok.com/node/share/user/@mysterious_by_nature?aid=1988"
+  
+  
+  # url_params$app_name <- "tiktok_web"     
+  # url_params$device_platform <- "web"     
+  # url_params$referer <- ""  
+  # url_params$root_referer <- ""           
+  # url_params$cookie_enabled <- "true"  
+  # url_params$screen_width <- "1440"       
+  # url_params$screen_height <- "900"       
+  # url_params$browser_language <- "fr-FR"  
+  # url_params$browser_platform <- "MacIntel" 
+  # url_params$browser_online <- "true"                                                                                                 
+  # url_params$ac <- "4g"             
+  # url_params$timezone_name <- "America%2FToronto"                                                                                                       
+  # url_params$priority_region <- ""  
+  # url_params$appId <- "1233"                                                         
+  # url_params$region <- "CA"                                                          
+  #url_params$appType <- "m"                                                          
+  #url_params$isAndroid <- "true"                                                    
+  #url_params$isMobile <- "false"                                                     
+  #url_params$isIOS <- "false"                                                        
+  #url_params$OS <- "mac"     
+  # url_params$language <- "fr" 
+  # url_params$did <- "6893606546577982982"   
+  # url_params$browser_name <- str_extract(ua, ".*?(?=\\/)")
+  # url_params$browser_version <- encode_string(str_remove(ua, ".*?\\/"))
+  # url_params$page_referer <- encode_string("https://www.tiktok.com/foryou")   
+  
+  ## User Query
+  # url_params$uniqueId <- "mysterious_by_nature"
+  # url_params$secUid <- "MS4wLjABAAAAzoTMYqYafiGwnL-hR8DflXL6CSuvU5wDLmz5NdxchWbbR0XL7XuYWq-4XRb4_ldr"
+  # url_params$validUniqueId <- "mysterious_by_nature"
+  
+  url_params <- list()  
+  url_params$id <- "6727327145951183878"
+  url_params$secUid <- "MS4wLjABAAAA8ezUaW4ecJX222ObGXxt07F9BIh4QH3-g1P1DHyChT2LLi2cn-vAE2R53-H672ZO"
+  
+  
+  url_params$count <- "50"
+  url_params$maxCursor <- "1604716686000"
+  url_params$minCursor <- "0"
+  url_params$sourceType <- "8"
+   
+  ua <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36"
+  url_params$user_agent <- encode_string(ua)
+  url_params$verifyFp <- paste0("verify_", get_verify())
+                
+  
+  query <- url_params %>% imap_chr(~paste0("&", .y, "=", .x)) %>% paste(collapse = "")  %>% paste0(base_url, .)
+  final_url <- get_signature(url, ua = ua, port = NULL)
+  tiktok_res <- httr::GET(final_url, httr::add_headers(.headers = c("user-agent" = ua)))
+  jsonlite::fromJSON(rawToChar(tiktok_res$content))
+  
+user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50)
+  
+  
+}
+
+url <- get_url(type, n = 50, min = min_cursor, max = max_cursor, query_1 = query_1, query_2 = query_2, verify = verify) %>% shape_query_info(ua)
+
+query_2
+
+query <- "https://m.tiktok.com/api/item_list/?count=50&id=6727327145951183878&type=1&secUid=MS4wLjABAAAA8ezUaW4ecJX222ObGXxt07F9BIh4QH3-g1P1DHyChT2LLi2cn-vAE2R53-H672ZO&maxCursor=0&minCursor=0&sourceType=8&appId=1233&user_agent=Mozilla%2F5.0+(iPhone%3B+CPU+iPhone+OS+11_0+like+Mac+OS+X)+AppleWebKit%2F604.1.38+(KHTML,+like+Gecko)+Version%2F11.0+Mobile%2F15A372+Safari%2F604.1&verifyFp=verify_UAVDUveeTllPrHhP"
+
+
+ base_url <- "https://m.tiktok.com/api/item_list/?aid=1988"
+
+
+shape_query_user_post <- function(base_url, ua, n, min = min_cursor, max = max_cursor, query_1 = query_1, query_2 = query_2){
+  url_params <- list()  
+  url_params$id <- query_1
+  url_params$secUid <- query_2
+  url_params$count <- n
+  url_params$maxCursor <- max
+  url_params$minCursor <- min
+  url_params$sourceType <- "8"
+  url_params$user_agent <- encode_string(ua)
+  url_params$verifyFp <- paste0("verify_", get_verify())
+  
+  url_params %>% imap_chr(~paste0("&", .y, "=", .x)) %>% paste(collapse = "")  %>% paste0(base_url, .)
+}
+
+from_unix(1604716686)
+
+res$headers[[1]][["user-agent"]]
+
+
+dput(params)
+c("https://www.tiktok.com/node/share/user/@mysterious_by_nature?aid=1988", 
+"user_agent=Mozilla%2F5.0+(Macintosh%3B+Intel+Mac+OS+X+10_15_7)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F86.0.4240.198+Safari%2F537.36", 
+"verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI", 
+"sec_uid=", "lang=fr", "uniqueId=mysterious_by_nature", "secUid=MS4wLjABAAAAzoTMYqYafiGwnL-hR8DflXL6CSuvU5wDLmz5NdxchWbbR0XL7XuYWq-4XRb4_ldr", 
+"validUniqueId=mysterious_by_nature")
+
+
+tk_info("user", "mysterious_by_nature", ua = ua, port = NULL) %>%
+  glimpse
+```
+
+
+
+```{r}
+tk_info(scope = "hashtag", query = "trump")
+
+
+
+tk_info("user")
+tk_info("music")
+tk_info("post", )
+
+
+```
+
+
+```{r}
+page <- xml2::read_html("https://www.tiktok.com/@dieterbohlen/video/6871895622593678594")
+url <- page %>%
+  rvest::html_node("video") %>%
+  rvest::html_attr("src")
+
+download.file(url, "~/test.mp4")
+
+req <- httr::GET("https://www.tiktok.com/@dieterbohlen/video/6871895622593678594", 
+                 httr::add_headers(.headers = c(
+                   `user-agent` = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36",
+                   cookie = "SLARDAR_WEB_ID=f8755c60-76b2-487e-8926-e8921f409314; tt_webid_v2=6851597117224830469; s_v_web_id=verify_kcz0vg19_eEzm6b6R_XRlA_4lLL_85mu_iL0JG0gbmt2l; tt_webid=6851597117224830469; store-country-code=unknown; MONITOR_WEB_ID=4fe28730-c051-4323-b4fe-c5b5f49434e0; cookie-consent={%22ga%22:true%2C%22af%22:true%2C%22fbp%22:true%2C%22lip%22:true%2C%22version%22:%22v2%22}; passport_csrf_token=d1d5eea2525394591137d5e061831f85; passport_auth_status=a8f6603b0a36020fe7185cf6e9f3b73d%2C; sid_guard=4f64c2d255a7843c8359cf6e9deb9ca4%7C1600848857%7C5184000%7CSun%2C+22-Nov-2020+08%3A14%3A17+GMT; uid_tt=e6e4d1f7058002b014d00ac00d333b2b348cd6e9cd1f91d2b3c90e1fdecaaef4; uid_tt_ss=e6e4d1f7058002b014d00ac00d333b2b348cd6e9cd1f91d2b3c90e1fdecaaef4; sid_tt=4f64c2d255a7843c8359cf6e9deb9ca4; sessionid=4f64c2d255a7843c8359cf6e9deb9ca4; sessionid_ss=4f64c2d255a7843c8359cf6e9deb9ca4; store-idc=alisg"
+                 )))
+
+test <- rawToChar(req$content)
+
+str_extract_all(test, '.{30}src="http.*?".{30}')
+library(rvest)
+test %>%
+  html_children %>%
+  .[[2]] %>%
+  html_children %>%
+  .[[1]] %>%
+  html_children %>%
+  as.character
+map(html_children) %>%
+  
+  rvest::html_node("video") %>%
+  rvest::html_attr("src")
+
+```
+
+
+
+```{R}
+
+system("curl 'https://www.tiktok.com/@dieterbohlen/video/6871895622593678594' -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36' -H 'cookie: SLARDAR_WEB_ID=f8755c60-76b2-487e-8926-e8921f409314; tt_webid_v2=6851597117224830469; s_v_web_id=verify_kcz0vg19_eEzm6b6R_XRlA_4lLL_85mu_iL0JG0gbmt2l; tt_webid=6851597117224830469; store-country-code=unknown; MONITOR_WEB_ID=4fe28730-c051-4323-b4fe-c5b5f49434e0; cookie-consent={%22ga%22:true%2C%22af%22:true%2C%22fbp%22:true%2C%22lip%22:true%2C%22version%22:%22v2%22}; passport_csrf_token=d1d5eea2525394591137d5e061831f85; passport_auth_status=a8f6603b0a36020fe7185cf6e9f3b73d%2C; sid_guard=4f64c2d255a7843c8359cf6e9deb9ca4%7C1600848857%7C5184000%7CSun%2C+22-Nov-2020+08%3A14%3A17+GMT; uid_tt=e6e4d1f7058002b014d00ac00d333b2b348cd6e9cd1f91d2b3c90e1fdecaaef4; uid_tt_ss=e6e4d1f7058002b014d00ac00d333b2b348cd6e9cd1f91d2b3c90e1fdecaaef4; sid_tt=4f64c2d255a7843c8359cf6e9deb9ca4; sessionid=4f64c2d255a7843c8359cf6e9deb9ca4; sessionid_ss=4f64c2d255a7843c8359cf6e9deb9ca4; store-idc=alisg'", intern = T)
+```
+
+
 ```{r}
 reticulate::use_python("/usr/local/bin/python3")
 library(reticulate)
@@ -46,8 +279,8 @@ id_cookie <-  "sid_guard=2555fb582f00401d62c180f491cdf712%7C1595547871%7C5184000
 Sys.setenv("tiktok_vpn_host" = "192.168.1.14", "tiktok_vpn_port" = "5000")
 
 test <- tk_comment(post_id = post_id, verify = verify, id_cookie = id_cookie, port = NULL, vpn = T, verbose = T) %>%
-    mutate(timestamp = as.numeric(Sys.time()), 
-           query = post_id)
+  mutate(timestamp = as.numeric(Sys.time()), 
+         query = post_id)
 
 test
 

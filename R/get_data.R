@@ -2,23 +2,30 @@
 #' @description Main function to get data from tiktok
 #' @export
 
-get_n <- function(type, n = 10000, start_date = lubridate::dmy("01-01-1900"),cursor = 0, ua = default_ua, port = NULL, query_1 = NULL, query_2 = NULL, save_dir = NULL, query = NULL, vpn = F, verify = ""){
+get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"),cursor = 0, ua = default_ua, port = NULL, query_1 = NULL, query_2 = "", save_dir = NULL, query = NULL, vpn = F, verify = ""){
   response <- tibble::tibble()
-  max_n <- 50
+  if(stringr::str_detect(scope, "music|trend|hash")){
+    max_n <- 30
+  } else {
+    max_n <- 50
+  }
   max_cursor <- cursor
   min_cursor <- cursor
 
   while(nrow(response) < n){
     # cat("\rCursor: ", max_cursor, "  TikToks: ", nrow(response))
 
-    url <- get_url(type, n = 50, min = min_cursor, max = max_cursor, query_1 = query_1, query_2 = query_2, verify = verify)
+    url <- get_url(scope, n = max_n, min = min_cursor, max = max_cursor, query_1 = query_1, query_2 = query_2, verify = verify)
     out <- get_data(url, ua = ua, port = port, parse = T, vpn = vpn)
 
-    if(type %in% c("hashtag_post", "sound_post")){
-      out$items <- out$body$itemListData
+    if(scope %in% c("music_post", "hashtag_post")){
+      out$items <- out$itemList
     }
+    # if(scope %in% c("hashtag_post", "sound_post")){
+    #   out$items <- out$body$itemListData
+    # }
 
-    if(stringr::str_detect(type, "discover")){
+    if(stringr::str_detect(scope, "discover")){
 
       data <- out$body$exploreList %>%
         purrr::compact() %>%
@@ -54,7 +61,7 @@ get_n <- function(type, n = 10000, start_date = lubridate::dmy("01-01-1900"),cur
       out <- out$body
       max_cursor <- out$maxCursor
     }
-    if(type != "user_post"){ min_cursor = as.character(out$minCursor)}
+    if(scope != "user_post"){ min_cursor = as.character(out$minCursor)}
 
     # utils::flush.console()
 
@@ -69,7 +76,7 @@ get_n <- function(type, n = 10000, start_date = lubridate::dmy("01-01-1900"),cur
       }
     }
 
-    if(type == "user_post"){
+    if(scope == "user_post"){
       if(min(from_unix(response$createTime)) < start_date){
         response <- response %>%
           dplyr::filter(from_unix(createTime) < start_date)
@@ -96,7 +103,7 @@ get_n <- function(type, n = 10000, start_date = lubridate::dmy("01-01-1900"),cur
 get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_cookie = "", signed = F, time_out = 10){
 
   if(!signed){
-    final_url = get_signature(url, ua = ua, port = port)
+    final_url <- get_signature(url, ua = ua, port = port)
   } else {
     final_url <- url
   }
@@ -111,8 +118,9 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_c
                   referer = "https://www.tiktok.com/trending?lang=en",
                   `user-agent` = ua,
                   cookie = id_cookie
-                )),
-                timeout = httr::timeout(time_out))
+                ))#,
+                # timeout = httr::timeout(time_out)
+                )
     })
   }
 
@@ -122,6 +130,10 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_c
 
   content <- rawToChar(req$content)
 
+  if(content == "illegal request..."){
+    warning("illegal request")
+    content <- "{}"
+  }
   if(content == "") content <- "{}"
 
   out <- content %>%

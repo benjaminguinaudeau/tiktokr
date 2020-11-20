@@ -19,3 +19,5 @@ Imports:
     purrr,
     jsonlite,
     readr
+Suggests: 
+    testthat

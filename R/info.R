@@ -10,16 +10,15 @@ tk_info <- function(scope, query, ua = default_ua, port = NULL, vpn = F){
   res <- switch(
     scope,
     "user" = {
-      url <- get_url("username", query_1 = query)
+      url <- get_url("username", query_1 = query, ua = ua)
       get_data(url, ua = ua, port = port, vpn = vpn)$userInfo
     },
     "hashtag" = {
-      url <- get_url("hashtag", query_1 = query)
+      url <- get_url("hashtag", query_1 = query, ua = ua)
       get_data(url, ua = ua, port = port, vpn = vpn)
     },
     "music" = {
-      url <- get_url("music", query_1 = query)
-      get_data(url, ua = ua, port = port, vpn = vpn)
+      tk_posts(scope = "music", query = "6782187241935505410", n = 1, port = port, vpn = vpn, ua = ua)
     },
     "post" = {
       url <- get_url("post", query_1 = query)

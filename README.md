@@ -110,7 +110,6 @@ trends %>%
 From hashtag:
 
 ``` r
-
 hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 5)
 
 hash_post %>%

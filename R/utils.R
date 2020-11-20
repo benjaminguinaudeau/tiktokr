@@ -17,7 +17,8 @@ NULL
 
 get_url <- function(type, n = NULL, cursor = NULL,
                     verify = "",
-                    query_1 = NULL, query_2 = NULL,
+                    query_1 = NULL, query_2 = "",
+                    ua = default_ua,
                     # username = NULL, user_id = NULL, sec_uid = NULL,
                     # comment_id = NULL, post_id = NULL,
                     # hashtag = NULL, hash_id = NULL,
@@ -27,28 +28,67 @@ get_url <- function(type, n = NULL, cursor = NULL,
   switch(
     type,
     "trending" = {
-      glue::glue("https://m.tiktok.com/api/item_list/?count={n}&id=1&type=5&secUid=&maxCursor={max}&minCursor={min}&sourceType=12&appId=1233")
+      base_url <- "https://m.tiktok.com/api/item_list/?aid=1988"
+
+      url_params <- list(id = "1", secUid = "", count = n,
+                         maxCursor = max, minCursor = min, sourceType = "12")
+
+      url_params %>%
+        imap_chr(~paste0("&", .y, "=", .x)) %>%
+        paste(collapse = "")  %>%
+        paste0(base_url, .) %>%
+        add_verify_ua(ua)
     },
     "user_post" = {
-      glue::glue("https://m.tiktok.com/api/item_list/?count={n}&id={query_1}&type=1&secUid={query_2}&maxCursor={max}&minCursor={min}&sourceType=8&appId=1233")
+      base_url <- glue::glue("https://m.tiktok.com/api/item_list/?aid=1988")
+
+      url_params <- list(id = query_1, secUid = query_2, count = n,
+                         maxCursor = max, minCursor = min, sourceType = "8")
+
+      url_params %>%
+        imap_chr(~paste0("&", .y, "=", .x)) %>%
+        paste(collapse = "")  %>%
+        paste0(base_url, .) %>%
+        add_verify_ua(ua)
+
     },
     "username" = {
-      glue::glue("https://m.tiktok.com/api/user/detail/?uniqueId={query_1}")
+      glue::glue("https://www.tiktok.com/node/share/user/@{query_1}?aid=1988") %>%
+        add_verify_ua(ua)
     },
     "hashtag" = {
-      glue::glue("https://m.tiktok.com/api/challenge/detail/?verifyFP=&challengeName={query_1}&language=en")
+      glue::glue("https://m.tiktok.com/api/challenge/detail/?challengeName={query_1}&language=en") %>%
+        add_verify_ua(ua)
     },
     "hashtag_post" = {
-      glue::glue("https://m.tiktok.com/share/item/list?secUid=&id={query_1}&type=3&count={n}&minCursor={min}&maxCursor={max}&shareUid=&lang=en")
+      base_url <- "https://m.tiktok.com/api/challenge/item_list/?aid=1988"
+
+      url_params <- list(challengeID = query_1, count = n, shareUid = "",
+                         cursor = min)
+
+      url_params %>%
+        imap_chr(~paste0("&", .y, "=", .x)) %>%
+        paste(collapse = "")  %>%
+        paste0(base_url, .) %>%
+        add_verify_ua(ua)
     },
     "discover_hash" = {
       glue::glue("https://m.tiktok.com/node/share/discover?noUser=1&userCount={n}&scene=0")
     },
     "music" = {
-      glue::glue("https://m.tiktok.com/api/music/detail/?musicId={query_1}&language=en")
+      glue::glue("https://m.tiktok.com/api/music/detail/?musicId={query_1}&language=en") %>%
+        add_verify_ua(ua)
     },
     "music_post" = {
-      glue::glue("https://m.tiktok.com/share/item/list?secUid=&id={query_1}&type=4&count={n}&minCursor={min}&maxCursor={max}&shareUid=&lang=en")
+      base_url <- "https://m.tiktok.com/api/music/item_list/?aid=1988"
+
+      url_params <- list(musicID = query_1, count = n,cursor = min)
+
+      url_params %>%
+        imap_chr(~paste0("&", .y, "=", .x)) %>%
+        paste(collapse = "")  %>%
+        paste0(base_url, .) %>%
+        add_verify_ua(ua)
     },
     "discover_music" = {
       glue::glue("https://m.tiktok.com/node/share/discover?noUser=1&userCount=30&scene=0&verifyFp=")
@@ -60,7 +100,8 @@ get_url <- function(type, n = NULL, cursor = NULL,
       glue::glue("https://www.tiktok.com/api/comment/list/reply/?comment_id={query_1}&item_id={query_2}&cursor={cursor}&count={n}&aid=1988&app_language=fr&device_platform=web_pc&current_region=CA&fromWeb=1&channel_id=5&verifyFp={verify}")
     },
     "post" = {
-      glue::glue("https://m.tiktok.com/api/item/detail/?itemId={query_1}&language=en&verifyFp={verify}")
+      glue::glue("https://m.tiktok.com/api/item/detail/?itemId={query_1}&language=en") %>%
+        add_verify_ua(ua)
     }
   )
 }
@@ -90,6 +131,7 @@ parse_json_structure <- function(x){
 #' @description Intitalize puppeeter browser in the reticulate session
 #' @export
 tk_init <- function(){
+  require(reticulate)
   reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/stealth.py")
   reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/browser.py")
 }
@@ -98,7 +140,7 @@ tk_init <- function(){
 #' @description Install needed python libraries
 #' @export
 tk_install <- function(){
-  reticulate::py_install(c("pyppeteer", "pyppeteer_stealth", "asyncio"), pip = T)
+  reticulate::py_install(c("pyppeteer", "pyppeteer_stealth", "asyncio", "requests"), pip = T)
 }
 
 
@@ -182,8 +224,32 @@ from_unix <- function(x) {
 }
 
 #'@export
-default_ua <- "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"
+default_ua <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36"
 
+#'@export
+encode_string <- function(string){
+  str_replace_all(string, c("\\s+" = "+", "/" = "%2F", ";" = "%3B" ))
+}
+
+#'@export
+add_verify_ua <- function(url, ua){
+  paste0(url, "&verifyFp=", paste0("verify_", get_verify()), "&user_agent=", encode_string(ua))
+}
+
+#'@export
+shape_query_user_post <- function(base_url, ua, n, min, max, query_1 = query_1, query_2 = query_2){
+  url_params <- list()
+  url_params$id <- query_1
+  url_params$secUid <- query_2
+  url_params$count <- n
+  url_params$maxCursor <- max
+  url_params$minCursor <- min
+  url_params$sourceType <- "8"
+  url_params$user_agent <- encode_string(ua)
+  url_params$verifyFp <- paste0("verify_", get_verify())
+
+  url_params %>% imap_chr(~paste0("&", .y, "=", .x)) %>% paste(collapse = "")  %>% paste0(base_url, .)
+}
 
 #' @export
 get_signature <- function(urls, ua, port = NULL){
@@ -191,10 +257,10 @@ get_signature <- function(urls, ua, port = NULL){
   urls <- paste0(urls, "&verifyFp=", verify)
 
   if(!is.null(port)){
-      out <- urls %>%
-        purrr::map_chr(get_docker_signature, port = port)
+    out <- urls %>%
+      purrr::map_chr(get_docker_signature, port = port)
   } else {
-      out <- get_puppeteer_signature(urls, ua)
+    out <- get_puppeteer_signature(urls, ua)
   }
 
   paste0(urls, "&_signature=", out)
@@ -207,6 +273,10 @@ get_verify <- function(){
 
 #' @export
 get_puppeteer_signature <- function(urls, ua){
+
+  if(!exists("py")) stop("Tiktokr was not initialized. Please run `tk_init()")
+  if(!"browser" %in% names(py)) stop("Tiktokr was not initialized. Please run `tk_init()")
+
 
   url <- paste(urls, collapse = '", "')
 
