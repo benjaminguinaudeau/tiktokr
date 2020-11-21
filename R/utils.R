@@ -137,12 +137,49 @@ tk_init <- function(){
   reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/browser.py")
 }
 
+
+#' @title Set up a TikTok cookie
+#' @description This function will add a TikTok cookie to your
+#'   \code{.Renviron} file so it can be called securely without being stored in
+#'   your code. After you have installed your key, it can be called any time by
+#'   typing \code{Sys.getenv("TIKTOK_COOKIE")}. If you do not have an \code{.Renviron} file, the
+#'   function will create one for you.
+#' @param cookie The TikTok cookie as string. Find out here how to get a TikTok cookie: \url{https://www.youtube.com/watch?v=kYMV2ugxacs&feature=youtu.be}
+#' @export tk_auth
+#' @examples
+#'
+#' \dontrun{
+#' # Put in your cookie:
+#' tk_auth(cookie = "abcd012345678901234567890123456789")
+#' # Restart R for changes to take effect or load your environment so you can use the cookie without
+#' # restarting R.
+#' readRenviron("~/.Renviron")
+#' # You can check it with:
+#' Sys.getenv("TIKTOK_COOKIE")
+#' }
+tk_auth <- function(cookie) {
+
+  if (Sys.getenv("TIKTOK_COOKIE") == "" | missing(cookie)) {
+    cookie <- rstudioapi::askForPassword(prompt = "Please enter the TikToK cookie")
+    # message("Setting API key as AIRTABLE_API_KEY environment variable.")
+
+    if(length(cookie)==0){
+      stop("No Cookie specified. Please try again.")
+    }
+  }
+
+  set_renv("TIKTOK_COOKIE" = cookie)
+
+}
+
 #' tk_install
 #' @description Install needed python libraries
 #' @export
 tk_install <- function(){
   reticulate::py_install(c("pyppeteer", "pyppeteer_stealth", "asyncio", "requests"), pip = T)
 }
+
+
 
 
 #' tk_dl_video

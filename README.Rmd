@@ -54,17 +54,9 @@ tk_install()
 ```
 
 
-## Examples
+## Authentification
 
-First you need to initialize `tiktokr`
-
-```{r}
-tk_init()
-```
-
-## Authentification issue
-
-In November 2020, Tiktok increased its security issue. They now have a captcha, which easily triggered after a few request. This can be solved by specifying the cookie parameter. To get a cookie session: 
+In November 2020, Tiktok increased its security protocal. They now frequently show a captcha, which is easily triggered after a few request. This can be solved by specifying the cookie parameter. To get a cookie session: 
 
 1. Open a browser and go to "http://tiktok.com"
 2. Scroll down a bit, to ensure, that you don't get any captcha
@@ -76,6 +68,15 @@ In November 2020, Tiktok increased its security issue. They now have a captcha, 
 ```{r}
 cookie <- "<paste here the result from document.cookie>"
 ```
+
+## Examples
+
+First you need to initialize `tiktokr`
+
+```{r}
+tk_init()
+```
+
 
 
 ### Get TikTok trends
