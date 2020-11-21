@@ -1,8 +1,15 @@
 #' @export
-tk_comment <- function(post_id, ua = default_ua, verify = "", id_cookie = "", port = NULL, vpn = F, verbose = T){
+tk_comment <- function(post_id, ua = default_ua, cookie = "", port = NULL, vpn = F, verbose = T){
+
+
+  if(stringr::str_detect(cookie, "verify_.")){
+    verify <- cookie %>% stringr::str_extract("verify_.*?(?=\\s|$|\\;)")
+  } else {
+    verify <- ""
+  }
 
   response <- tibble::tibble()
-  count <- sample(50:100, 1)
+  count <- sample(30:50, 1)
   max_cursor <- 1000
   has_more <- T
 
@@ -14,7 +21,7 @@ tk_comment <- function(post_id, ua = default_ua, verify = "", id_cookie = "", po
 
     index <- 1
     while(has_more & index <= 20){
-      res <- get_data(fins[index], ua = ua, port = port, vpn = vpn, id_cookie = id_cookie, signed = T)
+      res <- get_data(url = fins[index], ua = ua, port = port, vpn = vpn, cookie = cookie, signed = T)
 
       data <- try({
         res %>%

@@ -94,7 +94,8 @@ get_url <- function(type, n = NULL, cursor = NULL,
       glue::glue("https://m.tiktok.com/node/share/discover?noUser=1&userCount=30&scene=0&verifyFp=")
     },
     "comment" = {
-      glue::glue("https://www.tiktok.com/api/comment/list/?aweme_id={query_1}&cursor={cursor}&count={n}&aid=1988&app_language=fr&device_platform=web_pc&current_region=CA&fromWeb=1&channel_id=5&verifyFp={verify}")
+      glue::glue("https://www.tiktok.com/api/comment/list/?aid=1988&aweme_id={query_1}&cursor={cursor}&count={n}&aid=1988") %>%
+        add_verify_ua(ua, verify)
     },
     "reply" = {
       glue::glue("https://www.tiktok.com/api/comment/list/reply/?comment_id={query_1}&item_id={query_2}&cursor={cursor}&count={n}&aid=1988&app_language=fr&device_platform=web_pc&current_region=CA&fromWeb=1&channel_id=5&verifyFp={verify}")
@@ -237,7 +238,7 @@ add_verify_ua <- function(url, ua, verify){
 }
 
 #' @export
-get_signature <- function(urls, ua, port = NULL){
+get_signature <- function(urls, ua = default_ua, port = NULL){
   # verify <- get_verify()
   # urls <- paste0(urls, "&verifyFp=", verify)
 

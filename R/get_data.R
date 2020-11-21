@@ -100,7 +100,7 @@ get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"),cu
 #' @param url url to visit and get data from
 #' @param parse logical. whether to return parsed data or not. Defautls to \code{TRUE}.
 #' @export
-get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_cookie = "", signed = F, time_out = 10){
+get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, cookie = "", signed = F, time_out = 10){
 
   if(!signed){
     final_url <- get_signature(url, ua = ua, port = port)
@@ -117,12 +117,12 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_c
       httr::GET(final_url,
                 httr::add_headers(.headers = c(
                   method = "GET",
-                  # referer = "https://www.tiktok.com/trending?lang=en",
+                  referer = "https://www.tiktok.com/foryou",
                   `user-agent` = ua,
-                  cookie = "s_v_web_id=verify_VzQUiCcjHlCdPyPz"
+                  cookie = cookie
                 ))#,
                 # timeout = httr::timeout(time_out)
-                )
+      )
     })
   }
 
@@ -144,8 +144,15 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, id_c
   out <- content %>%
     jsonlite::fromJSON()
 
-  if(out$statusCode == "10000"){
-    stop("Captcha required. Please update the cookie file.")
+  if(!is.null(out[["statusCode"]])){
+    if(out$statusCode == "10000"){
+      stop("Captcha required. Please update the cookie file.")
+    }
+  }
+  if(!is.null(out[["status_code"]])){
+    if(out$status_code == "8"){
+      # stop("Captcha required. Please update the cookie file.")
+    }
   }
 
   return(out)
