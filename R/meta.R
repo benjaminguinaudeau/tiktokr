@@ -39,7 +39,7 @@ tk_auth <- function(cookie, ua, id_cookie) {
     }
   }
   if(missing(cookie) & Sys.getenv("TIKTOK_COOKIE") != ""){
-    message("A tiktok cookie is already stored in .Renviron")
+    message("Tiktok cookie already specified in `.Renviron`")
     cookie <- Sys.getenv("TIKTOK_COOKIE")
   }
   if(Sys.getenv("TIKTOK_COOKIE") != cookie){
@@ -50,13 +50,14 @@ tk_auth <- function(cookie, ua, id_cookie) {
   ## User agent
 
 
-  if(missing(ua) & Sys.getenv("TIKTOK_UA") != ""){
-    message("A user agent is already stored in .Renviron")
-  }
   if (missing(ua) & Sys.getenv("TIKTOK_UA") == "") {
+    message("Using default User Agent")
     ua <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36"
   }
-  if(missing(ua)) ua <- Sys.getenv("TIKTOK_UA")
+  if(missing(ua) & Sys.getenv("TIKTOK_UA") != ""){
+    message("User agent already specified in `.Renviron`")
+    ua <- Sys.getenv("TIKTOK_UA")
+  }
   if(Sys.getenv("TIKTOK_UA") != ua){
     message("User agent was updated")
     set_renv("TIKTOK_UA" = ua)
