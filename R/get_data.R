@@ -2,7 +2,7 @@
 #' @description Main function to get data from tiktok
 #' @export
 
-get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"),cursor = 0, ua = default_ua, port = NULL, query_1 = NULL, query_2 = "", save_dir = NULL, query = NULL, vpn = F, verify = ""){
+get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"), cursor = 0, query_1 = NULL, query_2 = "", save_dir = NULL, query = NULL, ...){
   response <- tibble::tibble()
   if(stringr::str_detect(scope, "music|trend|hash")){
     max_n <- 30
@@ -13,17 +13,13 @@ get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"),cu
   min_cursor <- cursor
 
   while(nrow(response) < n){
-    # cat("\rCursor: ", max_cursor, "  TikToks: ", nrow(response))
 
-    url <- get_url(scope, n = max_n, min = min_cursor, max = max_cursor, query_1 = query_1, query_2 = query_2, verify = verify)
-    out <- get_data(url, ua = ua, port = port, parse = T, vpn = vpn)
+    url <- get_url(scope, n = max_n, min = min_cursor, max = max_cursor, query_1 = query_1, query_2 = query_2)
+    out <- get_data(url, parse = T, ...)
 
     if(scope %in% c("music_post", "hashtag_post")){
       out$items <- out$itemList
     }
-    # if(scope %in% c("hashtag_post", "sound_post")){
-    #   out$items <- out$body$itemListData
-    # }
 
     if(stringr::str_detect(scope, "discover")){
 
@@ -100,28 +96,23 @@ get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"),cu
 #' @param url url to visit and get data from
 #' @param parse logical. whether to return parsed data or not. Defautls to \code{TRUE}.
 #' @export
-get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, cookie = "", signed = F, time_out = 10){
+get_data <- function(url, parse = T, port = NULL, vpn = F, cookie = "", time_out = 10){
 
-  if(!signed){
-    final_url <- get_signature(url, ua = ua, port = port)
-  } else {
-    final_url <- url
+  if(!stringr::str_detect(url, "&_signature=")){
+    url <- get_signature(url, port = port)
   }
 
-  # final_url <- url
-
   if(vpn){
-    req <- try(get_vpn_data(final_url, ua, id_cookie = id_cookie, time_out = time_out))
+    req <- try(get_vpn_data(url, cookie = cookie, time_out = time_out))
   } else {
     req <- try({
-      httr::GET(final_url,
+      httr::GET(url,
                 httr::add_headers(.headers = c(
                   method = "GET",
                   referer = "https://www.tiktok.com/foryou",
-                  `user-agent` = ua,
+                  `user-agent` = Sys.getenv("TIKTOK_UA"),
                   cookie = cookie
-                ))#,
-                # timeout = httr::timeout(time_out)
+                ))
       )
     })
   }
@@ -136,6 +127,7 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, cook
     warning("illegal request")
     content <- "{}"
   }
+
   if(content == ""){
     warning("empty response ; something was probably wrong with the request")
     content <- "{}"
@@ -158,29 +150,3 @@ get_data <- function(url, ua = default_ua, parse = T, port = NULL, vpn = F, cook
   return(out)
 }
 
-#' @export
-get_vpn_data <- function(final_url, ua = default_ua, vpn_host = "", vpn_port = "", id_cookie = "", time_out = 10){
-
-  if(vpn_host == ""){
-    vpn_host <- Sys.getenv("tiktok_vpn_host")
-  }
-
-  if(vpn_port == ""){
-    vpn_port <- Sys.getenv("tiktok_vpn_port")
-  }
-
-  head <- list(
-    method = "GET",
-    referer = "https://www.tiktok.com/trending?lang=en",
-    `user-agent` = ua,
-    cookie = id_cookie
-  )
-
-  data <- list(url = final_url, head = head)
-
-  req <- try({
-    httr::POST(glue::glue("http://{vpn_host}:{vpn_port}/get"), body = data,  encode = "json", timeout = httr::timeout(time_out))
-  })
-
-  return(req)
-}

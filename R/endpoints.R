@@ -5,13 +5,7 @@
 #' @param query Character indicating the username/hashtag/music_id to scrape
 #' @param n Numeric indicating the number of tiktoks to scrape
 #' @export
-tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("01-01-1900"), cursor = 0, save_dir = NULL, port = NULL, ua = default_ua, vpn = F, verbose = T, cookie = "wrong_verify"){
-
-  if(stringr::str_detect(cookie, "verify_.")){
-    verify <- cookie %>% stringr::str_extract("verify_.*?(\\s|$)")
-  } else {
-    verify <- ""
-  }
+tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("01-01-1900"), save_dir = NULL, verbose = T, ...){
 
   if(!(scope %in% c("user", "hashtag", "music", "trends"))){
     stop("scope must be one of the following: user, hashtag, music or trends")
@@ -21,14 +15,14 @@ tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("
     switch(
       scope,
       "user" = {
-        user <- tk_info(scope = scope, query, port = port, ua = ua, vpn = vpn, cookie = cookie)
+        user <- tk_info(scope = scope, query, ...)
         if(length(user) == 0){
           tibble::tibble(author_uniqueId = query, id = NA_character_)
         } else if(user$stats.videoCount == 0 | user$user.privateAccount){
           user
         } else {
           tmp <- get_n("user_post", n = n, start_date = start_date, query_1 = user$user.id, query_2 = user$user.secUid, query = query,
-                       save_dir = save_dir, port = port, ua = ua, vpn = vpn, verify = verify) %>%
+                       save_dir = save_dir, ...) %>%
             dplyr::bind_cols(user)
           if(nrow(tmp) == 0){
             user$stats.videoCount <- 0
@@ -39,18 +33,15 @@ tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("
         }
       },
       "hashtag" = {
-        hash <- tk_info(scope = scope, query, port = port, ua = ua, vpn = vpn, cookie = cookie)
+        hash <- tk_info(scope = scope, query, ...)
         ## TODO: hash$challengeInfo.challenge.id this probably needs to be a better variable name!
-        get_n("hashtag_post", n = n, cursor = cursor, query_1 = hash$challengeInfo.challenge.id, query = query,
-              save_dir = save_dir, port = port, ua = ua, vpn = vpn, verify = verify)
+        get_n("hashtag_post", n = n, query_1 = hash$challengeInfo.challenge.id, query = query, save_dir = save_dir, ...)
       },
       "music" = {
-        get_n("music_post", n = n, query_1 = query, query = query,
-              save_dir = save_dir, port = port, ua = ua, vpn = vpn, verify = verify)
+        get_n("music_post", n = n, query_1 = query, query = query, save_dir = save_dir, ...)
       },
       "trends" = {
-        get_n("trending", n = n,
-              save_dir = save_dir, port = port, ua = ua, vpn = vpn, verify = verify)
+        get_n("trending", n = n, save_dir = save_dir, ...)
       }
     )
   })
@@ -100,18 +91,17 @@ tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("
 #' tk_discover
 #' @param scope Character indicating the endpoint to scrape (must be "hashtag" or "music")
 #' @description Function to get 20 suggested hashtags or music_ids
-#' @export
-tk_discover <- function(scope, save_dir = NULL, port = NULL, ua = default_ua, vpn = F){
-
-  if(!(scope %in% c("hashtag", "music"))){
-    stop("scope must be one of the following: hashtag or music")
-  }
-
-  switch(
-    scope,
-    "hashtag" = get_n("discover_hash", save_dir = NULL, port = NULL, ua = ua, vpn = vpn),
-    "music" = get_n("discover_music", save_dir = NULL, port = NULL, ua = ua, vpn = vpn)
-  )
-
-}
+# tk_discover <- function(scope, save_dir = NULL, port = NULL, ua = default_ua, vpn = F){
+#
+#   if(!(scope %in% c("hashtag", "music"))){
+#     stop("scope must be one of the following: hashtag or music")
+#   }
+#
+#   switch(
+#     scope,
+#     "hashtag" = get_n("discover_hash", save_dir = NULL, port = NULL, ua = ua, vpn = vpn),
+#     "music" = get_n("discover_music", save_dir = NULL, port = NULL, ua = ua, vpn = vpn)
+#   )
+#
+# }
 

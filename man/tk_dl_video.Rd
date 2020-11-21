@@ -4,15 +4,7 @@
 \alias{tk_dl_video}
 \title{tk_dl_video}
 \usage{
-tk_dl_video(
-  post_id = NULL,
-  url = NULL,
-  path,
-  ua = default_ua,
-  port = NULL,
-  vpn = F,
-  verbose = T
-)
+tk_dl_video(post_id = NULL, url = NULL, path, verbose = T, ...)
 }
 \arguments{
 \item{url}{url of tiktok to scrape}

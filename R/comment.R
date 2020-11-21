@@ -1,12 +1,5 @@
 #' @export
-tk_comment <- function(post_id, ua = default_ua, cookie = "", port = NULL, vpn = F, verbose = T){
-
-
-  if(stringr::str_detect(cookie, "verify_.")){
-    verify <- cookie %>% stringr::str_extract("verify_.*?(?=\\s|$|\\;)")
-  } else {
-    verify <- ""
-  }
+tk_comment <- function(post_id, verbose = T, port = NULL, vpn = vpn){
 
   response <- tibble::tibble()
   count <- sample(30:50, 1)
@@ -16,12 +9,12 @@ tk_comment <- function(post_id, ua = default_ua, cookie = "", port = NULL, vpn =
   while(has_more){
     cursor <- seq(max_cursor - 1000, max_cursor - 1, 50)
 
-    urls <- get_url("comment", query_1 = post_id, n = count, cursor = cursor, verify = verify)
-    fins <- get_signature(urls, ua, port = port)
+    urls <- get_url("comment", query_1 = post_id, n = count, cursor = cursor)
+    fins <- get_signature(urls, port = port)
 
     index <- 1
     while(has_more & index <= 20){
-      res <- get_data(url = fins[index], ua = ua, port = port, vpn = vpn, cookie = cookie, signed = T)
+      res <- get_data(url = fins[index], port = port, vpn = vpn, cookie = Sys.getenv("TIKTOK_ID_COOKIE"))
 
       data <- try({
         res %>%
@@ -53,7 +46,7 @@ tk_comment <- function(post_id, ua = default_ua, cookie = "", port = NULL, vpn =
 }
 
 #' @export
-tk_reply <- function(comment_id, post_id, ua = default_ua, verify, id_cookie, port = NULL, verbose = T, time_out = 10){
+tk_reply <- function(comment_id, post_id, id_cookie, port = NULL, verbose = T, time_out = 10){
 
   response <- tibble::tibble()
   count <- sample(50:100, 1)
@@ -63,8 +56,8 @@ tk_reply <- function(comment_id, post_id, ua = default_ua, verify, id_cookie, po
   while(has_more){
     cursor <- seq(max_cursor - 1000, max_cursor - 1, 50)
     cat("\rCursor: ", max_cursor, "  Comments: ", nrow(response))
-    urls <- get_url("reply", query_1 = comment_id, query_2 = post_id, n = count, cursor = cursor, verify = verify)
-    fins <- get_signature(urls, ua, port = port)
+    urls <- get_url("reply", query_1 = comment_id, query_2 = post_id, n = count, cursor = cursor)
+    fins <- get_signature(urls, port = port)
 
     index <- 1
     while(has_more & index <= 20){

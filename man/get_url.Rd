@@ -8,10 +8,8 @@ get_url(
   type,
   n = NULL,
   cursor = NULL,
-  verify = "",
   query_1 = NULL,
   query_2 = "",
-  ua = default_ua,
   max = 0,
   min = 0
 )

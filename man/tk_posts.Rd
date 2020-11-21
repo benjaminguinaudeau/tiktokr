@@ -9,13 +9,9 @@ tk_posts(
   query = "",
   n = 10000,
   start_date = lubridate::dmy("01-01-1900"),
-  cursor = 0,
   save_dir = NULL,
-  port = NULL,
-  ua = default_ua,
-  vpn = F,
   verbose = T,
-  cookie = ""
+  ...
 )
 }
 \arguments{

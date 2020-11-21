@@ -4,7 +4,7 @@
 \alias{tk_info}
 \title{tk_info}
 \usage{
-tk_info(scope, query, cookie, ua = default_ua, port = NULL, vpn = F)
+tk_info(scope, query, ...)
 }
 \arguments{
 \item{scope}{Character indicating the endpoint to scrape (must be "hashtag", "user"
