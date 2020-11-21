@@ -14,8 +14,7 @@ tk_posts(
   port = NULL,
   ua = default_ua,
   vpn = F,
-  verbose = T,
-  cookie = ""
+  verbose = T
 )
 }
 \arguments{
