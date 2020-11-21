@@ -29,15 +29,17 @@ tk_init <- function(){
 #' }
 tk_auth <- function(cookie, ua, id_cookie) {
 
+  if(Sys.getenv("TIKTOK_COOKIE") != ""){ message("Env. TIKTOK_COOKIE found") }
   if (missing(cookie) & Sys.getenv("TIKTOK_COOKIE") == "") {
-    cookie <- readline(prompt = "Please enter the TikToK cookie")
+    cookie <- readline(prompt = "Please enter your TikToK cookie")
 
     if(length(cookie)==0){
       stop("No Cookie specified. Please try again.")
     }
   }
-  if(missing(cookie)) cookie <- Sys.getenv("TIKTOK_COOKIE")
+  if(missing(cookie)) cookie <- Sys.getenv("Env. TIKTOK_UA")
 
+  if(Sys.getenv("TIKTOK_UA") != ""){ message("Env. TIKTOK_UA found") }
   if (missing(ua) & Sys.getenv("TIKTOK_UA") == "") {
     ua <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36"
   }

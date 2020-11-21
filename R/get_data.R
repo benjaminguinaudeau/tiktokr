@@ -138,7 +138,7 @@ get_data <- function(url, parse = T, port = NULL, vpn = F, cookie = "", time_out
 
   if(!is.null(out[["statusCode"]])){
     if(out$statusCode == "10000"){
-      stop("Captcha required. Please update the cookie file.")
+      stop("Captcha required. Please update TIKTOK_COOKIE using `tk_auth()`.")
     }
   }
   if(!is.null(out[["status_code"]])){
