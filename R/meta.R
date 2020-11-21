@@ -29,7 +29,9 @@ tk_init <- function(){
 #' }
 tk_auth <- function(cookie, ua, id_cookie) {
 
-  if(Sys.getenv("TIKTOK_COOKIE") != ""){ message("Env. TIKTOK_COOKIE found") }
+  if(missing(cookie) & Sys.getenv("TIKTOK_COOKIE") != ""){
+    message("A tiktok cookie is stored in .Renviron")
+  }
   if (missing(cookie) & Sys.getenv("TIKTOK_COOKIE") == "") {
     cookie <- readline(prompt = "Please enter your TikToK cookie")
 
@@ -37,19 +39,25 @@ tk_auth <- function(cookie, ua, id_cookie) {
       stop("No Cookie specified. Please try again.")
     }
   }
-  if(missing(cookie)) cookie <- Sys.getenv("Env. TIKTOK_UA")
+  if(Sys.getenv("TIKTOK_COOKIE") != cookie){
+    message("Tiktok cookie was updated")
+    set_renv("TIKTOK_COOKIE" = cookie)
+  }
 
-  if(Sys.getenv("TIKTOK_UA") != ""){ message("Env. TIKTOK_UA found") }
+  if(missing(ua)) ua <- Sys.getenv("TIKTOK_UA")
+  if(Sys.getenv("TIKTOK_UA") != ""){
+    message("A user agent is stored in .Renviron")
+  }
   if (missing(ua) & Sys.getenv("TIKTOK_UA") == "") {
     ua <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36"
   }
   if(missing(ua)) ua <- Sys.getenv("TIKTOK_UA")
+  if(Sys.getenv("TIKTOK_UA") != ua){
+    message("User agent was updated")
+    set_renv("TIKTOK_UA" = ua)
+  }
 
   if(missing(id_cookie)) id_cookie <- Sys.getenv("TIKTOK_COOKIE")
-
-
-  set_renv("TIKTOK_UA" = ua)
-  set_renv("TIKTOK_COOKIE" = cookie)
   set_renv("TIKTOK_ID_COOKIE" = id_cookie)
 
 }
