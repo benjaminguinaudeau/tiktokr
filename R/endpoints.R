@@ -5,7 +5,7 @@
 #' @param query Character indicating the username/hashtag/music_id to scrape
 #' @param n Numeric indicating the number of tiktoks to scrape
 #' @export
-tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("01-01-1900"), cursor = 0, save_dir = NULL, port = NULL, ua = default_ua, vpn = F, verbose = T, cookie = ""){
+tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("01-01-1900"), cursor = 0, save_dir = NULL, port = NULL, ua = default_ua, vpn = F, verbose = T, cookie = "wrong_verify"){
 
   if(stringr::str_detect(cookie, "verify_.")){
     verify <- cookie %>% stringr::str_extract("verify_.*?(\\s|$)")

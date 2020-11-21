@@ -1,6 +1,22 @@
 
 devtools::load_all()
+
+context("Authentification tests")
+
+test_that("error without init", {
+  expect_error(tk_info(scope = "user", query = "willsmith"), "Tiktokr was not initialized. Please run `tk_init()")
+})
+
 tk_init()
+
+test_that("info user without cookie", {
+  user <- tk_info(scope = "user", query = "willsmith")
+  expect_equal(nrow(user), 1)
+  expect_true("user.uniqueId" %in% names(user))
+  expect_true("user.privateAccount" %in% names(user))
+  expect_true("stats.heart" %in% names(user))
+  expect_gt(ncol(user), 24)
+})
 
 cookie <- Sys.getenv("TIKTOK_COOKIE")
 
@@ -78,6 +94,15 @@ test_that("post hashtag simple", {
   expect_gt(nrow(hashtag), 20)
   expect_true("desc" %in% names(hashtag))
   expect_gt(ncol(hashtag), 60)
+})
+
+id_cookie <- Sys.getenv("TIKTOK_ID_COOKIE")
+
+test_that("comment", {
+  comment <- tk_comment(post_id = "6829090092984929541", ua = default_ua, cookie = id_cookie, port = NULL, vpn = F, verbose = T)
+  expect_gt(nrow(comment), 20)
+  expect_true("cid" %in% names(comment))
+  expect_gt(ncol(comment), 35)
 })
 
 context("Parsing")

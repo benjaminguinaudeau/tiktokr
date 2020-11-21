@@ -17,6 +17,12 @@ devtools::load_all()
 
 tk_init()
 
+post_id <- "6829090092984929541"
+cookie <- "tt_csrf_token=H6i2arlMHoulC72AFtOfbQG6; s_v_web_id=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI; passport_csrf_token=b7eceede5b931d6d288851a3eaedbb70; MONITOR_WEB_ID=80356681-5ce4-4e59-b849-540d4e1982ae"
+
+
+
+
 user <- tk_info(scope = "user", query = "willsmith") %>% glimpse
 hashtag <- tk_info(scope = "hashtag", query = "maincharacter") %>% glimpse
 music <- tk_info(scope = "music", query = "6782187241935505410") %>% glimpse
@@ -84,6 +90,47 @@ parse_curl_request <- function(){
 
 get_verify()
 
+```
+```{r}
+cookie <- "s_v_web_id=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI;sid_guard=ac169552b4af2dd6f2b38fa517fa7a63%7C1605910001%7C5184000%7CTue%2C+19-Jan-2021+22%3A06%3A41+GMT"
+
+a <- tk_comment(post_id = "6829090092984929541", ua = ua, cookie = cookie, port = NULL, vpn = F, verbose = T)
+b <- tk_comment(post_id = "6829090092984929541", ua = ua, cookie = cookie, port = NULL, vpn = F, verbose = T)
+c <- tk_comment(post_id = "6829090092984929541", ua = ua, cookie = cookie, port = NULL, vpn = F, verbose = T)
+d <- tk_comment(post_id = "6829090092984929541", ua = ua, cookie = cookie, port = NULL, vpn = F, verbose = T)
+
+url <- "https://www.tiktok.com/api/comment/list/?aid=1988&aweme_id=6829090092984929541&cursor=800&count=37&aid=1988&verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI&user_agent=Mozilla%2F5.0+(Macintosh%3B+Intel+Mac+OS+X+10_14_7)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F86.0.4240.198+Safari%2F537.36&_signature=_02B4Z6wo00f01BRTqVgAAICA3g9BjdAI6nAUc63AAFqyc2"
+url <- "https://www.tiktok.com/api/comment/list/?aid=1988&aweme_id=6829090092984929541&cursor=0&count=73&aid=1988&verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI&user_agent=Mozilla%2F5.0+(Macintosh%3B+Intel+Mac+OS+X+10_14_7)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F86.0.4240.198+Safari%2F537.36"
+
+ httr::GET(url,
+                httr::add_headers(.headers = c(
+                  method = "GET",
+                  referer = "https://www.tiktok.com/foryou",
+                  `user-agent` = ua,
+                  cookie = cookie
+                ))#,
+                # timeout = httr::timeout(time_out)
+      )
+
+req <- httr::GET(url = url, #get_signature(url, ua, port = NULL),
+          httr::add_headers(.headers = c(#authority = "www.tiktok.com", accept = "application/json, text/plain, */*", 
+                                         `user-agent` = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36", 
+                                         # `sec-fetch-site` = "same-origin", 
+                                         # `sec-fetch-mode` = "cors", 
+                                         # `sec-fetch-dest` = "empty", 
+                                         referer = "https://www.tiktok.com/foryou",
+                                         # referer = "https://www.tiktok.com/@willsmith/video/6829090092984929541",
+                                         # `accept-language` = "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7,de;q=0.6",
+                                         cookie = " s_v_web_id=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI;sid_guard=ac169552b4af2dd6f2b38fa517fa7a63%7C1605910001%7C5184000%7CTue%2C+19-Jan-2021+22%3A06%3A41+GMT")))
+
+jsonlite::fromJSON(rawToChar(req$content))
+
+6829106683533410309
+
+mutate(balance = ifelse(buy == 1, btc_price, -btc_price)) %>%
+  
+mutate(cum_cash = cumsum(balance))  
+  
 ```
 
 

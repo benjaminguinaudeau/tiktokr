@@ -5,7 +5,7 @@
 #'   or "music")
 #' @param query Character indicating the username/hashtag/music_id to scrape
 #' @export
-tk_info <- function(scope, query, cookie, ua = default_ua, port = NULL, vpn = F){
+tk_info <- function(scope, query, cookie = "wrong_verify", ua = default_ua, port = NULL, vpn = F){
 
   if(stringr::str_detect(cookie, "verify_.")){
     verify <- cookie %>% stringr::str_extract("verify_.*?(\\s|$)")
