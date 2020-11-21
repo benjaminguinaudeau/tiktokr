@@ -43,13 +43,6 @@ tk_auth <- function(cookie, ua, id_cookie) {
   }
   if(missing(ua)) ua <- Sys.getenv("TIKTOK_UA")
 
-  if (missing(id_cookie) & Sys.getenv("TIKTOK_ID_COOKIE") == "") {
-    id_cookie <- readline(prompt = "Please enter the identified TikToK cookie")
-
-    if(length(id_cookie)==0){
-      stop("No identified Cookie specified. Please try again.")
-    }
-  }
   if(missing(id_cookie)) id_cookie <- Sys.getenv("TIKTOK_COOKIE")
 
 

@@ -5,3 +5,4 @@
 video
 tmp
 political
+^codecov\.yml$

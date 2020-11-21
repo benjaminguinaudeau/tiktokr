@@ -20,4 +20,5 @@ Imports:
     jsonlite,
     readr
 Suggests: 
-    testthat
+    testthat,
+    covr

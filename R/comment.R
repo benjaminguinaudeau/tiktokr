@@ -1,5 +1,5 @@
 #' @export
-tk_comment <- function(post_id, verbose = T, port = NULL, vpn = vpn){
+tk_comment <- function(post_id, verbose = T, port = NULL, vpn = F){
 
   response <- tibble::tibble()
   count <- sample(30:50, 1)

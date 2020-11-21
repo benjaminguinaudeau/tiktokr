@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Codecov test coverage](https://codecov.io/gh/benjaminguinaudeau/tiktokr/branch/master/graph/badge.svg)](https://codecov.io/gh/benjaminguinaudeau/tiktokr?branch=master)
 <!-- badges: end -->
 
 The goal of `tiktokr` is to provide a scraper for the video-sharing social networking service [TikTok](http://tiktok.com/). Mostly inspired by this Python module: [davidteather/TikTok-Api](https://github.com/davidteather/TikTok-Api). You will need Python 3.6 or higher to use `tiktokr`.
