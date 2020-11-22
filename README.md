@@ -7,6 +7,10 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Codecov test
+coverage](https://codecov.io/gh/benjaminguinaudeau/tiktokr/branch/master/graph/badge.svg)](https://codecov.io/gh/benjaminguinaudeau/tiktokr?branch=master)
+[![Travis build
+status](https://travis-ci.com/favstats/tiktokr.svg?branch=master)](https://travis-ci.com/favstats/tiktokr)
 <!-- badges: end -->
 
 The goal of `tiktokr` is to provide a scraper for the video-sharing
@@ -45,23 +49,16 @@ Install necessary Python libraries
 tk_install()
 ```
 
-## Examples
+## Authentification
 
-First you need to initialize `tiktokr`
-
-``` r
-tk_init()
-```
-
-## Authentification issue
-
-In November 2020, Tiktok increased its security issue. They now have a
-captcha, which easily triggered after a few request. This can be solved
-by specifying the cookie parameter. To get a cookie session:
+In November 2020, Tiktok increased its security protocal. They now
+frequently show a captcha, which is easily triggered after a few
+request. This can be solved by specifying the cookie parameter. To get a
+cookie session:
 
 1.  Open a browser and go to “<http://tiktok.com>”
 2.  Scroll down a bit, to ensure, that you don’t get any captcha
-3.  Open the javascript console (in Chrome: View &gt; Developer &gt;
+3.  Open the javascript console (in Chrome: View \> Developer \>
     Javascript Console)
 4.  Run `document.cookie` and use the output as a cookie param when
     querying
@@ -70,6 +67,14 @@ by specifying the cookie parameter. To get a cookie session:
 
 ``` r
 cookie <- "<paste here the result from document.cookie>"
+```
+
+## Examples
+
+First you need to initialize `tiktokr`
+
+``` r
+tk_init()
 ```
 
 ### Get TikTok trends
@@ -117,6 +122,7 @@ trends %>%
 From hashtag:
 
 ``` r
+
 hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 5, cookie = cookie)
 
 hash_post %>%

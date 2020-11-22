@@ -1,0 +1,37 @@
+anguage: R
+cache: packages
+dist: trusty
+sudo: required
+
+
+addons:
+  apt:
+    packages:
+      - gdal-bin
+      - libgdal1-dev
+      - libproj-dev
+
+jobs:
+  include:
+  - r: release
+    warnings_are_errors: false
+  - r: devel
+    warnings_are_errors: false
+
+
+r_packages:
+  - covr
+
+
+after_success:
+  - Rscript -e 'library(covr); codecov()'
+
+# apt_packages: libudunits2-dev
+
+
+
+#before_deploy: Rscript -e 'remotes::install_cran("pkgdown")'
+#deploy:
+#  provider: script
+#  script: Rscript -e 'pkgdown::deploy_site_github()'
+#  skip_cleanup: true
