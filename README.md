@@ -19,8 +19,8 @@ by this Python module:
 [davidteather/TikTok-Api](https://github.com/davidteather/TikTok-Api).
 You will need Python 3.6 or higher to use `tiktokr`.
 
-*Many thanks go to [Vivi Fabry](https://twitter.com/ViviFabrien) for
-creating the hexagon.*
+*Many thanks go to [Vivien Fabry](https://twitter.com/ViviFabrien) for
+creating the hexagon logo.*
 
 ## Installation
 
