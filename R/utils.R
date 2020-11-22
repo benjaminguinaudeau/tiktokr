@@ -214,7 +214,7 @@ get_signature <- function(urls, port = NULL){
 #' @export
 get_current_verify <- function(){
   if(stringr::str_detect(Sys.getenv("TIKTOK_COOKIE"), "verify_.")){
-    Sys.getenv("TIKTOK_COOKIE") %>% stringr::str_extract("verify_.*?(\\s|$)")
+    Sys.getenv("TIKTOK_COOKIE") %>% stringr::str_extract("verify_.*?(?=\\s|;|$)")
   } else {
     return("")
   }
