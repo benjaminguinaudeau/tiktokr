@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 167 192" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g>
+        <path id="h1mPk2iQtb" d="M82.064,1.281L0.976,48.152L0.976,141.895L82.064,188.766L163.151,141.895L163.151,48.152L82.064,1.281Z" style="fill-rule:nonzero;"/>
+    </g>
+    <g transform="matrix(1,0,0,1,-0.278299,96)">
+        <text x="47.283px" y="46.47px" style="font-family:'Consolas', monospace;font-size:17.491px;fill:white;">tiktokr</text>
+    </g>
+    <g id="Layer2" transform="matrix(1,0,0,1,-2.78261,-10.5739)">
+        <g transform="matrix(1,0,0,1,-6.67824,2.50435)">
+            <g id="Layer1">
+                <text x="48.953px" y="129.67px" style="font-family:'Bauhaus93', 'Bauhaus 93', fantasy;font-size:120px;fill:rgb(0,247,239);">R</text>
+            </g>
+        </g>
+        <g transform="matrix(1.03489,0,0,0.982604,-5.60528,7.8209)">
+            <g id="Layer11" serif:id="Layer1">
+                <text x="48.953px" y="129.67px" style="font-family:'Bauhaus93', 'Bauhaus 93', fantasy;font-size:120px;fill:rgb(255,0,79);">R</text>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,-4.45217,4.17392)">
+            <g id="Layer12" serif:id="Layer1">
+                <text x="48.953px" y="129.67px" style="font-family:'Bauhaus93', 'Bauhaus 93', fantasy;font-size:120px;">R</text>
+            </g>
+        </g>
+    </g>
+</svg>

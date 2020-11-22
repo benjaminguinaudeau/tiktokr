@@ -1,16 +1,16 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# tiktokr
+# tiktokr <img src='man/figures/logo.svg' align="right" height="139" />
 
 <!-- badges: start -->
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Codecov test
-coverage](https://codecov.io/gh/benjaminguinaudeau/tiktokr/branch/master/graph/badge.svg)](https://codecov.io/gh/benjaminguinaudeau/tiktokr?branch=master)
+coverage](https://codecov.io/gh/favstats/tiktokr/branch/master/graph/badge.svg)](https://codecov.io/gh/benjaminguinaudeau/tiktokr?branch=master)
 [![Travis build
-status](https://travis-ci.com/favstats/tiktokr.svg?branch=master)](https://travis-ci.com/favstats/tiktokr)
+status](https://travis-ci.com/favstats/tiktokr.svg?branch=master)](https://travis-ci.com/benjaminguinaudeau/tiktokr)
 <!-- badges: end -->
 
 The goal of `tiktokr` is to provide a scraper for the video-sharing
@@ -18,6 +18,9 @@ social networking service [TikTok](http://tiktok.com/). Mostly inspired
 by this Python module:
 [davidteather/TikTok-Api](https://github.com/davidteather/TikTok-Api).
 You will need Python 3.6 or higher to use `tiktokr`.
+
+*Many thanks go to [Vivi Fabry](https://twitter.com/ViviFabrien) for
+creating the hexagon.*
 
 ## Installation
 
@@ -51,27 +54,35 @@ tk_install()
 
 ## Authentification
 
-In November 2020, Tiktok increased its security protocal. They now
+In November 2020, Tiktok increased its security protocol. They now
 frequently show a captcha, which is easily triggered after a few
-request. This can be solved by specifying the cookie parameter. To get a
-cookie session:
+requests. This can be solved by specifying the cookie parameter. To get
+a cookie session:
 
 1.  Open a browser and go to “<http://tiktok.com>”
 2.  Scroll down a bit, to ensure, that you don’t get any captcha
 3.  Open the javascript console (in Chrome: View \> Developer \>
     Javascript Console)
-4.  Run `document.cookie` and use the output as a cookie param when
-    querying
+4.  Run `document.cookie` in the console. Copy the entire output (your
+    cookie).
+5.  Run `tk_auth()` in R and paste the cookie.
 
-[<img src="data/preview.png" width="50%">](https://youtu.be/kYMV2ugxacs)
+Click on image below for screen recording of how to get your TikTok
+cookie:
+
+[<img src="https://github.com/benjaminguinaudeau/tiktokr/raw/master/data/preview.png" width="50%">](https://youtu.be/kYMV2ugxacs)
+
+The `tk_auth` function will save cookies (and user agent) as environment
+variable to your `.Renviron` file. You need to only run this once to use
+the `tiktokr` or whenever you want to update your cookie/user agent.
 
 ``` r
-cookie <- "<paste here the result from document.cookie>"
+tk_auth(cookie = "<paste here the output from document.cookie>")
 ```
 
 ## Examples
 
-First you need to initialize `tiktokr`
+Every time before you run functions you need to initialize `tiktokr`
 
 ``` r
 tk_init()
@@ -83,7 +94,7 @@ Returns a tibble with trends.
 
 ``` r
 # Trend
-trends <- tk_posts(scope = "trends", n = 200, cookie = cookie)
+trends <- tk_posts(scope = "trends", n = 200)
 ```
 
 ### Get TikToks from User
@@ -92,17 +103,17 @@ Note: User query often only provides 2k hits but limit is unclear.
 Sample seems to be from most recent to oldest.
 
 ``` r
-user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50, cookie = cookie)
+user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50)
 ```
 
 ### Get TikToks from hashtag
 
 Note: Hashtags query only provides 2k hits, which are not drawn randomly
-or based on the most recent post date but rather **some mix of recency
-and popularity** of TikToks.
+or based on the most recent post date but rather **some mix of recent
+and popular** TikToks.
 
 ``` r
-hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 100, cookie = cookie)
+hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 100)
 ```
 
 ### Download TikTok Videos
@@ -123,7 +134,7 @@ From hashtag:
 
 ``` r
 
-hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 5, cookie = cookie)
+hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 5)
 
 hash_post %>%
   split(1:nrow(.)) %>% 
