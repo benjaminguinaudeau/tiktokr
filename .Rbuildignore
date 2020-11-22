@@ -6,3 +6,4 @@ video
 tmp
 political
 ^codecov\.yml$
+^\.travis\.yml$
