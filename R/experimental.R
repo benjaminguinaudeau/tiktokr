@@ -37,7 +37,7 @@ get_new_verify <- function(){
   title <- base36encode(lubridate::now())
 
   ending <- 1:36 %>%
-    imap_chr(~{
+    purrr::imap_chr(~{
       if(.y == 1) return("0")
       if(.y %in% c(8, 13, 18, 23)) return("_")
       if(.y %in% c(14)) return("4")

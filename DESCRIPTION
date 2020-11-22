@@ -23,7 +23,8 @@ Imports:
     dplyr,
     purrr,
     jsonlite,
-    readr
+    readr,
+    rlist
 Suggests: 
     testthat,
     covr
