@@ -53,11 +53,12 @@ get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"), c
 
     max_cursor = as.character(out$maxCursor)
 
-    if(length(max_cursor) == 0){
-      out <- out$body
-      max_cursor <- out$maxCursor
-    }
-    if(scope != "user_post"){ min_cursor = as.character(out$minCursor)}
+    if(scope != "user_post"){min_cursor <- as.character(out$cursor)}
+
+    # if(length(max_cursor) == 0){
+    #   out <- out$body
+    #   max_cursor <- out$maxCursor
+    # }
 
     # utils::flush.console()
 

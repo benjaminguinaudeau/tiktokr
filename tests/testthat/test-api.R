@@ -56,46 +56,41 @@ test_that("info post", {
 
 context("Post Endpoint")
 
-test_that("post user simple", {
+test_that("post user", {
   user_post <- tk_posts(scope = "user", query = "willsmith", n = 40)
-  expect_gt(nrow(user_post), 1)
+  expect_gt(nrow(user_post), 2)
   expect_true("desc" %in% names(user_post))
   expect_gt(ncol(user_post), 90)
+  user_post_ <- tk_posts(scope = "user", query = "willsmith", n = 100)
+  expect_gt(nrow(dplyr::anti_join(user_post_, user_post, by = "id")), 0)
 })
 
-test_that("post user double", {
-  user_post <- tk_posts(scope = "user", query = "willsmith", n = 100)
-  expect_gt(nrow(user_post), 50)
-  expect_true("desc" %in% names(user_post))
-  expect_gt(ncol(user_post), 90)
-})
 
-test_that("post trend simple", {
+test_that("post trend", {
   trends <- tk_posts(scope = "trends", n = 25)
   expect_gt(nrow(trends), 1)
   expect_true("desc" %in% names(trends))
   expect_gt(ncol(trends), 60)
+  trends_ <- tk_posts(scope = "trends", n = 50)
+  expect_gt(nrow(dplyr::anti_join(trends_, trends, by = "id")), 0)
 })
 
-test_that("post trend double", {
-  trends <- tk_posts(scope = "trends", n = 50)
-  expect_gt(nrow(trends), 35)
-  expect_true("desc" %in% names(trends))
-  expect_gt(ncol(trends), 60)
-})
-
-test_that("post music simple", {
+test_that("post music", {
   music <- tk_posts(scope = "music", query = "6782187241935505410", n = 25)
   expect_gt(nrow(music), 20)
   expect_true("desc" %in% names(music))
   expect_gt(ncol(music), 60)
+  music_ <- tk_posts(scope = "music", query = "6782187241935505410", n = 60)
+  expect_gt(nrow(dplyr::anti_join(music_, music, by = "id")), 0)
 })
 
-test_that("post hashtag simple", {
+test_that("post hashtag", {
   hashtag <- tk_posts(scope = "hashtag", query = "maincharacter", n = 25)
   expect_gt(nrow(hashtag), 20)
   expect_true("desc" %in% names(hashtag))
   expect_gt(ncol(hashtag), 60)
+  hashtag_ <- tk_posts(scope = "hashtag", query = "maincharacter", n = 60)
+  expect_gt(nrow(dplyr::anti_join(hashtag_, hashtag, by = "id")), 0)
 })
 
 # id_cookie <- Sys.getenv("TIKTOK_ID_COOKIE")
