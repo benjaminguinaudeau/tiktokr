@@ -9,10 +9,9 @@ Authors@R:
            comment = c(ORCID = "0000-0001-7206-6875")), 
       person(given = "Fabio",
            family = "Votta",
-           role = c("aut", "cre"),
+           role = c("aut"),
            email = "f.a.votta@uva.nl",
            comment = c(ORCID = "0000-0002-3143-5942")))
-           
 Description: The goal of `tiktokr` is to provide a scraper for the video-sharing social networking service TikTok.
 License: MIT
 Encoding: UTF-8

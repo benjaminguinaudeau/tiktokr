@@ -1,5 +1,5 @@
 
-devtools::load_all()
+# devtools::load_all()
 
 context("Authentification tests")
 
