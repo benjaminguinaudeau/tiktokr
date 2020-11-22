@@ -1,15 +1,14 @@
-anguage: R
+language: R
 cache: packages
-dist: trusty
 sudo: required
 
 
-addons:
-  apt:
-    packages:
-      - gdal-bin
-      - libgdal1-dev
-      - libproj-dev
+# addons:
+#   apt:
+#     packages:
+#       - gdal-bin
+#       - libgdal1-dev
+#       - libproj-dev
 
 jobs:
   include:
