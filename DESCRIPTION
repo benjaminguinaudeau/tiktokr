@@ -24,7 +24,13 @@ Imports:
     purrr,
     jsonlite,
     readr,
-    rlist
+    rlist,
+    stringr
 Suggests: 
     testthat,
-    covr
+    covr,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Depends: 
+    R (>= 2.10)
