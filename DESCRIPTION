@@ -1,14 +1,20 @@
 Package: tiktokr
-Title: What the Package Does (One Line, Title Case)
+Title: Provides access to unofficial TikTok API
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    c(person(given = "Benjamin",
+           family = "Guinaudeau",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: What license it uses
+           email = "benjamin.guinaudeau@uni-konstanz.de",
+           comment = c(ORCID = "0000-0001-7206-6875")), 
+      person(given = "Fabio",
+           family = "Votta",
+           role = c("aut", "cre"),
+           email = "f.a.votta@uva.nl",
+           comment = c(ORCID = "0000-0002-3143-5942")))
+           
+Description: The goal of `tiktokr` is to provide a scraper for the video-sharing social networking service TikTok.
+License: MIT
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1

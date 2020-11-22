@@ -2,18 +2,22 @@
 % Please edit documentation in R/meta.R
 \name{tk_auth}
 \alias{tk_auth}
-\title{Set up a TikTok cookie}
+\title{Set up TikTok cookie and user agent}
 \usage{
 tk_auth(cookie, ua, id_cookie)
 }
 \arguments{
 \item{cookie}{The TikTok cookie as string. Find out here how to get a TikTok cookie: \url{https://www.youtube.com/watch?v=kYMV2ugxacs&feature=youtu.be}}
+
+\item{ua}{The User Agent, that should be used when making HTTP requests. Default is 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'}
+
+\item{id_cookie}{Logged-in cookie used by the comment endpoint (experimental).}
 }
 \description{
-This function will add a TikTok cookie to your
+This function will add a TikTok cookie and a user agent to your
   \code{.Renviron} file so it can be called securely without being stored in
   your code. After you have installed your key, it can be called any time by
-  typing \code{Sys.getenv("TIKTOK_COOKIE")}. If you do not have an \code{.Renviron} file, the
+  typing \code{Sys.getenv("TIKTOK_COOKIE")} or \code{Sys.getenv("TIKTOK_UA")}. If you do not have an \code{.Renviron} file, the
   function will create one for you.
 }
 \examples{

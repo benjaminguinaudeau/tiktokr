@@ -87,6 +87,7 @@ tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("
 }
 
 
+# TODO
 
 #' tk_discover
 #' @param scope Character indicating the endpoint to scrape (must be "hashtag" or "music")

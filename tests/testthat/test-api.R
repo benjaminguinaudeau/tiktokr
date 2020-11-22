@@ -125,7 +125,7 @@ test_that("captcha trigger", {
   prev_cookie <- Sys.getenv("TIKTOK_COOKIE")
   Sys.setenv("TIKTOK_COOKIE" = "wrong_verify")
   testthat::skip("Skiping captcha trigger")
-  expect_error(tk_info(scope = "user", query = "willsmith"), "Captcha required. Please update the cookie file.")
+  expect_error(tk_posts(scope = "user", query = "willsmith", n = 50), "Captcha required. Please update the cookie file.")
   Sys.setenv("TIKTOK_COOKIE" = prev_cookie)
 })
 

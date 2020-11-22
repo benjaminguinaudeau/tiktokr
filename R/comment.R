@@ -45,6 +45,7 @@ tk_comment <- function(post_id, verbose = T, port = NULL, vpn = F){
 
 }
 
+# Need to be maintained
 #' @export
 tk_reply <- function(comment_id, post_id, id_cookie, port = NULL, verbose = T, time_out = 10){
 
