@@ -24,7 +24,8 @@ Imports:
     purrr,
     jsonlite,
     readr,
-    rlist
+    rlist,
+    stringr
 Suggests: 
     testthat,
     covr
