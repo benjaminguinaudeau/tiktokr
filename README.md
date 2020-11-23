@@ -73,8 +73,7 @@ cookie:
 [<img src="https://github.com/benjaminguinaudeau/tiktokr/raw/master/data/preview.png" width="100%">](https://youtu.be/kYMV2ugxacs)
 
 The `tk_auth` function will save cookies (and user agent) as environment
-variable to your `.Renviron` file. You need to only run this once to use
-the `tiktokr` or whenever you want to update your cookie/user agent.
+variable to your `.Renviron` file. You need to only run this once to use `tiktokr` or whenever you want to update your cookie/user agent.
 
 ``` r
 tk_auth(cookie = "<paste here the output from document.cookie>")
