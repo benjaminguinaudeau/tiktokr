@@ -1,5 +1,5 @@
 ---
-title: "statstiktok-usecase"
+title: "Example: Analyzing #statstiktok "
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{statstiktok-usecase}
