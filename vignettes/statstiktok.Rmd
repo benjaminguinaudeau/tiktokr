@@ -14,9 +14,11 @@ knitr::opts_chunk$set(
   message = F,
   warning = F
 )
+
+options(scipen = 999)
 ```
 
-First, let's load the `tiktokr` library and the `tidyverse`.
+First, let's load `tiktokr` and some `tidyverse` libraries.
 
 ```{r, setup, eval = T}
 library(tiktokr)
@@ -55,7 +57,7 @@ In November 2020, Tiktok increased its security protocol. They now frequently sh
 
 Click on image below for screen recording of how to get your TikTok cookie:
 
-[<img src="https://github.com/benjaminguinaudeau/tiktokr/raw/master/data/preview.png" width="50%">](https://youtu.be/kYMV2ugxacs)
+[<img src="https://github.com/benjaminguinaudeau/tiktokr/raw/master/data/preview.png" width="100%">](https://youtu.be/kYMV2ugxacs)
 
 The `tk_auth` function will save cookies (and user agent) as environment variable to your `.Renviron` file. You need to only run this once to use the `tiktokr` or whenever you want to update your cookie/user agent.
 
@@ -84,23 +86,21 @@ load('../data/stats_tiktok.rda')
 
 ```
 
-Great! Now we have a dataset with metadata of tiktoks with rstats hashtag!
+Great! Now we have a dataset with metadata on tiktoks mentioning the hashtag 'statstiktok'!
 
 ```{r}
 glimpse(stats_tiktok)
 ```
 
-There are quite a few variables. We do not really care about many of them so as a first step we select only relevant variables. I also like to use `janitor` for cleaning up variable names.
+First, the data needs to be cleaned. Many varaibles are irrelevant and useless, so we focus on the most important ones and clean the variablesnames using `janitor::clean_names()`. 
 
 ```{r}
-library(janitor)
-
 stats_tk <- stats_tiktok %>% 
   select(id, createTime, 
          author_id:author_nickname, 
          author_signature, author_avatarLarger, 
          desc, music_id:authorStats_heart) %>% 
-  clean_names() %>% 
+  janitor::clean_names() %>% 
   distinct(id, .keep_all = T)
 
 glimpse(stats_tk)
@@ -108,18 +108,18 @@ glimpse(stats_tk)
 
 ## Stats about tiktokers
 
-Let`s first check out the top posters in the data.
+Let`s first find out who are the top posters in the data. [Chelsea Parlett-Pelleriti](https://twitter.com/ChelseaParlett) is the most prolific poster, when it comes to #statstiktok. This actually makes sense, considering that she is one of the pioeneers of #statstiktok.
 
 ```{r}
 stats_tk %>% 
   count(author_unique_id, sort = T) %>% 
   filter(n >= 2) %>% 
   mutate(authr_url = paste0("https://www.tiktok.com/@", author_unique_id)) %>% 
-  knitr::kable()
+  knitr::kable() %>%
+  kableExtra::kable_styling()
 ```
 
-
-If you want to only analyze authors you can filter the data down like this.
+Metadata include authors data, such as the handle of the author, its description and its stats. The name of the variable makes author metadata easy to retrieve. In addition to classical social media metrics (number of followers, following, posts, likes), Tiktok also proposes a new metric 'digg'. There is no much documention on this, but it seems to be a summary of the current popularity of a user/post. 
 
 ```{r}
 tiktokers <- stats_tk %>% 
@@ -130,34 +130,26 @@ tiktokers <- stats_tk %>%
 glimpse(tiktokers)
 ```
 
-### Who has the most videos in sample?
+### Any famous tiktoker using Stats Tiktok?
 
 
 ```{r}
 tiktokers %>% 
-  arrange(desc(vids_in_sample)) %>% 
-  slice(1:10) %>% 
-  select(author_unique_id, vids_in_sample) %>% 
+  select(author_unique_id, contains("count")) %>% 
+  arrange(desc(author_stats_following_count)) %>% 
+  rename_all(stringr::str_remove_all, "(author_stats_)|(_count)") %>%
+  arrange(desc(follower)) %>%
+  slice(1:10) %>%
   mutate(authr_url = paste0("https://www.tiktok.com/@", author_unique_id)) %>% 
-  knitr::kable()
-```
-Unsurprisingly, Chelsea Parlett-Pelleriti tops the list. She is one of the pioeneers of #statstiktok.
-
-
-### Who has the most followers?
-
-
-```{r}
-tiktokers %>% 
-  arrange(desc(author_stats_follower_count)) %>% 
-  slice(1:10) %>% 
-  select(author_unique_id, author_stats_follower_count, vids_in_sample) %>% 
-  mutate(authr_url = paste0("https://www.tiktok.com/@", author_unique_id)) %>% 
-  knitr::kable()
+  knitr::kable()  %>%
+  kableExtra::kable_styling()
 ```
 
+Some of the tiktokers, that used at least once #statstiktok seem to be pretty successfull. There is here no doubt, that their post mentioning #statstik has been strongly driving their success. You can also see here the strangeness of this digg count. It seems somehow uncorrelated to the other metrics. 
 
 ## Posts over time
+
+When looking at the distribution over time, we see unregular increase, but there is a steady increase in the number of tiktoks mentioning #statstiktok. 
 
 ```{r, fig.width = 6}
 stats_tk %>% 
@@ -167,7 +159,70 @@ stats_tk %>%
   ggplot(aes(create_date, cumsum_n)) + 
   geom_line() +
   theme_minimal() +
-  scale_x_datetime(date_labels = "%B %Y") 
+  scale_x_datetime(date_labels = "%B %Y")  +
+  labs(y = "Number of Posts", x = "")
+```
+
+## TikToks description
+
+Each tiktok is usually accompanied with a brief text description, which eventually uses hashtasg. Unsurprinsgly, stats-related hashtags are used. We can now use these new hashtags to explore furthermore tiktoks on stats. 
+
+```{r}
+
+stats_tiktok %>%
+  select(desc) %>%
+  mutate(hashtags = stringr::str_extract_all(desc, "#\\w+")) %>%
+  tidyr::unnest(hashtags) %>%
+  count(hashtags, sort = T) %>% 
+  slice(1:10) %>%
+  knitr::kable()  %>%
+  kableExtra::kable_styling()
+
+```
+
+## Expanding the data using hashtags
+
+```{r, eval = F}
+
+larger_stats_tiktok <- c("statsTikTok", "statistics", "rstats", "datascience") %>%
+  purrr::map_dfr(~tk_posts("hashtag", .x, n = 2000)) %>%
+  bind_rows(stats_tiktok) %>% # bind_rows the #statstiktok data
+  distinct(id, .keep_all = T)
+
+```
+
+```{r, echo = F}
+load('../data/larger_stats_tiktok.rda')
+```
+
+Using the hashtags with discovered earlier, we can now get data for other hashtags (statsTikTok, statistics, rstats, datascience). We obtain metadata on 3474 tiktoks, which can be further analyzed or used for further expansion. 
+
+```{r}
+larger_stats_tk <- larger_stats_tiktok %>% 
+  select(id, createTime, 
+         author_id:author_nickname, 
+         author_signature, author_avatarLarger, 
+         desc, music_id:authorStats_heart) %>% 
+  janitor::clean_names() %>% 
+  distinct(id, .keep_all = T)
+
+glimpse(larger_stats_tk)
+```
+
+Before closing up, we take a look at the popularity of the considered hashtags. To do so, we filter the 6 queried hashtags and look at the distributions of plays depending on the hashtag. We find out that - in our small and not-at-all random sample -, #statistics is associated with the most viewed, while #rstats is (for now) the least popular hashtag. 
+
+```{r}
+larger_stats_tk %>%
+  select(desc, matches("^stats")) %>%
+  mutate(hashtags = stringr::str_extract_all(desc, "#\\w+")) %>%
+  tidyr::unnest(hashtags) %>%
+  filter(hashtags %in% c("#statsTikTok", "#statstiktok", "#statistics", "#rstats", "#datascience")) %>%
+  mutate(hashtags = forcats::fct_reorder(hashtags, stats_play_count)) %>%
+  ggplot(aes(x = hashtags, y = stats_play_count)) + 
+  geom_boxplot() + 
+  ylim(c(0, 12e3)) +
+  theme_minimal() +
+  labs(x = "Hashtag", y = "Number of Plays")
 ```
 
 
