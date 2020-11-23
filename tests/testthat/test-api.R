@@ -97,7 +97,7 @@ test_that("post hashtag", {
 
 test_that("comment", {
   comment <- tk_comment(post_id = "6829090092984929541", verbose = T)
-  expect_gt(nrow(comment), 20)
+  expect_gt(nrow(comment), 2)
   expect_true("cid" %in% names(comment))
   expect_gt(ncol(comment), 35)
 })

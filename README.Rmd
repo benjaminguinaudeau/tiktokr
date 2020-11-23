@@ -19,10 +19,12 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Codecov test coverage](https://codecov.io/gh/benjaminguinaudeau/tiktokr/branch/master/graph/badge.svg)](https://codecov.io/gh/benjaminguinaudeau/tiktokr?branch=master)
-[![Travis build status](https://travis-ci.com/benjaminguinaudeau/tiktokr.svg?branch=master)](https://travis-ci.com/benjaminguinaudeau/tiktokr)
+[![Travis build status](https://travis-ci.com/favstats/tiktokr.svg?branch=master)](https://travis-ci.com/benjaminguinaudeau/tiktokr)
 <!-- badges: end -->
 
-The goal of `tiktokr` is to provide a scraper for the video-sharing social networking service [TikTok](http://tiktok.com/). Mostly inspired by this Python module: [davidteather/TikTok-Api](https://github.com/davidteather/TikTok-Api). You will need Python 3.6 or higher to use `tiktokr`.
+The goal of `tiktokr` is to provide a scraper for the video-sharing social networking service [TikTok](http://tiktok.com/). 
+
+While writing this library, we were broadly inspired by the Python module [davidteather/TikTok-Api](https://github.com/davidteather/TikTok-Api). You will need Python 3.6 or higher to use `tiktokr`.
 
 *Many thanks go to [Vivien Fabry](https://twitter.com/ViviFabrien) for creating the hexagon logo.*
 
@@ -70,21 +72,20 @@ In November 2020, Tiktok increased its security protocol. They now frequently sh
 
 Click on image below for screen recording of how to get your TikTok cookie:
 
-[<img src="https://github.com/benjaminguinaudeau/tiktokr/raw/master/data/preview.png" width="50%">](https://youtu.be/kYMV2ugxacs)
+[<img src="https://github.com/benjaminguinaudeau/tiktokr/raw/master/data/preview.png" width="100%">](https://youtu.be/kYMV2ugxacs)
 
 The `tk_auth` function will save cookies (and user agent) as environment variable to your `.Renviron` file. You need to only run this once to use the `tiktokr` or whenever you want to update your cookie/user agent.
 
 ```{r, eval = F}
+
 tk_auth(cookie = "<paste here the output from document.cookie>")
 
 ```
 
-
-
 ## Examples
 
 
-Every time before you run functions you need to initialize `tiktokr`
+For every session involving `tiktokr`, you will need to initialize. Once it is initiliazed you can run as many queries as you want. 
 
 ```{r}
 tk_init()
@@ -102,13 +103,10 @@ trends <- tk_posts(scope = "trends", n = 200)
 ```
 
 
-
 ### Get TikToks from User
 
-Note: User query often only provides 2k hits but limit is unclear. Sample seems to be from most recent to oldest.
-
 ```{r, eval = F}
-user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50)
+user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50) 
 
 ```
 
@@ -118,36 +116,36 @@ user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50)
 Note: Hashtags query only provides 2k hits, which are not drawn randomly or based on the most recent post date but rather **some mix of recent and popular** TikToks.
 
 ```{r, eval = F}
-hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 100)
 
+hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 100) 
+
+```
+
+### Get TikToks from music id
+
+Note: Hashtags query only provides 2k hits, which are not drawn randomly or based on the most recent post date but rather **some mix of recent and popular** TikToks.
+
+```{r, eval = F}
+
+user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50)
+music_post <- tk_posts(scope = "music", query = user_posts$music_id[1], n = 100)
 
 ```
 
 ### Download TikTok Videos
 
-With `tk_dl_video` you can download videos from TikTok.
+With `tk_dwnl` you can download videos from TikTok.
 
 From Trends:
 
 ```{r, eval = F}
+# fs::dir_create("video")
 trends <- tk_posts(scope = "trends", n = 5)
 
 trends %>%
-  split(1:nrow(.)) %>% 
-  purrr::walk(~{tk_dl_video(.x$downloadAddr, paste0("video/", .x$id, ".mp4"))})
-
-```
-
-From hashtag:
-
-```{r, eval = F}
-
-hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 5)
-
-hash_post %>%
-  split(1:nrow(.)) %>% 
-  purrr::walk(~{tk_dl_video(.x$downloadAddr, paste0("video/hashtag/", .x$id, ".mp4"))})
-
+  split(1:nrow(.)) %>%
+  purrr::walk(~{tk_dwnl(.x$video_downloadAddr, paste0("video/", .x$id, ".mp4"))})
+# fs::dir_delete("video")
 ```
 
 

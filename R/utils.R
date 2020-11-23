@@ -117,12 +117,12 @@ parse_json_structure <- function(x){
   })
 }
 
-#' tk_dl_video
+#' tk_dwnl
 #' @description Function that enable to download tiktoks
 #' @export
 #' @param url url of tiktok to scrape
 #' @param path path to download tiktok video to
-download_video <- function(url, path, time_out = 10){
+tk_dwnl <- function(url, path, time_out = 10){
   req <- httr::GET(url,
                    httr::add_headers(.headers = c(
                      'Connection' = 'keep-alive' ,
@@ -140,12 +140,12 @@ download_video <- function(url, path, time_out = 10){
   writeBin(req$content, con = path)
 }
 
-#' tk_dl_video
-#' @description Function that enable to download tiktoks
+#' tk_dwnl_from_id
+#' @description Function that enable to download tiktoks given a post_id
 #' @export
 #' @param url url of tiktok to scrape
 #' @param path path to download tiktok video to
-tk_dl_video <- function(post_id = NULL, url = NULL, path, verbose = T, ...){
+tk_dwnl_from_id <- function(post_id = NULL, url = NULL, path, verbose = T, ...){
   if(!is.null(post_id)){
     post <- tk_info("post", post_id, ...)
     index <- 0
@@ -155,7 +155,7 @@ tk_dl_video <- function(post_id = NULL, url = NULL, path, verbose = T, ...){
       try(if(post$statusCode == "10201"){ index <- 10 }, silent = T)
     }
     if(index == 10){
-      readr::write_rds(tibble::tibble(), str_replace(path, "mp4$", "rds$"))
+      readr::write_rds(tibble::tibble(), stringr::str_replace(path, "mp4$", "rds$"))
       if(verbose) cli::cli_alert('[{Sys.time()}] {str_replace(path, "mp4$", "rds")}')
       return(list())
     } else {
@@ -168,7 +168,7 @@ tk_dl_video <- function(post_id = NULL, url = NULL, path, verbose = T, ...){
   }, silent = T)
 
   if(inherits(out, "try-error")){
-    readr::write_rds(tibble::tibble(), str_replace(path, "mp4$", "rds"))
+    readr::write_rds(tibble::tibble(), stringr::str_replace(path, "mp4$", "rds"))
     if(verbose) cli::cli_alert(glue::glue("[{Sys.time()}] {path}"))
   } else {
     if(verbose) cli::cli_alert_success(glue::glue("[{Sys.time()}] {path}"))
