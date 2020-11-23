@@ -22,6 +22,7 @@ First, let's load the `tiktokr` library and the `tidyverse`.
 library(tiktokr)
 library(dplyr)
 library(ggplot2)
+library(lubridate)
 ```
 
 
