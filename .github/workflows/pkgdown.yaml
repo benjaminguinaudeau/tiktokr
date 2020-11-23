@@ -37,6 +37,8 @@ jobs:
           install.packages("ggplot2")
           install.packages("janitor")
           install.packages("lubridate")
+          install.packages("kableExtra")
+          install.packages("tidyr")
         shell: Rscript {0}
 
       - name: Install package
