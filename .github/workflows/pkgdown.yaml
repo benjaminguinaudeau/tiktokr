@@ -38,6 +38,7 @@ jobs:
           remotes::install_github("rstudio/reticulate")
           install.packages("pkgdown", type = "binary")
           install.packages("ggplot2")
+          install.packages("janitor")
           install.packages("lubridate")
         shell: Rscript {0}
 
