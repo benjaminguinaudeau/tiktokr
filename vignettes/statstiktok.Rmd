@@ -64,7 +64,7 @@ tk_auth(cookie = "<paste here the output from document.cookie>")
 
 ```
 
-## Getting #rstats TikTok 
+## Getting #statstiktok posts 
 
 Once per script you need to run `tk_init` to initialize `tiktokr`
 
