@@ -81,7 +81,7 @@ tk_auth(cookie = "<paste here the output from document.cookie>")
 
 ## Examples
 
-For every session involving `tiktokr`, you will need to initialize. Once
+For every session involving `tiktokr`, you will need to initialize the package with ´tk_init()´. Once
 it is initiliazed you can run as many queries as you want.
 
 ``` r
