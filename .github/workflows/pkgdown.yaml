@@ -39,6 +39,7 @@ jobs:
           install.packages("lubridate")
           install.packages("kableExtra")
           install.packages("tidyr")
+          install.packages("forcats")
         shell: Rscript {0}
 
       - name: Install package
