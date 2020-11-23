@@ -77,7 +77,8 @@
       
 
       </header><script src="statstiktok_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="statstiktok_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="statstiktok_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+<script src="statstiktok_files/anchor-sections-1.0/anchor-sections.js"></script><script src="statstiktok_files/kePrint-0.0.1/kePrint.js"></script><link href="statstiktok_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Example: Analyzing #statstiktok</h1>
@@ -90,12 +91,13 @@
 
     
     
-<p>First, let’s load the <code>tiktokr</code> library and the <code>tidyverse</code>.</p>
+<p>First, let’s load <code>tiktokr</code> and some <code>tidyverse</code> libraries.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">tiktokr</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org">lubridate</a></span><span class="op">)</span></code></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org">lubridate</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org">stringr</a></span><span class="op">)</span></code></pre></div>
 <p>Make sure to use your preferred Python installation</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/reticulate">reticulate</a></span><span class="op">)</span>
@@ -119,7 +121,7 @@
 <li>Run <code><a href="../reference/tk_auth.html">tk_auth()</a></code> in R and paste the cookie.</li>
 </ol>
 <p>Click on image below for screen recording of how to get your TikTok cookie:</p>
-<p><a href="https://youtu.be/kYMV2ugxacs"><img src="https://github.com/benjaminguinaudeau/tiktokr/raw/master/data/preview.png" width="50%"></a></p>
+<p><a href="https://youtu.be/kYMV2ugxacs"><img src="https://github.com/benjaminguinaudeau/tiktokr/raw/master/data/preview.png" width="100%"></a></p>
 <p>The <code>tk_auth</code> function will save cookies (and user agent) as environment variable to your <code>.Renviron</code> file. You need to only run this once to use the <code>tiktokr</code> or whenever you want to update your cookie/user agent.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/tk_auth.html">tk_auth</a></span><span class="op">(</span>cookie <span class="op">=</span> <span class="st">"&lt;paste here the output from document.cookie&gt;"</span><span class="op">)</span></code></pre></div>
@@ -129,9 +131,10 @@
 <p>Once per script you need to run <code>tk_init</code> to initialize <code>tiktokr</code></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/tk_init.html">tk_init</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p>Let’s now get data on #statstiktok with <code>tk_posts</code>!</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">stats_tiktok</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"hashtag"</span>, query <span class="op">=</span> <span class="st">"statstiktok"</span>, n <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></code></pre></div>
-<p>Great! Now we have a dataset with metadata of tiktoks with rstats hashtag!</p>
+<p>Great! Now we have a dataset with metadata on tiktoks mentioning the hashtag ‘statstiktok’!</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">stats_tiktok</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 123</span>
@@ -203,16 +206,14 @@
 <span class="co">#&gt; $ shareEnabled               &lt;chr&gt; "TRUE", "TRUE", "TRUE", "TRUE", "TRUE", "T…</span>
 <span class="co">#&gt; $ isAd                       &lt;chr&gt; "FALSE", "FALSE", "FALSE", "FALSE", "FALSE…</span>
 <span class="co">#&gt; $ effectStickers             &lt;chr&gt; "NULL", "NULL", "NULL", "NULL", "NULL", "N…</span></code></pre></div>
-<p>There are quite a few variables. We do not really care about many of them so as a first step we select only relevant variables. I also like to use <code>janitor</code> for cleaning up variable names.</p>
+<p>First, the data needs to be cleaned. Many variables that TikTok returns are not relevant, so we focus on the most important ones and clean the variable names using <code><a href="https://rdrr.io/pkg/janitor/man/clean_names.html">janitor::clean_names()</a></code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor">janitor</a></span><span class="op">)</span>
-
-<span class="va">stats_tk</span> <span class="op">&lt;-</span> <span class="va">stats_tiktok</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="va">stats_tk</span> <span class="op">&lt;-</span> <span class="va">stats_tiktok</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">createTime</span>, 
          <span class="va">author_id</span><span class="op">:</span><span class="va">author_nickname</span>, 
          <span class="va">author_signature</span>, <span class="va">author_avatarLarger</span>, 
          <span class="va">desc</span>, <span class="va">music_id</span><span class="op">:</span><span class="va">authorStats_heart</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/janitor/man/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">janitor</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/janitor/man/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">id</span>, .keep_all <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
 
 <span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">stats_tk</span><span class="op">)</span>
@@ -244,97 +245,189 @@
 <span class="co">#&gt; $ author_stats_video_count     &lt;int&gt; 5, 5, 69, 69, 69, 306, 69, 69, 490, 69, …</span>
 <span class="co">#&gt; $ author_stats_digg_count      &lt;int&gt; 13800, 13800, 785, 785, 785, 8462, 785, …</span>
 <span class="co">#&gt; $ author_stats_heart           &lt;int&gt; 45500, 45500, 12000, 12000, 12000, 32100…</span></code></pre></div>
+<p>Now we have a cleaned sample of #statstiktok!</p>
 </div>
 <div id="stats-about-tiktokers" class="section level2">
 <h2 class="hasAnchor">
 <a href="#stats-about-tiktokers" class="anchor"></a>Stats about tiktokers</h2>
-<p>Let`s first check out the top posters in the data.</p>
+<p>Let`s first find out who the top posters are in the data. <a href="https://twitter.com/ChelseaParlett">Chelsea Parlett-Pelleriti</a> is the most prolific poster, when it comes to #statstiktok. This actually makes sense, considering that she is one of the pioneers of #statstiktok.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">stats_tk</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">author_unique_id</span>, sort <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&gt;=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>authr_url <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"https://www.tiktok.com/@"</span>, <span class="va">author_unique_id</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left">author_unique_id</th>
-<th align="right">n</th>
-<th align="left">authr_url</th>
+  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<table class="table table">
+<thead><tr>
+<th style="text-align:left;">
+author_unique_id
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:left;">
+authr_url
+</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
-<td align="left">chelseaparlettpelleriti</td>
-<td align="right">61</td>
-<td align="left"><a href="https://www.tiktok.com/@chelseaparlettpelleriti" class="uri">https://www.tiktok.com/@chelseaparlettpelleriti</a></td>
+<tr>
+<td style="text-align:left;">
+chelseaparlettpelleriti
+</td>
+<td style="text-align:right;">
+61
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@chelseaparlettpelleriti" class="uri">https://www.tiktok.com/@chelseaparlettpelleriti</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">baboutunt</td>
-<td align="right">5</td>
-<td align="left"><a href="https://www.tiktok.com/@baboutunt" class="uri">https://www.tiktok.com/@baboutunt</a></td>
+<tr>
+<td style="text-align:left;">
+baboutunt
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@baboutunt" class="uri">https://www.tiktok.com/@baboutunt</a>
+</td>
 </tr>
-<tr class="odd">
-<td align="left">dsquintana</td>
-<td align="right">5</td>
-<td align="left"><a href="https://www.tiktok.com/@dsquintana" class="uri">https://www.tiktok.com/@dsquintana</a></td>
+<tr>
+<td style="text-align:left;">
+dsquintana
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@dsquintana" class="uri">https://www.tiktok.com/@dsquintana</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">lakens</td>
-<td align="right">4</td>
-<td align="left"><a href="https://www.tiktok.com/@lakens" class="uri">https://www.tiktok.com/@lakens</a></td>
+<tr>
+<td style="text-align:left;">
+lakens
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@lakens" class="uri">https://www.tiktok.com/@lakens</a>
+</td>
 </tr>
-<tr class="odd">
-<td align="left">epiellie</td>
-<td align="right">3</td>
-<td align="left"><a href="https://www.tiktok.com/@epiellie" class="uri">https://www.tiktok.com/@epiellie</a></td>
+<tr>
+<td style="text-align:left;">
+epiellie
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@epiellie" class="uri">https://www.tiktok.com/@epiellie</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">morgane_fevrier</td>
-<td align="right">3</td>
-<td align="left"><a href="https://www.tiktok.com/@morgane_fevrier" class="uri">https://www.tiktok.com/@morgane_fevrier</a></td>
+<tr>
+<td style="text-align:left;">
+morgane_fevrier
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@morgane_fevrier" class="uri">https://www.tiktok.com/@morgane_fevrier</a>
+</td>
 </tr>
-<tr class="odd">
-<td align="left">statprof</td>
-<td align="right">3</td>
-<td align="left"><a href="https://www.tiktok.com/@statprof" class="uri">https://www.tiktok.com/@statprof</a></td>
+<tr>
+<td style="text-align:left;">
+statprof
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@statprof" class="uri">https://www.tiktok.com/@statprof</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">bookmatter</td>
-<td align="right">2</td>
-<td align="left"><a href="https://www.tiktok.com/@bookmatter" class="uri">https://www.tiktok.com/@bookmatter</a></td>
+<tr>
+<td style="text-align:left;">
+bookmatter
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@bookmatter" class="uri">https://www.tiktok.com/@bookmatter</a>
+</td>
 </tr>
-<tr class="odd">
-<td align="left">chelllarson</td>
-<td align="right">2</td>
-<td align="left"><a href="https://www.tiktok.com/@chelllarson" class="uri">https://www.tiktok.com/@chelllarson</a></td>
+<tr>
+<td style="text-align:left;">
+chelllarson
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@chelllarson" class="uri">https://www.tiktok.com/@chelllarson</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">dataislife</td>
-<td align="right">2</td>
-<td align="left"><a href="https://www.tiktok.com/@dataislife" class="uri">https://www.tiktok.com/@dataislife</a></td>
+<tr>
+<td style="text-align:left;">
+dataislife
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@dataislife" class="uri">https://www.tiktok.com/@dataislife</a>
+</td>
 </tr>
-<tr class="odd">
-<td align="left">ladykelp</td>
-<td align="right">2</td>
-<td align="left"><a href="https://www.tiktok.com/@ladykelp" class="uri">https://www.tiktok.com/@ladykelp</a></td>
+<tr>
+<td style="text-align:left;">
+ladykelp
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@ladykelp" class="uri">https://www.tiktok.com/@ladykelp</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">rismyfavouriteletter</td>
-<td align="right">2</td>
-<td align="left"><a href="https://www.tiktok.com/@rismyfavouriteletter" class="uri">https://www.tiktok.com/@rismyfavouriteletter</a></td>
+<tr>
+<td style="text-align:left;">
+rismyfavouriteletter
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@rismyfavouriteletter" class="uri">https://www.tiktok.com/@rismyfavouriteletter</a>
+</td>
 </tr>
-<tr class="odd">
-<td align="left">ryansscience</td>
-<td align="right">2</td>
-<td align="left"><a href="https://www.tiktok.com/@ryansscience" class="uri">https://www.tiktok.com/@ryansscience</a></td>
+<tr>
+<td style="text-align:left;">
+ryansscience
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@ryansscience" class="uri">https://www.tiktok.com/@ryansscience</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">sam_d_parsons</td>
-<td align="right">2</td>
-<td align="left"><a href="https://www.tiktok.com/@sam_d_parsons" class="uri">https://www.tiktok.com/@sam_d_parsons</a></td>
+<tr>
+<td style="text-align:left;">
+sam_d_parsons
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@sam_d_parsons" class="uri">https://www.tiktok.com/@sam_d_parsons</a>
+</td>
 </tr>
 </tbody>
 </table>
-<p>If you want to only analyze authors you can filter the data down like this.</p>
+<p>Metadata includes author data, such as the unique handle of the author (<code>author_unique_id</code>), the text of their bio (<code>author_signature</code>) and some author stats (like the follower count: <code>author_stats_follower_count</code>). In addition to classical social media metrics (number of accounts followed, posts, likes), Tiktok also includes ‘diggs’. Unfortunately, there is no documentation on how this metric is computed. The <code>author_stats_heart</code> shows how many likes a user has received in total.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tiktokers</span> <span class="op">&lt;-</span> <span class="va">stats_tk</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">contains</a></span><span class="op">(</span><span class="st">"author"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -357,169 +450,285 @@
 <span class="co">#&gt; $ author_stats_digg_count      &lt;int&gt; 13800, 785, 8462, 11800, 34000, 284, 149…</span>
 <span class="co">#&gt; $ author_stats_heart           &lt;int&gt; 45500, 12000, 32100, 122800, 119900, 195…</span>
 <span class="co">#&gt; $ vids_in_sample               &lt;int&gt; 2, 61, 1, 1, 1, 3, 1, 2, 1, 1, 4, 5, 1, …</span></code></pre></div>
-<div id="who-has-the-most-videos-in-sample" class="section level3">
+<div id="any-famous-tiktoker-using-statstiktok" class="section level3">
 <h3 class="hasAnchor">
-<a href="#who-has-the-most-videos-in-sample" class="anchor"></a>Who has the most videos in sample?</h3>
+<a href="#any-famous-tiktoker-using-statstiktok" class="anchor"></a>Any famous tiktoker using #statstiktok?</h3>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tiktokers</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">vids_in_sample</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">author_unique_id</span>, <span class="va">vids_in_sample</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">author_unique_id</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">contains</a></span><span class="op">(</span><span class="st">"count"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">author_stats_following_count</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select_all.html">rename_all</a></span><span class="op">(</span><span class="fu">stringr</span><span class="fu">::</span><span class="va"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span>, <span class="st">"(author_stats_)"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">follower_count</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>authr_url <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"https://www.tiktok.com/@"</span>, <span class="va">author_unique_id</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left">author_unique_id</th>
-<th align="right">vids_in_sample</th>
-<th align="left">authr_url</th>
+  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">%&gt;%</span>
+  <span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<table class="table table">
+<thead><tr>
+<th style="text-align:left;">
+author_unique_id
+</th>
+<th style="text-align:right;">
+following_count
+</th>
+<th style="text-align:right;">
+follower_count
+</th>
+<th style="text-align:right;">
+heart_count
+</th>
+<th style="text-align:right;">
+video_count
+</th>
+<th style="text-align:right;">
+digg_count
+</th>
+<th style="text-align:left;">
+authr_url
+</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
-<td align="left">chelseaparlettpelleriti</td>
-<td align="right">61</td>
-<td align="left"><a href="https://www.tiktok.com/@chelseaparlettpelleriti" class="uri">https://www.tiktok.com/@chelseaparlettpelleriti</a></td>
+<tr>
+<td style="text-align:left;">
+morgane_fevrier
+</td>
+<td style="text-align:right;">
+3130
+</td>
+<td style="text-align:right;">
+13700
+</td>
+<td style="text-align:right;">
+195900
+</td>
+<td style="text-align:right;">
+416
+</td>
+<td style="text-align:right;">
+284
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@morgane_fevrier" class="uri">https://www.tiktok.com/@morgane_fevrier</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">dsquintana</td>
-<td align="right">5</td>
-<td align="left"><a href="https://www.tiktok.com/@dsquintana" class="uri">https://www.tiktok.com/@dsquintana</a></td>
+<tr>
+<td style="text-align:left;">
+easyworkgaming
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:right;">
+13100
+</td>
+<td style="text-align:right;">
+119900
+</td>
+<td style="text-align:right;">
+124
+</td>
+<td style="text-align:right;">
+34000
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@easyworkgaming" class="uri">https://www.tiktok.com/@easyworkgaming</a>
+</td>
 </tr>
-<tr class="odd">
-<td align="left">baboutunt</td>
-<td align="right">5</td>
-<td align="left"><a href="https://www.tiktok.com/@baboutunt" class="uri">https://www.tiktok.com/@baboutunt</a></td>
+<tr>
+<td style="text-align:left;">
+claredoe
+</td>
+<td style="text-align:right;">
+7790
+</td>
+<td style="text-align:right;">
+12100
+</td>
+<td style="text-align:right;">
+122800
+</td>
+<td style="text-align:right;">
+490
+</td>
+<td style="text-align:right;">
+11800
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@claredoe" class="uri">https://www.tiktok.com/@claredoe</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">lakens</td>
-<td align="right">4</td>
-<td align="left"><a href="https://www.tiktok.com/@lakens" class="uri">https://www.tiktok.com/@lakens</a></td>
+<tr>
+<td style="text-align:left;">
+dimplisimply81
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+9677
+</td>
+<td style="text-align:right;">
+150600
+</td>
+<td style="text-align:right;">
+471
+</td>
+<td style="text-align:right;">
+5296
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@dimplisimply81" class="uri">https://www.tiktok.com/@dimplisimply81</a>
+</td>
 </tr>
-<tr class="odd">
-<td align="left">morgane_fevrier</td>
-<td align="right">3</td>
-<td align="left"><a href="https://www.tiktok.com/@morgane_fevrier" class="uri">https://www.tiktok.com/@morgane_fevrier</a></td>
+<tr>
+<td style="text-align:left;">
+office305
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+3562
+</td>
+<td style="text-align:right;">
+35200
+</td>
+<td style="text-align:right;">
+178
+</td>
+<td style="text-align:right;">
+978
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@office305" class="uri">https://www.tiktok.com/@office305</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">epiellie</td>
-<td align="right">3</td>
-<td align="left"><a href="https://www.tiktok.com/@epiellie" class="uri">https://www.tiktok.com/@epiellie</a></td>
+<tr>
+<td style="text-align:left;">
+bellasunrae
+</td>
+<td style="text-align:right;">
+2691
+</td>
+<td style="text-align:right;">
+2907
+</td>
+<td style="text-align:right;">
+26300
+</td>
+<td style="text-align:right;">
+108
+</td>
+<td style="text-align:right;">
+14900
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@bellasunrae" class="uri">https://www.tiktok.com/@bellasunrae</a>
+</td>
 </tr>
-<tr class="odd">
-<td align="left">statprof</td>
-<td align="right">3</td>
-<td align="left"><a href="https://www.tiktok.com/@statprof" class="uri">https://www.tiktok.com/@statprof</a></td>
+<tr>
+<td style="text-align:left;">
+akrampathan4545
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+2752
+</td>
+<td style="text-align:right;">
+32100
+</td>
+<td style="text-align:right;">
+306
+</td>
+<td style="text-align:right;">
+8462
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@akrampathan4545" class="uri">https://www.tiktok.com/@akrampathan4545</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">chelllarson</td>
-<td align="right">2</td>
-<td align="left"><a href="https://www.tiktok.com/@chelllarson" class="uri">https://www.tiktok.com/@chelllarson</a></td>
+<tr>
+<td style="text-align:left;">
+chelseaparlettpelleriti
+</td>
+<td style="text-align:right;">
+240
+</td>
+<td style="text-align:right;">
+1519
+</td>
+<td style="text-align:right;">
+12000
+</td>
+<td style="text-align:right;">
+69
+</td>
+<td style="text-align:right;">
+785
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@chelseaparlettpelleriti" class="uri">https://www.tiktok.com/@chelseaparlettpelleriti</a>
+</td>
 </tr>
-<tr class="odd">
-<td align="left">ryansscience</td>
-<td align="right">2</td>
-<td align="left"><a href="https://www.tiktok.com/@ryansscience" class="uri">https://www.tiktok.com/@ryansscience</a></td>
+<tr>
+<td style="text-align:left;">
+ryansscience
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+1464
+</td>
+<td style="text-align:right;">
+39200
+</td>
+<td style="text-align:right;">
+83
+</td>
+<td style="text-align:right;">
+1298
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@ryansscience" class="uri">https://www.tiktok.com/@ryansscience</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">bookmatter</td>
-<td align="right">2</td>
-<td align="left"><a href="https://www.tiktok.com/@bookmatter" class="uri">https://www.tiktok.com/@bookmatter</a></td>
+<tr>
+<td style="text-align:left;">
+mahdikhdiri
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+1059
+</td>
+<td style="text-align:right;">
+14100
+</td>
+<td style="text-align:right;">
+753
+</td>
+<td style="text-align:right;">
+1429
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@mahdikhdiri" class="uri">https://www.tiktok.com/@mahdikhdiri</a>
+</td>
 </tr>
 </tbody>
 </table>
-<p>Unsurprisingly, Chelsea Parlett-Pelleriti tops the list. She is one of the pioeneers of #statstiktok.</p>
-</div>
-<div id="who-has-the-most-followers" class="section level3">
-<h3 class="hasAnchor">
-<a href="#who-has-the-most-followers" class="anchor"></a>Who has the most followers?</h3>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tiktokers</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">author_stats_follower_count</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">author_unique_id</span>, <span class="va">author_stats_follower_count</span>, <span class="va">vids_in_sample</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>authr_url <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"https://www.tiktok.com/@"</span>, <span class="va">author_unique_id</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<table class="table">
-<colgroup>
-<col width="20%">
-<col width="24%">
-<col width="13%">
-<col width="41%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">author_unique_id</th>
-<th align="right">author_stats_follower_count</th>
-<th align="right">vids_in_sample</th>
-<th align="left">authr_url</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">morgane_fevrier</td>
-<td align="right">13700</td>
-<td align="right">3</td>
-<td align="left"><a href="https://www.tiktok.com/@morgane_fevrier" class="uri">https://www.tiktok.com/@morgane_fevrier</a></td>
-</tr>
-<tr class="even">
-<td align="left">easyworkgaming</td>
-<td align="right">13100</td>
-<td align="right">1</td>
-<td align="left"><a href="https://www.tiktok.com/@easyworkgaming" class="uri">https://www.tiktok.com/@easyworkgaming</a></td>
-</tr>
-<tr class="odd">
-<td align="left">claredoe</td>
-<td align="right">12100</td>
-<td align="right">1</td>
-<td align="left"><a href="https://www.tiktok.com/@claredoe" class="uri">https://www.tiktok.com/@claredoe</a></td>
-</tr>
-<tr class="even">
-<td align="left">dimplisimply81</td>
-<td align="right">9677</td>
-<td align="right">1</td>
-<td align="left"><a href="https://www.tiktok.com/@dimplisimply81" class="uri">https://www.tiktok.com/@dimplisimply81</a></td>
-</tr>
-<tr class="odd">
-<td align="left">office305</td>
-<td align="right">3562</td>
-<td align="right">1</td>
-<td align="left"><a href="https://www.tiktok.com/@office305" class="uri">https://www.tiktok.com/@office305</a></td>
-</tr>
-<tr class="even">
-<td align="left">bellasunrae</td>
-<td align="right">2907</td>
-<td align="right">1</td>
-<td align="left"><a href="https://www.tiktok.com/@bellasunrae" class="uri">https://www.tiktok.com/@bellasunrae</a></td>
-</tr>
-<tr class="odd">
-<td align="left">akrampathan4545</td>
-<td align="right">2752</td>
-<td align="right">1</td>
-<td align="left"><a href="https://www.tiktok.com/@akrampathan4545" class="uri">https://www.tiktok.com/@akrampathan4545</a></td>
-</tr>
-<tr class="even">
-<td align="left">chelseaparlettpelleriti</td>
-<td align="right">1519</td>
-<td align="right">61</td>
-<td align="left"><a href="https://www.tiktok.com/@chelseaparlettpelleriti" class="uri">https://www.tiktok.com/@chelseaparlettpelleriti</a></td>
-</tr>
-<tr class="odd">
-<td align="left">ryansscience</td>
-<td align="right">1464</td>
-<td align="right">2</td>
-<td align="left"><a href="https://www.tiktok.com/@ryansscience" class="uri">https://www.tiktok.com/@ryansscience</a></td>
-</tr>
-<tr class="even">
-<td align="left">mahdikhdiri</td>
-<td align="right">1059</td>
-<td align="right">1</td>
-<td align="left"><a href="https://www.tiktok.com/@mahdikhdiri" class="uri">https://www.tiktok.com/@mahdikhdiri</a></td>
-</tr>
-</tbody>
-</table>
+<p>Some of the tiktokers who used #statstiktok at least once seem to be pretty successful with more than 13700 followers. Maybe their one post post mentioning #statstiktok could have been be responsible for their success (…but most likely not :P). You can also see the strangeness of the digg count. It seems somehow uncorrelated to the other metrics.</p>
 </div>
 </div>
 <div id="posts-over-time" class="section level2">
 <h2 class="hasAnchor">
 <a href="#posts-over-time" class="anchor"></a>Posts over time</h2>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<p>When looking at frequency of posts over time, we see a continuous increase in the number of tiktoks mentioning #statstiktok since April 2020 (coinciding with the start of lockdowns in many countries!).</p>
+<p>The function ´from_unix´ converts the timestamp in ´create_time´ to actual datetime.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">stats_tk</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>create_date <span class="op">=</span> <span class="fu"><a href="../reference/from_unix.html">from_unix</a></span><span class="op">(</span><span class="va">create_time</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/round_date.html">floor_date</a></span><span class="op">(</span><span class="st">"day"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">create_date</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -527,8 +736,526 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">create_date</span>, <span class="va">cumsum_n</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_date.html">scale_x_datetime</a></span><span class="op">(</span>date_labels <span class="op">=</span> <span class="st">"%B %Y"</span><span class="op">)</span> </code></pre></div>
-<p><img src="statstiktok_files/figure-html/unnamed-chunk-14-1.png" width="576"></p>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_date.html">scale_x_datetime</a></span><span class="op">(</span>date_labels <span class="op">=</span> <span class="st">"%B %Y"</span><span class="op">)</span>  <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Number of Posts"</span>, x <span class="op">=</span> <span class="st">""</span><span class="op">)</span></code></pre></div>
+<p><img src="statstiktok_files/figure-html/unnamed-chunk-13-1.png" width="768"></p>
+</div>
+<div id="check-out-the-most-played-tiktoks" class="section level2">
+<h2 class="hasAnchor">
+<a href="#check-out-the-most-played-tiktoks" class="anchor"></a>Check out the most played tiktoks</h2>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">stats_tk</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">stats_play_count</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">author_unique_id</span>, <span class="va">stats_play_count</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>video_url <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"https://www.tiktok.com/@"</span>, <span class="va">author_unique_id</span>, <span class="st">"/video/"</span>, <span class="va">id</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">%&gt;%</span>
+  <span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<table class="table table">
+<thead><tr>
+<th style="text-align:left;">
+id
+</th>
+<th style="text-align:left;">
+author_unique_id
+</th>
+<th style="text-align:right;">
+stats_play_count
+</th>
+<th style="text-align:left;">
+video_url
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+6895134839197011206
+</td>
+<td style="text-align:left;">
+chelllarson
+</td>
+<td style="text-align:right;">
+554100
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@chelllarson/video/6895134839197011206" class="uri">https://www.tiktok.com/@chelllarson/video/6895134839197011206</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6894319168787664133
+</td>
+<td style="text-align:left;">
+chelllarson
+</td>
+<td style="text-align:right;">
+47200
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@chelllarson/video/6894319168787664133" class="uri">https://www.tiktok.com/@chelllarson/video/6894319168787664133</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6870296141569871109
+</td>
+<td style="text-align:left;">
+chelseaparlettpelleriti
+</td>
+<td style="text-align:right;">
+40100
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@chelseaparlettpelleriti/video/6870296141569871109" class="uri">https://www.tiktok.com/@chelseaparlettpelleriti/video/6870296141569871109</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6871608918494252294
+</td>
+<td style="text-align:left;">
+chelseaparlettpelleriti
+</td>
+<td style="text-align:right;">
+15200
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@chelseaparlettpelleriti/video/6871608918494252294" class="uri">https://www.tiktok.com/@chelseaparlettpelleriti/video/6871608918494252294</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6854302480956673285
+</td>
+<td style="text-align:left;">
+chelseaparlettpelleriti
+</td>
+<td style="text-align:right;">
+12600
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@chelseaparlettpelleriti/video/6854302480956673285" class="uri">https://www.tiktok.com/@chelseaparlettpelleriti/video/6854302480956673285</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6871246394531876102
+</td>
+<td style="text-align:left;">
+chelseaparlettpelleriti
+</td>
+<td style="text-align:right;">
+11500
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@chelseaparlettpelleriti/video/6871246394531876102" class="uri">https://www.tiktok.com/@chelseaparlettpelleriti/video/6871246394531876102</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6818031944715062533
+</td>
+<td style="text-align:left;">
+chelseaparlettpelleriti
+</td>
+<td style="text-align:right;">
+3755
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@chelseaparlettpelleriti/video/6818031944715062533" class="uri">https://www.tiktok.com/@chelseaparlettpelleriti/video/6818031944715062533</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6827002877089697025
+</td>
+<td style="text-align:left;">
+akrampathan4545
+</td>
+<td style="text-align:right;">
+3386
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@akrampathan4545/video/6827002877089697025" class="uri">https://www.tiktok.com/@akrampathan4545/video/6827002877089697025</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6854389075894455558
+</td>
+<td style="text-align:left;">
+chelseaparlettpelleriti
+</td>
+<td style="text-align:right;">
+2603
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@chelseaparlettpelleriti/video/6854389075894455558" class="uri">https://www.tiktok.com/@chelseaparlettpelleriti/video/6854389075894455558</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6870863330244840709
+</td>
+<td style="text-align:left;">
+chelseaparlettpelleriti
+</td>
+<td style="text-align:right;">
+2487
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/@chelseaparlettpelleriti/video/6870863330244840709" class="uri">https://www.tiktok.com/@chelseaparlettpelleriti/video/6870863330244840709</a>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Chelsea makes a lot of appearances again!</p>
+</div>
+<div id="tiktoks-description" class="section level2">
+<h2 class="hasAnchor">
+<a href="#tiktoks-description" class="anchor"></a>TikToks description</h2>
+<p>Each tiktok is usually accompanied with a brief text description. In this description, users typically use hashtags to increase the visibility of their posts.</p>
+<p>Unsurprisingly, stats and academia related hashtags are used quite often combination with #statstiktok. We can now use these new hashtags to explore further stats tiktoks.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="va">stats_tiktok</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">desc</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>hashtags <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract_all</a></span><span class="op">(</span><span class="va">desc</span>, <span class="st">"#\\w+"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html">unnest</a></span><span class="op">(</span><span class="va">hashtags</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>hashtags <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_lower</a></span><span class="op">(</span><span class="va">hashtags</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">hashtags</span>, sort <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>hashtag_url <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"https://www.tiktok.com/tag/"</span>, <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">hashtags</span>, <span class="st">"#"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">%&gt;%</span>
+  <span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<table class="table table">
+<thead><tr>
+<th style="text-align:left;">
+hashtags
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:left;">
+hashtag_url
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+#statstiktok
+</td>
+<td style="text-align:right;">
+123
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/tag/statstiktok" class="uri">https://www.tiktok.com/tag/statstiktok</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+#statistics
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/tag/statistics" class="uri">https://www.tiktok.com/tag/statistics</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+#fyp
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/tag/fyp" class="uri">https://www.tiktok.com/tag/fyp</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+#phdlife
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/tag/phdlife" class="uri">https://www.tiktok.com/tag/phdlife</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+#rstats
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/tag/rstats" class="uri">https://www.tiktok.com/tag/rstats</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+#academia
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/tag/academia" class="uri">https://www.tiktok.com/tag/academia</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+#datascience
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/tag/datascience" class="uri">https://www.tiktok.com/tag/datascience</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+#science
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/tag/science" class="uri">https://www.tiktok.com/tag/science</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+#bayesian
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/tag/bayesian" class="uri">https://www.tiktok.com/tag/bayesian</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+#duet
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+<a href="https://www.tiktok.com/tag/duet" class="uri">https://www.tiktok.com/tag/duet</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="expanding-the-data-using-hashtags" class="section level2">
+<h2 class="hasAnchor">
+<a href="#expanding-the-data-using-hashtags" class="anchor"></a>Expanding the data using hashtags</h2>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="va">larger_stats_tiktok</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"statsTikTok"</span>, <span class="st">"statistics"</span>, <span class="st">"rstats"</span>, <span class="st">"datascience"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dfr</a></span><span class="op">(</span><span class="op">~</span><span class="fu"><a href="../reference/tk_posts.html">tk_posts</a></span><span class="op">(</span><span class="st">"hashtag"</span>, <span class="va">.x</span>, n <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span><span class="va">stats_tiktok</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># bind_rows the #statstiktok data</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">id</span>, .keep_all <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="hashtags" class="section level2">
+<h2 class="hasAnchor">
+<a href="#hashtags" class="anchor"></a>Hashtags</h2>
+<p>Using the hashtags we discovered earlier, we can now get data for other hashtags (statsTikTok, statistics, rstats, datascience). We obtain metadata on 3474 tiktoks, which can be further analyzed or used for further expansion.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">larger_stats_tk</span> <span class="op">&lt;-</span> <span class="va">larger_stats_tiktok</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">createTime</span>, 
+         <span class="va">author_id</span><span class="op">:</span><span class="va">author_nickname</span>, 
+         <span class="va">author_signature</span>, <span class="va">author_avatarLarger</span>, 
+         <span class="va">desc</span>, <span class="va">music_id</span><span class="op">:</span><span class="va">authorStats_heart</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">janitor</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/janitor/man/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">id</span>, .keep_all <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
+
+<span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">larger_stats_tk</span><span class="op">)</span>
+<span class="co">#&gt; Rows: 3,474</span>
+<span class="co">#&gt; Columns: 26</span>
+<span class="co">#&gt; $ id                           &lt;chr&gt; "6895134839197011206", "6894319168787664…</span>
+<span class="co">#&gt; $ create_time                  &lt;int&gt; 1605398717, 1605208816, 1599615483, 1599…</span>
+<span class="co">#&gt; $ author_id                    &lt;chr&gt; "6815076321426326533", "6815076321426326…</span>
+<span class="co">#&gt; $ author_unique_id             &lt;chr&gt; "chelllarson", "chelllarson", "chelseapa…</span>
+<span class="co">#&gt; $ author_nickname              &lt;chr&gt; "Mitchell", "Mitchell", "Chelsea Parlett…</span>
+<span class="co">#&gt; $ author_signature             &lt;chr&gt; "#statstiktok", "#statstiktok", "Just re…</span>
+<span class="co">#&gt; $ author_avatar_larger         &lt;chr&gt; "https://p16-sign-va.tiktokcdn.com/music…</span>
+<span class="co">#&gt; $ desc                         &lt;chr&gt; "Where are all my fellow H0s at? No HAs …</span>
+<span class="co">#&gt; $ music_id                     &lt;chr&gt; "6886831115148036869", "6890224563494472…</span>
+<span class="co">#&gt; $ music_title                  &lt;chr&gt; "Ur appreciated ily", "original sound", …</span>
+<span class="co">#&gt; $ music_play_url               &lt;chr&gt; "https://sf16-va.tiktokcdn.com/obj/music…</span>
+<span class="co">#&gt; $ music_cover_thumb            &lt;chr&gt; "https://p16-sign-va.tiktokcdn.com/tos-m…</span>
+<span class="co">#&gt; $ music_cover_medium           &lt;chr&gt; "https://p16-sign-va.tiktokcdn.com/tos-m…</span>
+<span class="co">#&gt; $ music_cover_large            &lt;chr&gt; "https://p16-sign-va.tiktokcdn.com/tos-m…</span>
+<span class="co">#&gt; $ music_author_name            &lt;chr&gt; "angela vasquez \U0001f49f", "carson", "…</span>
+<span class="co">#&gt; $ music_original               &lt;chr&gt; "TRUE", "TRUE", "TRUE", "TRUE", "FALSE",…</span>
+<span class="co">#&gt; $ stats_digg_count             &lt;int&gt; 42600, 2869, 2789, 1328, 1019, 638, 531,…</span>
+<span class="co">#&gt; $ stats_share_count            &lt;int&gt; 6152, 483, 355, 10, 44, 11, 46, 38, 0, 1…</span>
+<span class="co">#&gt; $ stats_comment_count          &lt;int&gt; 965, 75, 56, 27, 43, 2, 45, 16, 32, 10, …</span>
+<span class="co">#&gt; $ stats_play_count             &lt;int&gt; 555300, 47400, 40100, 15200, 11500, 3391…</span>
+<span class="co">#&gt; $ author_stats_following_count &lt;int&gt; 33, 33, 240, 240, 240, 24, 240, 240, 778…</span>
+<span class="co">#&gt; $ author_stats_follower_count  &lt;int&gt; 259, 259, 1519, 1519, 1519, 2752, 1519, …</span>
+<span class="co">#&gt; $ author_stats_heart_count     &lt;int&gt; 45600, 45600, 12100, 12100, 12100, 32100…</span>
+<span class="co">#&gt; $ author_stats_video_count     &lt;int&gt; 5, 5, 69, 69, 69, 306, 69, 69, 490, 69, …</span>
+<span class="co">#&gt; $ author_stats_digg_count      &lt;int&gt; 13800, 13800, 788, 788, 788, 8462, 788, …</span>
+<span class="co">#&gt; $ author_stats_heart           &lt;int&gt; 45600, 45600, 12100, 12100, 12100, 32100…</span></code></pre></div>
+<p>Before closing up, we take a look at the popularity of the considered hashtags. To do so, we filter the 6 queried hashtags and look at the distributions of plays depending on the hashtag. We find out that - in our small and not-at-all random sample -, #statistics is associated with the most viewed, while #rstats is (for now) the least popular hashtag.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">larger_stats_tk</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">desc</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">matches</a></span><span class="op">(</span><span class="st">"^stats"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>hashtags <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract_all</a></span><span class="op">(</span><span class="va">desc</span>, <span class="st">"#\\w+"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html">unnest</a></span><span class="op">(</span><span class="va">hashtags</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">hashtags</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#statsTikTok"</span>, <span class="st">"#statstiktok"</span>, <span class="st">"#statistics"</span>, <span class="st">"#rstats"</span>, <span class="st">"#datascience"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>hashtags <span class="op">=</span> <span class="fu">forcats</span><span class="fu">::</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder</a></span><span class="op">(</span><span class="va">hashtags</span>, <span class="va">stats_play_count</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">hashtags</span>, y <span class="op">=</span> <span class="va">stats_play_count</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html">ylim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">12e3</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Hashtag"</span>, y <span class="op">=</span> <span class="st">"Number of Plays"</span><span class="op">)</span></code></pre></div>
+<p><img src="statstiktok_files/figure-html/unnamed-chunk-19-1.png" width="768"></p>
+</div>
+<div id="check-out-the-most-common-music-titles-usedd" class="section level2">
+<h2 class="hasAnchor">
+<a href="#check-out-the-most-common-music-titles-usedd" class="anchor"></a>Check out the most common music titles usedd</h2>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">larger_stats_tk</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">music_title</span>, <span class="va">music_play_url</span>, sort <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">music_title</span>, <span class="st">"original"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">%&gt;%</span>
+  <span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<table class="table table">
+<thead><tr>
+<th style="text-align:left;">
+music_title
+</th>
+<th style="text-align:left;">
+music_play_url
+</th>
+<th style="text-align:right;">
+n
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Classical Music
+</td>
+<td style="text-align:left;">
+<a href="https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/ea66fa0925e62cdcbdfbecdd7e30d636.m4a" class="uri">https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/ea66fa0925e62cdcbdfbecdd7e30d636.m4a</a>
+</td>
+<td style="text-align:right;">
+14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+She Share Story (for Vlog)
+</td>
+<td style="text-align:left;">
+<a href="https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/1641273466152961.mp3" class="uri">https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/1641273466152961.mp3</a>
+</td>
+<td style="text-align:right;">
+14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+The Banjo Beat, Pt. 1
+</td>
+<td style="text-align:left;">
+<a href="https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/0f584cb7892da90cb0f1ff1b18a9d821.mp3" class="uri">https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/0f584cb7892da90cb0f1ff1b18a9d821.mp3</a>
+</td>
+<td style="text-align:right;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+What If (I Told You I Like You)
+</td>
+<td style="text-align:left;">
+<a href="https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/651c09ce5b9d0d496f78870030dd1459.mp3" class="uri">https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/651c09ce5b9d0d496f78870030dd1459.mp3</a>
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Banana (feat. Shaggy) [DJ FLe - Minisiren Remix]
+</td>
+<td style="text-align:left;">
+<a href="https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/f404dd8ad7ef4181d8cbb8a64704c9c0.mp3" class="uri">https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/f404dd8ad7ef4181d8cbb8a64704c9c0.mp3</a>
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Renee
+</td>
+<td style="text-align:left;">
+<a href="https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/e4763633ecd930af26a37bafffe2c6df.mp3" class="uri">https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/e4763633ecd930af26a37bafffe2c6df.mp3</a>
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Stranger
+</td>
+<td style="text-align:left;">
+<a href="https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/1630587050952706.mp3" class="uri">https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/1630587050952706.mp3</a>
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Monkeys Spinning Monkeys
+</td>
+<td style="text-align:left;">
+<a href="https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/a7c68545b238686d79179e25ee990183.m4a" class="uri">https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/a7c68545b238686d79179e25ee990183.m4a</a>
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mystery of Love (From the Original Motion Picture “Call Me by Your Name”)
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Play Date
+</td>
+<td style="text-align:left;">
+<a href="https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/ee5b572c266d37b749725c708f3a0212.mp3" class="uri">https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/ee5b572c266d37b749725c708f3a0212.mp3</a>
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+</tbody>
+</table>
+<p>Looks like <a href="https://sf16-sg.tiktokcdn.com/obj/tiktok-obj/ea66fa0925e62cdcbdfbecdd7e30d636.m4a"><em>Classical Music</em></a> is quite popular with stats tiktok!</p>
 </div>
   </div>
 

@@ -84,7 +84,8 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of <code>tiktokr</code> is to provide a scraper for the video-sharing social networking service <a href="http://tiktok.com/">TikTok</a>. Mostly inspired by this Python module: <a href="https://github.com/davidteather/TikTok-Api">davidteather/TikTok-Api</a>. You will need Python 3.6 or higher to use <code>tiktokr</code>.</p>
+<p>The goal of <code>tiktokr</code> is to provide a scraper for the video-sharing social networking service <a href="http://tiktok.com/">TikTok</a>.</p>
+<p>While writing this library, we were broadly inspired by the Python module <a href="https://github.com/davidteather/TikTok-Api">davidteather/TikTok-Api</a>. You will need Python 3.6 or higher to use <code>tiktokr</code>.</p>
 <p><em>Many thanks go to <a href="https://twitter.com/ViviFabrien">Vivien Fabry</a> for creating the hexagon logo.</em></p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -117,7 +118,7 @@
 <li>Run <code><a href="reference/tk_auth.html">tk_auth()</a></code> in R and paste the cookie.</li>
 </ol>
 <p>Click on image below for screen recording of how to get your TikTok cookie:</p>
-<p><a href="https://youtu.be/kYMV2ugxacs"><img src="https://github.com/benjaminguinaudeau/tiktokr/raw/master/data/preview.png" width="50%"></a></p>
+<p><a href="https://youtu.be/kYMV2ugxacs"><img src="https://github.com/benjaminguinaudeau/tiktokr/raw/master/data/preview.png" width="100%"></a></p>
 <p>The <code>tk_auth</code> function will save cookies (and user agent) as environment variable to your <code>.Renviron</code> file. You need to only run this once to use the <code>tiktokr</code> or whenever you want to update your cookie/user agent.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/tk_auth.html">tk_auth</a></span><span class="op">(</span>cookie <span class="op">=</span> <span class="st">"&lt;paste here the output from document.cookie&gt;"</span><span class="op">)</span></code></pre></div>
@@ -125,7 +126,7 @@
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
-<p>Every time before you run functions you need to initialize <code>tiktokr</code></p>
+<p>For every session involving <code>tiktokr</code>, you will need to initialize. Once it is initiliazed you can run as many queries as you want.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/tk_init.html">tk_init</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div id="get-tiktok-trends" class="section level3">
@@ -139,36 +140,37 @@
 <div id="get-tiktoks-from-user" class="section level3">
 <h3 class="hasAnchor">
 <a href="#get-tiktoks-from-user" class="anchor"></a>Get TikToks from User</h3>
-<p>Note: User query often only provides 2k hits but limit is unclear. Sample seems to be from most recent to oldest.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">user_posts</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"user"</span>, query <span class="op">=</span> <span class="st">"willsmith"</span>, n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">user_posts</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"user"</span>, query <span class="op">=</span> <span class="st">"willsmith"</span>, n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> </code></pre></div>
 </div>
 <div id="get-tiktoks-from-hashtag" class="section level3">
 <h3 class="hasAnchor">
 <a href="#get-tiktoks-from-hashtag" class="anchor"></a>Get TikToks from hashtag</h3>
 <p>Note: Hashtags query only provides 2k hits, which are not drawn randomly or based on the most recent post date but rather <strong>some mix of recent and popular</strong> TikToks.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hash_post</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"hashtag"</span>, query <span class="op">=</span> <span class="st">"maincharacter"</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">hash_post</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"hashtag"</span>, query <span class="op">=</span> <span class="st">"maincharacter"</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> </code></pre></div>
+</div>
+<div id="get-tiktoks-from-music-id" class="section level3">
+<h3 class="hasAnchor">
+<a href="#get-tiktoks-from-music-id" class="anchor"></a>Get TikToks from music id</h3>
+<p>Note: Hashtags query only provides 2k hits, which are not drawn randomly or based on the most recent post date but rather <strong>some mix of recent and popular</strong> TikToks.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">user_posts</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"user"</span>, query <span class="op">=</span> <span class="st">"willsmith"</span>, n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
+<span class="va">music_post</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"music"</span>, query <span class="op">=</span> <span class="va">user_posts</span><span class="op">$</span><span class="va">music_id</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="download-tiktok-videos" class="section level3">
 <h3 class="hasAnchor">
 <a href="#download-tiktok-videos" class="anchor"></a>Download TikTok Videos</h3>
-<p>With <code>tk_dl_video</code> you can download videos from TikTok.</p>
+<p>With <code>tk_dwnl</code> you can download videos from TikTok.</p>
 <p>From Trends:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">trends</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"trends"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># fs::dir_create("video")</span>
+<span class="va">trends</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"trends"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
 
 <span class="va">trends</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/split.html">split</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">walk</a></span><span class="op">(</span><span class="op">~</span><span class="op">{</span><span class="fu"><a href="reference/tk_dl_video.html">tk_dl_video</a></span><span class="op">(</span><span class="va">.x</span><span class="op">$</span><span class="va">downloadAddr</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"video/"</span>, <span class="va">.x</span><span class="op">$</span><span class="va">id</span>, <span class="st">".mp4"</span><span class="op">)</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></code></pre></div>
-<p>From hashtag:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">hash_post</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"hashtag"</span>, query <span class="op">=</span> <span class="st">"maincharacter"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
-
-<span class="va">hash_post</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/split.html">split</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">walk</a></span><span class="op">(</span><span class="op">~</span><span class="op">{</span><span class="fu"><a href="reference/tk_dl_video.html">tk_dl_video</a></span><span class="op">(</span><span class="va">.x</span><span class="op">$</span><span class="va">downloadAddr</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"video/hashtag/"</span>, <span class="va">.x</span><span class="op">$</span><span class="va">id</span>, <span class="st">".mp4"</span><span class="op">)</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://rdrr.io/r/base/split.html">split</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">walk</a></span><span class="op">(</span><span class="op">~</span><span class="op">{</span><span class="fu"><a href="reference/tk_dwnl.html">tk_dwnl</a></span><span class="op">(</span><span class="va">.x</span><span class="op">$</span><span class="va">video_downloadAddr</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"video/"</span>, <span class="va">.x</span><span class="op">$</span><span class="va">id</span>, <span class="st">".mp4"</span><span class="op">)</span><span class="op">)</span><span class="op">}</span><span class="op">)</span>
+<span class="co"># fs::dir_delete("video")</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -194,8 +196,6 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://codecov.io/gh/benjaminguinaudeau/tiktokr?branch=master"><img src="https://codecov.io/gh/favstats/tiktokr/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://travis-ci.com/benjaminguinaudeau/tiktokr"><img src="https://travis-ci.com/favstats/tiktokr.svg?branch=master" alt="Travis build status"></a></li>
 </ul>
 </div>
 </div>

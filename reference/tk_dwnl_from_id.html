@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • tiktokr</title>
+<title>tk_dwnl_from_id — tk_dwnl_from_id • tiktokr</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,8 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="tk_dwnl_from_id — tk_dwnl_from_id" />
+<meta property="og:description" content="Function that enable to download tiktoks given a post_id" />
 <meta property="og:image" content="/logo.svg" />
 
 
@@ -66,7 +67,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -120,120 +121,34 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>tk_dwnl_from_id</h1>
+    
+    <div class="hidden name"><code>tk_dwnl_from_id.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Function that enable to download tiktoks given a post_id</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>tk_dwnl_from_id</span><span class='op'>(</span>post_id <span class='op'>=</span> <span class='cn'>NULL</span>, url <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>path</span>, verbose <span class='op'>=</span> <span class='cn'>T</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="from_unix.html">from_unix()</a></code> </p>
-        </td>
-        <td><p>from_unix</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_data.html">get_data()</a></code> </p>
-        </td>
-        <td><p>get_data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_n.html">get_n()</a></code> </p>
-        </td>
-        <td><p>get_n</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_url.html">get_url()</a></code> </p>
-        </td>
-        <td><p>get_url</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="parse_json_structure.html">parse_json_structure()</a></code> </p>
-        </td>
-        <td><p>parse_json_structure</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="quiet.html">quiet()</a></code> </p>
-        </td>
-        <td><p>quiet</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="shape_url.html">shape_url()</a></code> </p>
-        </td>
-        <td><p>shape_url</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tk_auth.html">tk_auth()</a></code> </p>
-        </td>
-        <td><p>Set up TikTok cookie and user agent</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tk_dwnl.html">tk_dwnl()</a></code> </p>
-        </td>
-        <td><p>tk_dwnl</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tk_dwnl_from_id.html">tk_dwnl_from_id()</a></code> </p>
-        </td>
-        <td><p>tk_dwnl_from_id</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tk_info.html">tk_info()</a></code> </p>
-        </td>
-        <td><p>tk_info</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tk_init.html">tk_init()</a></code> </p>
-        </td>
-        <td><p>tk_init</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tk_install.html">tk_install()</a></code> </p>
-        </td>
-        <td><p>tk_install</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tk_posts.html">tk_posts()</a></code> </p>
-        </td>
-        <td><p>tk_posts</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>url</th>
+      <td><p>url of tiktok to scrape</p></td>
+    </tr>
+    <tr>
+      <th>path</th>
+      <td><p>path to download tiktok video to</p></td>
+    </tr>
     </table>
-  </div>
 
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
