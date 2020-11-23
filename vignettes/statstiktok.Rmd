@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 First, let's load the `tiktokr` library and the `tidyverse`.
 
-```{r setup}
+```{r, setup, eval = T}
 library(tiktokr)
 library(dplyr)
 library(ggplot2)
@@ -28,7 +28,7 @@ library(lubridate)
 
 Make sure to use your preferred Python installation
 
-```{r}
+```{r, eval = F}
 library(reticulate)
 
 use_python(py_config()$python)
@@ -159,7 +159,7 @@ tiktokers %>%
 
 ## Posts over time
 
-```{r, fig.width = 5}
+```{r, fig.width = 6}
 stats_tk %>% 
   mutate(create_date = from_unix(create_time) %>% lubridate::floor_date("day")) %>% 
   count(create_date) %>% 
