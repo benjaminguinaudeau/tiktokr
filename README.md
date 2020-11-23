@@ -10,7 +10,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![Codecov test
 coverage](https://codecov.io/gh/benjaminguinaudeau/tiktokr/branch/master/graph/badge.svg)](https://codecov.io/gh/benjaminguinaudeau/tiktokr?branch=master)
 [![Travis build
-status](https://travis-ci.com/favstats/tiktokr.svg?branch=master)](https://travis-ci.com/benjaminguinaudeau/tiktokr)
+status](https://travis-ci.com/benjaminguinaudeau/tiktokr.svg?branch=master)](https://travis-ci.com/benjaminguinaudeau/tiktokr)
 <!-- badges: end -->
 
 The goal of `tiktokr` is to provide a scraper for the video-sharing

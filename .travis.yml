@@ -20,7 +20,7 @@ jobs:
 
 r_packages:
   - covr
-  - kabelExtra
+  - kableExtra
 
 
 after_success:
