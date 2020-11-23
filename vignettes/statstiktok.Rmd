@@ -1,0 +1,173 @@
+---
+title: "Example: Analyzing #statstiktok "
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{statstiktok-usecase}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = F,
+  warning = F
+)
+```
+
+First, let's load the `tiktokr` library and the `tidyverse`.
+
+```{r, setup, eval = T}
+library(tiktokr)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+```
+
+
+Make sure to use your preferred Python installation
+
+```{r, eval = F}
+library(reticulate)
+
+use_python(py_config()$python)
+
+```
+
+The next two steps you only need to do once:
+
+1. Install necessary Python libraries
+
+```{r, eval = F}
+tk_install()
+```
+
+2. Authentication
+
+In November 2020, Tiktok increased its security protocol. They now frequently show a captcha, which is easily triggered after a few requests. This can be solved by specifying the cookie parameter. To get a cookie session: 
+
+1. Open a browser and go to "http://tiktok.com"
+2. Scroll down a bit, to ensure, that you don't get any captcha
+3. Open the javascript console (in Chrome: View > Developer > Javascript Console)
+4. Run `document.cookie` in the console. Copy the entire output (your cookie). 
+5. Run `tk_auth()` in R and paste the cookie.
+
+Click on image below for screen recording of how to get your TikTok cookie:
+
+[<img src="https://github.com/benjaminguinaudeau/tiktokr/raw/master/data/preview.png" width="50%">](https://youtu.be/kYMV2ugxacs)
+
+The `tk_auth` function will save cookies (and user agent) as environment variable to your `.Renviron` file. You need to only run this once to use the `tiktokr` or whenever you want to update your cookie/user agent.
+
+```{r, eval = F}
+tk_auth(cookie = "<paste here the output from document.cookie>")
+
+```
+
+## Getting #statstiktok posts 
+
+Once per script you need to run `tk_init` to initialize `tiktokr`
+
+
+```{r, eval = F}
+tk_init()
+```
+
+
+```{r, eval = F}
+stats_tiktok <- tk_posts(scope = "hashtag", query = "statstiktok", n = 2000)
+
+```
+
+```{r, echo =FALSE}
+load('../data/stats_tiktok.rda')
+
+```
+
+Great! Now we have a dataset with metadata of tiktoks with rstats hashtag!
+
+```{r}
+glimpse(stats_tiktok)
+```
+
+There are quite a few variables. We do not really care about many of them so as a first step we select only relevant variables. I also like to use `janitor` for cleaning up variable names.
+
+```{r}
+library(janitor)
+
+stats_tk <- stats_tiktok %>% 
+  select(id, createTime, 
+         author_id:author_nickname, 
+         author_signature, author_avatarLarger, 
+         desc, music_id:authorStats_heart) %>% 
+  clean_names() %>% 
+  distinct(id, .keep_all = T)
+
+glimpse(stats_tk)
+```
+
+## Stats about tiktokers
+
+Let`s first check out the top posters in the data.
+
+```{r}
+stats_tk %>% 
+  count(author_unique_id, sort = T) %>% 
+  filter(n >= 2) %>% 
+  mutate(authr_url = paste0("https://www.tiktok.com/@", author_unique_id)) %>% 
+  knitr::kable()
+```
+
+
+If you want to only analyze authors you can filter the data down like this.
+
+```{r}
+tiktokers <- stats_tk %>% 
+  select(contains("author")) %>% 
+  add_count(author_unique_id, name = "vids_in_sample") %>% 
+  distinct(author_id, .keep_all = T)
+
+glimpse(tiktokers)
+```
+
+### Who has the most videos in sample?
+
+
+```{r}
+tiktokers %>% 
+  arrange(desc(vids_in_sample)) %>% 
+  slice(1:10) %>% 
+  select(author_unique_id, vids_in_sample) %>% 
+  mutate(authr_url = paste0("https://www.tiktok.com/@", author_unique_id)) %>% 
+  knitr::kable()
+```
+Unsurprisingly, Chelsea Parlett-Pelleriti tops the list. She is one of the pioeneers of #statstiktok.
+
+
+### Who has the most followers?
+
+
+```{r}
+tiktokers %>% 
+  arrange(desc(author_stats_follower_count)) %>% 
+  slice(1:10) %>% 
+  select(author_unique_id, author_stats_follower_count, vids_in_sample) %>% 
+  mutate(authr_url = paste0("https://www.tiktok.com/@", author_unique_id)) %>% 
+  knitr::kable()
+```
+
+
+## Posts over time
+
+```{r, fig.width = 6}
+stats_tk %>% 
+  mutate(create_date = from_unix(create_time) %>% lubridate::floor_date("day")) %>% 
+  count(create_date) %>% 
+  mutate(cumsum_n = cumsum(n)) %>% 
+  ggplot(aes(create_date, cumsum_n)) + 
+  geom_line() +
+  theme_minimal() +
+  scale_x_datetime(date_labels = "%B %Y") 
+```
+
+
