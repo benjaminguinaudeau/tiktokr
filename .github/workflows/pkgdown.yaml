@@ -31,11 +31,11 @@ jobs:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
-
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_github("rstudio/reticulate")
+          reticulate::install_miniconda()
           install.packages("pkgdown", type = "binary")
           install.packages("ggplot2")
           install.packages("janitor")
