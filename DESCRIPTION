@@ -30,7 +30,13 @@ Suggests:
     testthat,
     covr,
     knitr,
-    rmarkdown
+    rmarkdown,
+    ggplot2,
+    janitor,
+    lubridate,
+    kableExtra,
+    tidyr,
+    forcats
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
