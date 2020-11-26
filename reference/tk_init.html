@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>tk_init — tk_init • tiktokr</title>
+<title>Initialize tiktokr — tk_init • tiktokr</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="tk_init — tk_init" />
-<meta property="og:description" content="Intitalize puppeeter browser in the reticulate session" />
+<meta property="og:title" content="Initialize tiktokr — tk_init" />
+<meta property="og:description" content="This function loads reticulate, runs some python code and initializes a puppeeter browser. This function should be run once per session." />
 <meta property="og:image" content="/logo.svg" />
 
 
@@ -123,19 +123,27 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>tk_init</h1>
+    <h1>Initialize tiktokr</h1>
     
     <div class="hidden name"><code>tk_init.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Intitalize puppeeter browser in the reticulate session</p>
+    <p>This function loads reticulate, runs some python code and initializes a puppeeter browser. This function should be run once per session.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tk_init</span><span class='op'>(</span><span class='op'>)</span></pre>
 
 
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+
+<span class='co'># Run at the start of your sessions:</span>
+<span class='fu'>tk_init</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
