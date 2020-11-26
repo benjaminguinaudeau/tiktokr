@@ -2,10 +2,24 @@
 % Please edit documentation in R/meta.R
 \name{tk_install}
 \alias{tk_install}
-\title{tk_install}
+\title{Install needed python libraries}
 \usage{
-tk_install()
+tk_install(...)
+}
+\arguments{
+\item{...}{pass arguments to \code{py_install}}
 }
 \description{
-Install needed python libraries
+This function installs the following python libraries: "pyppeteer", "pyppeteer_stealth", "asyncio" and "requests". This function simply wraps \code{py_install}. Use the \code{...} argument to pass arguments to \code{py_install}.
+}
+\examples{
+
+\dontrun{
+
+# Run once to install the necessary packages:
+tk_install()
+# You can also install in custom environment name by using py_install arguments:
+tk_install(envname = "VeryNiceEnv")
+
+}
 }

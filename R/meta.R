@@ -1,6 +1,13 @@
-#' tk_init
-#' @description Intitalize puppeeter browser in the reticulate session
-#' @export
+#' @title Initialize tiktokr
+#' @description This function loads reticulate, runs some python code and initializes a puppeeter browser. This function should be run once per session.
+#' @export tk_init
+#' @examples
+#' \dontrun{
+#'
+#' # Run at the start of your sessions:
+#' tk_init()
+#'
+#' }
 tk_init <- function(){
   require(reticulate)
   reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/stealth.py")
@@ -21,6 +28,7 @@ tk_init <- function(){
 #' @examples
 #'
 #' \dontrun{
+#'
 #' # Put in your cookie:
 #' tk_auth(cookie = "abcd012345678901234567890123456789")
 #' # Restart R for changes to take effect or load your environment so you can use the cookie without
@@ -28,6 +36,7 @@ tk_init <- function(){
 #' readRenviron("~/.Renviron")
 #' # You can check it with:
 #' Sys.getenv("TIKTOK_COOKIE")
+#'
 #' }
 tk_auth <- function(cookie, ua, id_cookie) {
 
@@ -71,9 +80,21 @@ tk_auth <- function(cookie, ua, id_cookie) {
 
 }
 
-#' tk_install
-#' @description Install needed python libraries
-#' @export
-tk_install <- function(){
-  reticulate::py_install(c("pyppeteer", "pyppeteer_stealth", "asyncio", "requests"), pip = T)
+
+#' @title Install needed python libraries
+#' @description This function installs the following python libraries: "pyppeteer", "pyppeteer_stealth", "asyncio" and "requests". This function simply wraps \code{py_install}. Use the \code{...} argument to pass arguments to \code{py_install}.
+#' @export tk_install
+#' @param ... pass arguments to \code{py_install}
+#' @examples
+#'
+#' \dontrun{
+#'
+#' # Run once to install the necessary packages:
+#' tk_install()
+#' # You can also install in custom environment name by using py_install arguments:
+#' tk_install(envname = "VeryNiceEnv")
+#'
+#' }
+tk_install <- function(...){
+  reticulate::py_install(c("pyppeteer", "pyppeteer_stealth", "asyncio", "requests"), pip = T, ...)
 }

@@ -12,3 +12,10 @@ from_unix(x)
 \description{
 Converts UNIX timestamp to datetime format
 }
+\examples{
+
+\dontrun{
+# Convert unix timestamp to datetime (POSIXct)
+from_unix(1538430000)
+}
+}

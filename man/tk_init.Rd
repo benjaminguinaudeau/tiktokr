@@ -2,10 +2,18 @@
 % Please edit documentation in R/meta.R
 \name{tk_init}
 \alias{tk_init}
-\title{tk_init}
+\title{Initialize tiktokr}
 \usage{
 tk_init()
 }
 \description{
-Intitalize puppeeter browser in the reticulate session
+This function loads reticulate, runs some python code and initializes a puppeeter browser. This function should be run once per session.
+}
+\examples{
+\dontrun{
+
+# Run at the start of your sessions:
+tk_init()
+
+}
 }

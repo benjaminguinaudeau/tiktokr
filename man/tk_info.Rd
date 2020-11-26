@@ -15,3 +15,12 @@ or "music")}
 \description{
 Function to get information on a given user/hashtag/piece of music
 }
+\examples{
+
+\dontrun{
+# Get info about a user:
+tk_info(scope = "user", query = "willsmith")
+# Get info about a hashtag
+tk_info(scope = "hashtag", query = "cosplay")
+}
+}

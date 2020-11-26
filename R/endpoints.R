@@ -1,10 +1,28 @@
 
 #' tk_posts
-#' @description Get TikToks from a given username/hashtag or music_id
+#' @description Get TikToks from a given username/hashtag or music_id.
+#'
+#' 1. user (no known API-limit)
+#'
+#' 2. hashtag (API-limit of 2 000 tiktoks at a time)
+#'
+#' 3. music (API-limit of 2 000 tiktoks at a time)
+#'
+#' 4. trends (API-limit of 2 000 tiktoks at a time)
+#'
 #' @param scope Character indicating the endpoint to scrape (must be "user", "hashtag", "music" or "trends")
 #' @param query Character indicating the username/hashtag/music_id to scrape
 #' @param n Numeric indicating the number of tiktoks to scrape
 #' @export
+#' @examples
+#' \dontrun{
+#'
+#' # Get posts with hashtags
+#' tk_posts(scope = "hashtag", query = "maincharacter", n = 100)
+#' # Get posts from user willsmith
+#' tk_posts(scope = "user", query = "willsmith", n = 50)
+#'
+#' }
 tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("01-01-1900"), save_dir = NULL, verbose = T, ...){
 
   if(!(scope %in% c("user", "hashtag", "music", "trends"))){

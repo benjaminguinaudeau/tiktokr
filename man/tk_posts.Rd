@@ -22,5 +22,23 @@ tk_posts(
 \item{n}{Numeric indicating the number of tiktoks to scrape}
 }
 \description{
-Get TikToks from a given username/hashtag or music_id
+Get TikToks from a given username/hashtag or music_id.
+
+1. user (no known API-limit)
+
+2. hashtag (API-limit of 2 000 tiktoks at a time)
+
+3. music (API-limit of 2 000 tiktoks at a time)
+
+4. trends (API-limit of 2 000 tiktoks at a time)
+}
+\examples{
+\dontrun{
+
+# Get posts with hashtags
+tk_posts(scope = "hashtag", query = "maincharacter", n = 100)
+# Get posts from user willsmith
+tk_posts(scope = "user", query = "willsmith", n = 50)
+
+}
 }

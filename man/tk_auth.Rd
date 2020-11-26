@@ -23,6 +23,7 @@ This function will add a TikTok cookie and a user agent to your
 \examples{
 
 \dontrun{
+
 # Put in your cookie:
 tk_auth(cookie = "abcd012345678901234567890123456789")
 # Restart R for changes to take effect or load your environment so you can use the cookie without
@@ -30,5 +31,6 @@ tk_auth(cookie = "abcd012345678901234567890123456789")
 readRenviron("~/.Renviron")
 # You can check it with:
 Sys.getenv("TIKTOK_COOKIE")
+
 }
 }

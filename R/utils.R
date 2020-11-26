@@ -189,6 +189,12 @@ quiet <- function(x) {
 #' @description Converts UNIX timestamp to datetime format
 #' @param x UNIX timestamp to be converted to datetime
 #' @export
+#' @examples
+#'
+#' \dontrun{
+#' # Convert unix timestamp to datetime (POSIXct)
+#' from_unix(1538430000)
+#' }
 from_unix <- function(x) {
   as.POSIXct(as.numeric(x), origin = '1970-01-01', tz = 'UTC')
 }
