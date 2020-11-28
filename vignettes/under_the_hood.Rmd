@@ -1,0 +1,17 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## How does it work in the background? 
+
+TikTokr exploits the internal API used by the TikTok mobile application and the tiktok.com website to access data. As the API structure is fairly straightforward, TikTok deployed several hurdles to prevent automatic data extraction from their website. 
+
+
+
+
+
