@@ -61,7 +61,7 @@ tk_auth <- function(cookie, ua, id_cookie) {
 
   if(Sys.getenv("TIKTOK_UA") != ua){
     message("User agent was updated")
-    set_renv("TIKTOK_UA" = ua)
+    set_renv("TIKTOK_UA" = shape_ua(ua))
   }
 
   ## ID Cookie
