@@ -7,333 +7,263 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 pacman::p_load(tidyverse)
+
 ```
 
-## Endpoints info
+```{r}
+Sys.setenv(TIKTOK_UA="Mozilla%252F5.0%2B%28iPhone%253B%2BCPU%2BiPhone%2BOS%2B12_2%2Blike%2BMac%2BOS%2BX%29%2BAppleWebKit%252F605.1.15%2B%28KHTML%2C%2Blike%2BGecko%29%2BVersion%252F13.0%2BMobile%252F15E148%2BSafari%252F604.1")
+
+Sys.setenv(TIKTOK_UA_TEST="Mozilla%252F5.0%2B%28iPhone%253B%2BCPU%2BiPhone%2BOS%2B12_2%2Blike%2BMac%2BOS%2BX%29%2BAppleWebKit%252F605.1.15%2B%28KHTML%2C%2Blike%2BGecko%29%2BVersion%252F13.0%2BMobile%252F15E148%2BSafari%252F604.1")
+```
 
 
 ```{r}
-devtools::load_all()
+usethis::edit_r_environ()
 
-tk_init()
-
-post_id <- "6829090092984929541"
-cookie <- "tt_csrf_token=H6i2arlMHoulC72AFtOfbQG6; s_v_web_id=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI; passport_csrf_token=b7eceede5b931d6d288851a3eaedbb70; MONITOR_WEB_ID=80356681-5ce4-4e59-b849-540d4e1982ae"
-
-
-
-
-user <- tk_info(scope = "user", query = "willsmith") %>% glimpse
-hashtag <- tk_info(scope = "hashtag", query = "maincharacter") %>% glimpse
-music <- tk_info(scope = "music", query = "6782187241935505410") %>% glimpse
-post <- tk_info(scope = "post", query = "6826115812009495814") %>% glimpse
-
-user_posts <- tk_posts(scope = "user", query = "willsmith", n = 40) %>% glimpse
-user_posts <- tk_posts(scope = "user", query = "willsmith", n = 100) %>% glimpse
-
-trends <- tk_posts(scope = "trends", n = 25) %>% glimpse
-trends <- tk_posts(scope = "trends", n = 50) %>% glimpse
-
-music <- tk_posts(scope = "music", query = "6782187241935505410", n = 25) %>% glimpse
-music <- tk_posts(scope = "music", query = "6782187241935505410", n = 50) %>% glimpse
-
-hasgtag_posts <- tk_posts(scope = "hashtag", query = "maincharacter", n = 20) %>% glimpse
-hasgtag_posts <- tk_posts(scope = "hashtag", query = "maincharacter", n = 50) %>% glimpse
-
-url <- paste0("https://www.tiktok.com/node/share/user/@willsmith?aid=1988",
-              "&verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI", 
-              "&user_agent=Mozilla%2F5.0+(Macintosh%3B+Intel+Mac+OS+X+10_14_7)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F86.0.4240.198+Safari%2F537.36"
-
-"https://m.tiktok.com/api/item_list/?aid=1988&app_name=tiktok_web&device_platform=web&referer=&root_referer=https:%2F%2Fwww.tiktok.com%2Ffr%2F&user_agent=Mozilla%2F5.0+(Macintosh%3B+Intel+Mac+OS+X+10_15_7)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F86.0.4240.198+Safari%2F537.36&cookie_enabled=true&screen_width=1440&screen_height=900&browser_language=fr-FR&browser_platform=MacIntel&browser_name=Mozilla&browser_version=5.0+(Macintosh%3B+Intel+Mac+OS+X+10_15_7)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F86.0.4240.198+Safari%2F537.36&browser_online=true&ac=4g&timezone_name=America%2FToronto&page_referer=https:%2F%2Fwww.tiktok.com%2Fforyou%3Flang%3Dfr&priority_region=&verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI&appId=1233&region=CA&appType=m&isAndroid=false&isMobile=false&isIOS=false&OS=mac&did=6893606546577982982&count=30&id=6727327145951183878&secUid=MS4wLjABAAAA8ezUaW4ecJX222ObGXxt07F9BIh4QH3-g1P1DHyChT2LLi2cn-vAE2R53-H672ZO&maxCursor=1603245482000&minCursor=0&sourceType=8&language=fr&_signature=_02B4Z6wo00f011jYGtgAAICBTZxjuS56JQtY2R5AAImK83"
+user_id <- "_beardedguy"
+user <- tk_info(scope = "user", query = "_beardedgu")
+expect_equal(nrow(user), 1)
+expect_true("user.uniqueId" %in% names(user))
+expect_true("user.privateAccount" %in% names(user))
+expect_true("stats.heart" %in% names(user))
+expect_gt(ncol(user), 24)
+```
 
 
+## Python browser
+
+```{r}
+b <- py$browser("test")
+b$signature
+`````
+
+
+```{r}
+
+url <- "https://v16-web.tiktok.com/video/tos/useast2a/tos-useast2a-pve-0068/d446cf215f0442ce9787ada9ca430ac4/?a=1988&br=3202&bt=1601&cr=0&cs=0&dr=0&ds=3&er=&expire=1606381521&l=202011260305060101890531330302C8A5&lr=tiktok_m&mime_type=video_mp4&policy=2&qs=0&rc=M2Q2aG1zcHNudzMzNTczM0ApZWY5OWllPGRmN2RnZGY8OGdmYGMxL2UxXmpfLS01MTZzczRjNC9fMTAvXjRjLzIvNi06Yw%3D%3D&signature=c8f4d90070595ec5d7a5e9b0be654476&tk=tt_webid_v2&vl=&vr="
+id <- "6899263243702797830"
+post_id <- "6876228576803441925"
 
 ```
+
+
+```{r}
+
+dockeR::doc_copy("tiktoksignature", from = "../tiktok_signature/api.R", to_cont = "/usr/api.R")
+dockeR::doc_copy("tiktoksignature", from = "../tiktok_signature/run_api.R", to_cont = "/usr/run_api.R")
+
+# out <- res %>%
+#   rlist::list.flatten() %>%
+#   purrr::imap_dfc(~{
+#     if(length(.x) == 1){
+#       return(tibble::tibble(.x) %>% purrr::set_names(.y))
+#     } else {
+#       return(tibble::tibble(list(.x)) %>% purrr::set_names(.y))
+#     }
+#   })
+
+tk_install
+
+```
+
+
 
 
 ## Get individual tiktok
 
 
 ```{r}
-parse_curl_request <- function(){
-  
-  req <- clipr::read_clip() #%>%
-    # stringr::str_split("\n") %>%
-    # .[[1]]
-  
-  url <- req %>% 
-    str_subset("^curl") %>%
-    str_extract("(?<=').*?(?=')")
-  
-  tmp <- req %>%
-    stringr::str_subset("-H") %>%
-    stringr::str_extract("(?<=').*?(?=')") %>%
-    stringr::str_split("\\:\\s+") 
-  
-  headers <- map_chr(tmp, 2)
-  names(headers) <- map_chr(tmp, 1)
-  
-  r_code <- glue::glue("httr::GET(url = {url}, httr::add_headers(.headers = {paste(capture.output(dput(headers)), collapse = '')}))")
-  
-  
-  req <- try(httr::GET(url = url, httr::add_headers(.headers = headers)))
-  
-  dt <- tibble(url = url, headers = list(headers), r_code, req = list(req)) 
-  
-  return(dt)
-  
-}
-```
-
-
-```{r}
-
-get_verify()
-
-```
-```{r}
-cookie <- "s_v_web_id=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI;sid_guard=ac169552b4af2dd6f2b38fa517fa7a63%7C1605910001%7C5184000%7CTue%2C+19-Jan-2021+22%3A06%3A41+GMT"
-
-a <- tk_comment(post_id = "6829090092984929541", ua = ua, cookie = cookie, port = NULL, vpn = F, verbose = T)
-b <- tk_comment(post_id = "6829090092984929541", ua = ua, cookie = cookie, port = NULL, vpn = F, verbose = T)
-c <- tk_comment(post_id = "6829090092984929541", ua = ua, cookie = cookie, port = NULL, vpn = F, verbose = T)
-d <- tk_comment(post_id = "6829090092984929541", ua = ua, cookie = cookie, port = NULL, vpn = F, verbose = T)
-
-url <- "https://www.tiktok.com/api/comment/list/?aid=1988&aweme_id=6829090092984929541&cursor=800&count=37&aid=1988&verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI&user_agent=Mozilla%2F5.0+(Macintosh%3B+Intel+Mac+OS+X+10_14_7)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F86.0.4240.198+Safari%2F537.36&_signature=_02B4Z6wo00f01BRTqVgAAICA3g9BjdAI6nAUc63AAFqyc2"
-url <- "https://www.tiktok.com/api/comment/list/?aid=1988&aweme_id=6829090092984929541&cursor=0&count=73&aid=1988&verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI&user_agent=Mozilla%2F5.0+(Macintosh%3B+Intel+Mac+OS+X+10_14_7)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F86.0.4240.198+Safari%2F537.36"
-
- httr::GET(url,
-                httr::add_headers(.headers = c(
-                  method = "GET",
-                  referer = "https://www.tiktok.com/foryou",
-                  `user-agent` = ua,
-                  cookie = cookie
-                ))#,
-                # timeout = httr::timeout(time_out)
-      )
-
-req <- httr::GET(url = url, #get_signature(url, ua, port = NULL),
-          httr::add_headers(.headers = c(#authority = "www.tiktok.com", accept = "application/json, text/plain, */*", 
-                                         `user-agent` = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36", 
-                                         # `sec-fetch-site` = "same-origin", 
-                                         # `sec-fetch-mode` = "cors", 
-                                         # `sec-fetch-dest` = "empty", 
-                                         referer = "https://www.tiktok.com/foryou",
-                                         # referer = "https://www.tiktok.com/@willsmith/video/6829090092984929541",
-                                         # `accept-language` = "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7,de;q=0.6",
-                                         cookie = " s_v_web_id=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI;sid_guard=ac169552b4af2dd6f2b38fa517fa7a63%7C1605910001%7C5184000%7CTue%2C+19-Jan-2021+22%3A06%3A41+GMT")))
-
-jsonlite::fromJSON(rawToChar(req$content))
-
-6829106683533410309
-
-mutate(balance = ifelse(buy == 1, btc_price, -btc_price)) %>%
-  
-mutate(cum_cash = cumsum(balance))  
-  
-```
-
-
-```{r}
-source("https://gist.githubusercontent.com/benjaminguinaudeau/46652c61adee4469899a4026b873d07c/raw/5a3a46e99334990907b65a3d315680bf99e515d2/parse_curl_reqest.R")
 
 res <- parse_curl_request()
 res$r_code
-params <- str_split(res$url, "&")[[1]]
 
-url <- paste0("https://www.tiktok.com/node/share/user/@willsmith?aid=1988",
-              "&verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI", 
-              "&user_agent=Mozilla%2F5.0+(Macintosh%3B+Intel+Mac+OS+X+10_14_7)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F86.0.4240.198+Safari%2F537.36")
-
-ua <- "Mozilla Firefox Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0"
-
-
-session <- rvest::html_session("https://www.tiktok.com/node/share/user/@willsmith")
-session
-
-get_verify()
-verify
-get_signature("https://www.tiktok.com/node/share/user/@willsmith?&verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI", port = NULL, ua = ua)
-req <- try({
-      httr::GET("https://www.tiktok.com/node/share/user/@willsmith?&verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI&_signature=_02B4Z6wo00f01eyH-3wAAICBJtsTqMNVtynsp..AACSce7",
-                httr::add_headers(.headers = c(
-                  method = "GET",
-                  # referer = "https://www.tiktok.com/trending?lang=en",
-                  # authority = "www.tiktok.com", 
-                  # `cache-control` = "max-age=0", 
-                  # cookie = "s_v_web_id=verify_JGPNT5EB0kb9NiC_TByH_4TnB_EGoq_C2fXZ09otunV5",
-                  `user-agent` = ua
-                  
-                ))#,
-                # timeout = httr::timeout(time_out)
-                )
-    })
-
-httr::GET(url = "https://www.tiktok.com/node/share/user/@willsmith?aid=1988", 
-          httr::add_headers(.headers = c(
-            authority = "www.tiktok.com", 
-            `cache-control` = "max-age=0", 
-            `upgrade-insecure-requests` = "1", 
-            `user-agent` = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36", 
-            accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9", 
-            `sec-fetch-site` = "none", 
-            `sec-fetch-mode` = "navigate", 
-            `sec-fetch-user` = "?1", 
-            `sec-fetch-dest` = "document", 
-            `accept-language` = "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7,de;q=0.6", 
-            cookie = "s_v_web_id=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI",
-            `cp-extension-installed` = "Yes")))
 ```
 
 
+1. Install docker. Once it is installed you can verify with `docker -v```
+
+2. Build the image of a container able to generate tiktok signature (this needs to be done only once)
+
 ```{r}
-query <- "mysterious_by_nature"
-
-shape_url <- function(){
-  
-  # base_url <- "https://m.tiktok.com/api/item_list/?aid=1988"
-  base_url <- "https://www.tiktok.com/node/share/user/@mysterious_by_nature?aid=1988"
-  
-  
-  # url_params$app_name <- "tiktok_web"     
-  # url_params$device_platform <- "web"     
-  # url_params$referer <- ""  
-  # url_params$root_referer <- ""           
-  # url_params$cookie_enabled <- "true"  
-  # url_params$screen_width <- "1440"       
-  # url_params$screen_height <- "900"       
-  # url_params$browser_language <- "fr-FR"  
-  # url_params$browser_platform <- "MacIntel" 
-  # url_params$browser_online <- "true"                                                                                                 
-  # url_params$ac <- "4g"             
-  # url_params$timezone_name <- "America%2FToronto"                                                                                                       
-  # url_params$priority_region <- ""  
-  # url_params$appId <- "1233"                                                         
-  # url_params$region <- "CA"                                                          
-  #url_params$appType <- "m"                                                          
-  #url_params$isAndroid <- "true"                                                    
-  #url_params$isMobile <- "false"                                                     
-  #url_params$isIOS <- "false"                                                        
-  #url_params$OS <- "mac"     
-  # url_params$language <- "fr" 
-  # url_params$did <- "6893606546577982982"   
-  # url_params$browser_name <- str_extract(ua, ".*?(?=\\/)")
-  # url_params$browser_version <- encode_string(str_remove(ua, ".*?\\/"))
-  # url_params$page_referer <- encode_string("https://www.tiktok.com/foryou")   
-  
-  ## User Query
-  # url_params$uniqueId <- "mysterious_by_nature"
-  # url_params$secUid <- "MS4wLjABAAAAzoTMYqYafiGwnL-hR8DflXL6CSuvU5wDLmz5NdxchWbbR0XL7XuYWq-4XRb4_ldr"
-  # url_params$validUniqueId <- "mysterious_by_nature"
-  
-  url_params <- list()  
-  url_params$id <- "6727327145951183878"
-  url_params$secUid <- "MS4wLjABAAAA8ezUaW4ecJX222ObGXxt07F9BIh4QH3-g1P1DHyChT2LLi2cn-vAE2R53-H672ZO"
-  
-  
-  url_params$count <- "50"
-  url_params$maxCursor <- "1604716686000"
-  url_params$minCursor <- "0"
-  url_params$sourceType <- "8"
-   
-  ua <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36"
-  url_params$user_agent <- encode_string(ua)
-  url_params$verifyFp <- paste0("verify_", get_verify())
-                
-  
-  query <- url_params %>% imap_chr(~paste0("&", .y, "=", .x)) %>% paste(collapse = "")  %>% paste0(base_url, .)
-  final_url <- get_signature(url, ua = ua, port = NULL)
-  tiktok_res <- httr::GET(final_url, httr::add_headers(.headers = c("user-agent" = ua)))
-  jsonlite::fromJSON(rawToChar(tiktok_res$content))
-  
-user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50)
-  
-  
-}
-
-url <- get_url(type, n = 50, min = min_cursor, max = max_cursor, query_1 = query_1, query_2 = query_2, verify = verify) %>% shape_query_info(ua)
-
-query_2
-
- base_url <- "https://m.tiktok.com/api/item_list/?aid=1988"
 
 
-shape_query_user_post <- function(base_url, ua, n, min = min_cursor, max = max_cursor, query_1 = query_1, query_2 = query_2){
-  url_params <- list()  
-  url_params$id <- query_1
-  url_params$secUid <- query_2
-  url_params$count <- n
-  url_params$maxCursor <- max
-  url_params$minCursor <- min
-  url_params$sourceType <- "8"
-  url_params$user_agent <- encode_string(ua)
-  url_params$verifyFp <- paste0("verify_", get_verify())
-  
-  url_params %>% imap_chr(~paste0("&", .y, "=", .x)) %>% paste(collapse = "")  %>% paste0(base_url, .)
-}
 
-from_unix(1604716686)
-
-res$headers[[1]][["user-agent"]]
-
-
-dput(params)
-c("https://www.tiktok.com/node/share/user/@mysterious_by_nature?aid=1988", 
-"user_agent=Mozilla%2F5.0+(Macintosh%3B+Intel+Mac+OS+X+10_15_7)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F86.0.4240.198+Safari%2F537.36", 
-"verifyFp=verify_khch2o8a_bzrd04C2_bUg7_4wKH_8y7j_Sozn3jLxKEKI", 
-"sec_uid=", "lang=fr", "uniqueId=mysterious_by_nature", "secUid=MS4wLjABAAAAzoTMYqYafiGwnL-hR8DflXL6CSuvU5wDLmz5NdxchWbbR0XL7XuYWq-4XRb4_ldr", 
-"validUniqueId=mysterious_by_nature")
-
-
-tk_info("user", "mysterious_by_nature", ua = ua, port = NULL) %>%
-  glimpse
 ```
 
-
+4. Verify that everything is running correctly. The output should be a character vector of three elements.
 
 ```{r}
-reticulate::use_python("/usr/local/bin/python3")
-library(reticulate)
-devtools::load_all()
 
+tk_test_docker <- function(){
+  
+  version <- try({system("docker -v", intern = T)})
+  if(inherits(version, "try-error")){
+    cli::cli_alert_danger("Unable to find the installation of docker, make sure to install docker before using `tiktokt`")
+  } else {
+    cli::cli_alert_success(version)
+  }
+  
+  if(any(stringr::str_detect(system("docker images", intern = T), "tiktoksignature"))){
+    cli::cli_alert_success("Found image `tiktoksignature`")
+  } else {
+    cli::cli_alert_danger("Unable to find an image `tiktoksignature`")
+  }
+  
+  if(length(system("docker ps -a -f 'name=tiktoksignature'", intern = T)) == 1){
+    message("Creating container `tiktoksignature`... This might take a couple of minutes.")
+    system("docker run -dt --rm --name tiktoksignature tiktoksignature:latest", intern = T)
+    
+    if(length(system("docker ps -f 'name=tiktoksignature'", intern = T)) == 1){
+      cli::cli_alert_danger("Unable to create container `tiktoksignature`")
+      system("docker run -dt --rm --name tiktoksignature tiktoksignature:latest", intern = T)
+    } else {
+      cli::cli_alert_success("Successfully created container")
+    }
+    
+  } else {
+    cli::cli_alert_success("Found container `tiktoksignature`")
+  }
+  
+  
+  
+  if(stringr::str_length(get_docker_signature("")) > 16){
+    cli::cli_alert_success("Successfully signed a test url. Signature is working as expected")
+  } else {
+    cli::cli_alert_danger("Error when signing a url")
+  }
+  
+}
+
+tk_test_docker()
 tk_init()
-
-post <-tk_info("post", "6841992950277311750")
-hash <- tk_posts(scope = "hashtag", query = "obama", n = 30, port = NULL, verbose = F)
-trig <- tk_posts(scope = "user", query = "ezekieltheladiesm", n = 30, port = NULL, verbose = T, start_date = lubridate::dmy("01-07-2020"))
-tiktokr::tk_posts(scope = "user", query = "dwightsetts", n = 10000, port = NULL, vpn = F, verbose = T)
-tiktokr::tk_posts(scope = "user", query = "dwightsettles", n = 10000, port = NULL, vpn = F, verbose = T)
-
-br = py$browser("d", ua = default_ua)
-br$signature
-
-
-trig <- tk_posts(scope = "user", query = "mrs.jt", n = 200, port = NULL, verbose = T)
-
-verify <- "verify_kcz0vg19_eEzm6b6R_XRlA_4lLL_85mu_iL0JG0gbmt2l"
-id_cookie <-  "sid_guard=2555fb582f00401d62c180f491cdf712%7C1595547871%7C5184000%7CMon%2C+21-Sep-2020+23%3A44%3A31+GMT"
-Sys.setenv("tiktok_vpn_host" = "192.168.1.6", "tiktok_vpn_port" = "5000")
-
-a <- tk_comment(post_id = "66845236603477134597", verify = verify, id_cookie = id_cookie, vpn = T, verbose = T)
-
-
-a 
-a <- tk_comment("6855303947880582406", verify, id_cookie = id_cookie, port = NULL, vpn = F, verbose = T) 
-
-tk_comment(post_id = "6855303947880582406", verify = verify, id_cookie = id_cookie, port = NULL, vpn = T, verbose = T)
-
-verify <- "verify_kcz0vg19_eEzm6b6R_XRlA_4lLL_85mu_iL0JG0gbmt2l"
-id_cookie <-  "sid_guard=2555fb582f00401d62c180f491cdf712%7C1595547871%7C5184000%7CMon%2C+21-Sep-2020+23%3A44%3A31+GMT"
-Sys.setenv("tiktok_vpn_host" = "192.168.1.14", "tiktok_vpn_port" = "5000")
-
-test <- tk_comment(post_id = post_id, verify = verify, id_cookie = id_cookie, port = NULL, vpn = T, verbose = T) %>%
-  mutate(timestamp = as.numeric(Sys.time()), 
-         query = post_id)
-
-test
-
-
+get_docker_signature("tt")
+get_puppeteer_signature("tt")
+get_docker_signature()
 
 ```
 
 
+5. 
+
+```{r}
+
+```
+
+
+## Docker Signature
+
+
+```{r}
+
+system("docker run -dt --rm --name tiktoksignature tiktoksignature:latest ")
+
+res <- system("docker exec -t tiktoksignature /bin/python3 /usr/app/sign.py 'aa'", intern = T)
+jsonlite::fromJSON(res)
+
+
+system("docker start tiktapi")
+# system("docker run -d -p 8080:8080 -v $(pwd):/usr/app --name tiktapi tiktapi")
+
+
+
+system("docker run -d -p 8080:8080 -v $(pwd):/usr/app --name tiktapi tiktapi")
+
+
+docker build . -t tiktokapi:latest
+docker run -v TikTokApi --rm tiktokapi:latest python3 your_script.py
+
+
+port <- 32770
+
+res <- httr::POST(
+  url = glue::glue("http://localhost:{port}"), 
+  body = "dd", timeout = httr::timeout(2))
+
+rawToChar(res$content)
+
+jsonlite::fromJSON(rawToChar(res$content))$signature
+
+d <- httr::GET("test" http://localhost:8080/signature', interna)'
+               
+               tiktokr::get_docker_signature
+               
+               dockeR::list_container() %>%
+                 filter(str_detect(image, "tiktoksignature")) %>% 
+                 pull(names) %>%
+                 map(dockeR::stop_container, remove = T)
+               
+               
+               ```
+               
+               
+               ```{r}
+               query <- "mysterious_by_nature"
+               
+               shape_url <- function(){
+                 
+                 # base_url <- "https://m.tiktok.com/api/item_list/?aid=1988"
+                 base_url <- "https://www.tiktok.com/node/share/user/@mysterious_by_nature?aid=1988"
+                 
+                 
+                 # url_params$app_name <- "tiktok_web"     
+                 # url_params$device_platform <- "web"     
+                 # url_params$referer <- ""  
+                 # url_params$root_referer <- ""           
+                 # url_params$cookie_enabled <- "true"  
+                 # url_params$screen_width <- "1440"       
+                 # url_params$screen_height <- "900"       
+                 # url_params$browser_language <- "fr-FR"  
+                 # url_params$browser_platform <- "MacIntel" 
+                 # url_params$browser_online <- "true"                                                                                                 
+                 # url_params$ac <- "4g"             
+                 # url_params$timezone_name <- "America%2FToronto"                                                                                                       
+                 # url_params$priority_region <- ""  
+                 # url_params$appId <- "1233"                                                         
+                 # url_params$region <- "CA"                                                          
+                 #url_params$appType <- "m"                                                          
+                 #url_params$isAndroid <- "true"                                                    
+                 #url_params$isMobile <- "false"                                                     
+                 #url_params$isIOS <- "false"                                                        
+                 #url_params$OS <- "mac"     
+                 # url_params$language <- "fr" 
+                 # url_params$did <- "6893606546577982982"   
+                 # url_params$browser_name <- str_extract(ua, ".*?(?=\\/)")
+                 # url_params$browser_version <- encode_string(str_remove(ua, ".*?\\/"))
+                 # url_params$page_referer <- encode_string("https://www.tiktok.com/foryou")   
+                 
+                 ## User Query
+                 # url_params$uniqueId <- "mysterious_by_nature"
+                 # url_params$secUid <- "MS4wLjABAAAAzoTMYqYafiGwnL-hR8DflXL6CSuvU5wDLmz5NdxchWbbR0XL7XuYWq-4XRb4_ldr"
+                 # url_params$validUniqueId <- "mysterious_by_nature"
+                 
+                 url_params <- list()  
+                 url_params$id <- "6727327145951183878"
+                 url_params$secUid <- "MS4wLjABAAAA8ezUaW4ecJX222ObGXxt07F9BIh4QH3-g1P1DHyChT2LLi2cn-vAE2R53-H672ZO"
+                 
+                 
+                 url_params$count <- "50"
+                 url_params$maxCursor <- "1604716686000"
+                 url_params$minCursor <- "0"
+                 url_params$sourceType <- "8"
+                 
+                 ua <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36"
+                 url_params$user_agent <- encode_string(ua)
+                 url_params$verifyFp <- paste0("verify_", get_verify())
+                 
+                 
+                 query <- url_params %>% imap_chr(~paste0("&", .y, "=", .x)) %>% paste(collapse = "")  %>% paste0(base_url, .)
+                 final_url <- get_signature(url, ua = ua, port = NULL)
+                 tiktok_res <- httr::GET(final_url, httr::add_headers(.headers = c("user-agent" = ua)))
+                 jsonlite::fromJSON(rawToChar(tiktok_res$content))
+                 
+                 user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50)
+                 
+                 
+               }
+               
+               ````
+               
+               
+               
+               
+               
