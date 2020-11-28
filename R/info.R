@@ -15,27 +15,47 @@
 #' }
 tk_info <- function(scope, query, ...){
 
-   res <- switch(
+  res <- switch(
     scope,
+
     "user" = {
       url <- get_url("username", query_1 = query)
-      get_data(url, ...)$userInfo
+      tmp <- get_data(url, ...)
+      if(tmp[["statusCode"]] == "10202"){
+        return(tibble::tibble(query = query, found = F))
+      }
+      tmp$userInfo
+
     },
+
     "hashtag" = {
       url <- get_url("hashtag", query_1 = query)
-      get_data(url, ...)
+      tmp <- get_data(url, ...)
+      if(tmp[["statusCode"]] == "10205"){
+        return(tibble::tibble(query = query, found = F))
+      }
+      tmp
     },
+
     "music" = {
-      tk_posts(scope = "music", query = query, n = 1, ...)
+      tmp <- tk_posts(scope = "music", query = query, n = 1, ...)
+      if("found" %in% names(tmp)){
+        return(tibble::tibble(query = query, found = F))
+      }
+      tmp
     },
     "post" = {
       url <- get_url("post", query_1 = query)
-      get_data(url, ...)
+      tmp <- get_data(url, ...)
+      if(tmp[["statusCode"]] == "10204"){
+        return(tibble::tibble(query = query, found = F))
+      }
+      tmp
     }
   )
 
   if(is.null(res)){
-    return(tibble::tibble())
+    return(tibble::tibble(query = query))
   }
 
   out <- res %>%
@@ -46,7 +66,8 @@ tk_info <- function(scope, query, ...){
       } else {
         return(tibble::tibble(list(.x)) %>% purrr::set_names(.y))
       }
-    })
+    }) %>%
+    dplyr::mutate(query = query)
 
   return(out)
 }

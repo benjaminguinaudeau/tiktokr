@@ -29,56 +29,58 @@ tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("
     stop("scope must be one of the following: user, hashtag, music or trends")
   }
 
-  out <- try({
-    switch(
-      scope,
-      "user" = {
-        user <- tk_info(scope = scope, query, ...)
-        if(length(user) == 0){
-          tibble::tibble(author_uniqueId = query, id = NA_character_)
-        } else if(user$stats.videoCount == 0 | user$user.privateAccount){
+  out <- switch(
+    scope,
+
+    "user" = {
+      user <- tk_info(scope = scope, query, ...)
+      if("found" %in% names(user)){
+        if(verbose) cli::cli_alert_warning("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (not found)")
+        return(tibble::tibble(query = query, found = F))
+      } else if(user$stats.videoCount == 0 | user$user.privateAccount){
+        if(user[["stats.videoCount"]] == 0){
+          if(verbose) cli::cli_alert_info("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (no videos)")
+        } else {
+          if(verbose) cli::cli_alert_info("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (account is private)")
+        }
+        return(user)
+      } else {
+        tmp <- get_n(scope = "user_post", n = n, start_date = start_date, query_1 = user$user.id, query_2 = user$user.secUid, query = query,
+                     save_dir = save_dir, ...) %>%
+          dplyr::bind_cols(user)
+        if(nrow(tmp) == 0){
+          user$stats.videoCount <- 0
           user
         } else {
-          tmp <- get_n("user_post", n = n, start_date = start_date, query_1 = user$user.id, query_2 = user$user.secUid, query = query,
-                       save_dir = save_dir, ...) %>%
-            dplyr::bind_cols(user)
-          if(nrow(tmp) == 0){
-            user$stats.videoCount <- 0
-            user
-          } else {
-            tmp
-          }
+          tmp
         }
-      },
-      "hashtag" = {
-        hash <- tk_info(scope = scope, query, ...)
-        ## TODO: hash$challengeInfo.challenge.id this probably needs to be a better variable name!
-        get_n("hashtag_post", n = n, query_1 = hash$challengeInfo.challenge.id, query = query, save_dir = save_dir, ...)
-      },
-      "music" = {
-        get_n("music_post", n = n, query_1 = query, query = query, save_dir = save_dir, ...)
-      },
-      "trends" = {
-        get_n("trending", n = n, save_dir = save_dir, ...)
       }
-    )
-  })
+    },
 
-  if(inherits(out, "try-error")){
-    return(tibble::tibble())
-  } else {
+    "hashtag" = {
+      hash <- tk_info(scope = scope, query, ...)
+      if("found" %in% names(hash)){
+        if(verbose) cli::cli_alert_warning("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (not found)")
+        return(hash)
+      }
+      get_n("hashtag_post", n = n, query_1 = hash$challengeInfo.challenge.id, query = query, save_dir = save_dir, ...)
+    },
+
+    "music" = {
+      tmp <- get_n("music_post", n = n, query_1 = query, query = query, save_dir = save_dir, ...)
+      if(nrow(tmp) == 0){
+        return(tibble::tibble(query = query, found = F))
+      }
+      if(verbose) cli::cli_alert_success("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (no new video)")
+      tmp
+    },
+    "trends" = {
+      get_n(scope = "trending", n = n, save_dir = save_dir, ...)
+    }
+  )
+
     if(verbose){
-      if(stringr::str_detect(scope, "music")){
-        if(nrow(out) != 0){
-          cli::cli_alert_success("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} ({nrow(out)})")
-        } else {
-          cli::cli_alert_success("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (no new video)")
-        }
-      } else {
-
-        if(!any(stringr::str_detect(names(out), "stats"))){
-          cli::cli_alert_warning("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (not found)")
-        } else if ("stats.videoCount" %in% names(out)){
+        if ("stats.videoCount" %in% names(out)){
           if(unique(out[["stats.videoCount"]]) == 0){
             cli::cli_alert_info("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (no videos)")
           } else if(unique(out$user.privateAccount)){
@@ -93,15 +95,12 @@ tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("
               cli::cli_alert_success("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (no new video)")
             }
           }
-
         } else {
           out <- out %>%
             dplyr::filter(from_unix(createTime) > start_date)
         }
       }
-    }
     return(out)
-  }
 }
 
 

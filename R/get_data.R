@@ -9,6 +9,7 @@ get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"), c
   } else {
     max_n <- 50
   }
+  if(!exists("cursor")) cursor <- 0
   max_cursor <- cursor
   min_cursor <- cursor
 
@@ -16,6 +17,10 @@ get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"), c
 
     url <- get_url(scope, n = max_n, min = min_cursor, max = max_cursor, query_1 = query_1, query_2 = query_2)
     out <- get_data(url, parse = T, ...)
+
+    if(out$statusCode == "10219"){
+      return(tibble::tibble(query = query, found = F))
+    }
 
     if(scope %in% c("music_post", "hashtag_post")){
       out$items <- out$itemList
@@ -54,6 +59,8 @@ get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"), c
     max_cursor = as.character(out$maxCursor)
 
     if(scope != "user_post"){ min_cursor <- as.character(out$cursor) }
+    if(scope != "trending"){ min_cursor <- as.character(out$minCursor + 1) }
+    if(scope != "trending"){ max_cursor <- as.character(out$max_cursor + 1) }
 
     # if(length(max_cursor) == 0){
     #   out <- out$body
@@ -95,17 +102,18 @@ get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"), c
 #' @param url url to visit and get data from
 #' @param parse logical. whether to return parsed data or not. Defautls to \code{TRUE}.
 #' @export
-get_data <- function(url, parse = T, port = NULL, vpn = F, cookie = "", time_out = 10){
+get_data <- function(url, parse = T, vpn = F, cookie = "", time_out = 10, docker = F){
 
   if(!stringr::str_detect(url, "&_signature=")){
-    url <- get_signature(url, port = port)
+    final_url <- get_signature(url, docker = docker)
+  } else {
+    final_url <- url
   }
 
   if(vpn){
-    req <- try(get_vpn_data(url, cookie = cookie, time_out = time_out))
+    req <- try(get_vpn_data(final_url, cookie = cookie, time_out = time_out))
   } else {
-    req <- try({
-      httr::GET(url,
+    req <- httr::GET(final_url,
                 httr::add_headers(.headers = c(
                   method = "GET",
                   referer = "https://www.tiktok.com/foryou",
@@ -113,7 +121,6 @@ get_data <- function(url, parse = T, port = NULL, vpn = F, cookie = "", time_out
                   cookie = cookie
                 ))
       )
-    })
   }
 
   if(inherits(req, "try-error")){stop("Error happened while requesting")}
@@ -127,8 +134,13 @@ get_data <- function(url, parse = T, port = NULL, vpn = F, cookie = "", time_out
     content <- "{}"
   }
 
+  if(content == "{\n    statusCode: -1,\n    itemInfo: {}\n} "){
+    stop("empty response : request was blocked by tiktok")
+    content <- "{}"
+  }
+
   if(content == ""){
-    warning("empty response ; something was probably wrong with the request")
+    stop("empty response : request was blocked by tiktok")
     content <- "{}"
   }
 

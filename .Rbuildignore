@@ -3,6 +3,7 @@
 ^README\.Rmd$
 ^lab\.Rmd$
 video
+lib
 tmp
 political
 ^codecov\.yml$
