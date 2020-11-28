@@ -17,6 +17,7 @@ tk_init_docker <- function(){
     cli::cli_alert_success("Found image `tiktoksignature`")
   } else {
     cli::cli_alert_warning("Unable to found image `tiktoksignature` ; pull it from `github.com/benjaminguinaudeau/tiktok_signature`")
+    cat("This will take some time (at least 5 minutes)")
     folder <- tempfile()
     git2r::clone("https://github.com/benjaminguinaudeau/tiktok_signature.git", local_path = folder)
     system(glue::glue("docker build {folder} -t tiktoksignature"))
