@@ -1,8 +1,3 @@
-#' @export
-get_docker_signature <- function(url, port = 8080, time_out = 10){
-  res <- httr::POST(url  = glue::glue("http://localhost:{port}/signature"), body = url, timeout = httr::timeout(time_out))
-  jsonlite::fromJSON(rawToChar(res$content))$signature
-}
 
 #' @export
 get_vpn_data <- function(final_url, vpn_host = "", vpn_port = "", cookie = "", time_out = 10){
