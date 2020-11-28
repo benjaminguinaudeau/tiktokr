@@ -1,5 +1,5 @@
 #' @export
-tk_comment <- function(post_id, verbose = T, port = NULL, vpn = F){
+tk_comment <- function(post_id, verbose = T, vpn = F, docker = F){
 
   response <- tibble::tibble()
   count <- sample(30:50, 1)
@@ -10,11 +10,15 @@ tk_comment <- function(post_id, verbose = T, port = NULL, vpn = F){
     cursor <- seq(max_cursor - 1000, max_cursor - 1, 50)
 
     urls <- get_url("comment", query_1 = post_id, n = count, cursor = cursor)
-    fins <- get_signature(urls, port = port)
+    fins <- get_signature(urls, docker = docker)
 
     index <- 1
     while(has_more & index <= 20){
-      res <- get_data(url = fins[index], port = port, vpn = vpn, cookie = Sys.getenv("TIKTOK_ID_COOKIE"))
+      res <- get_data(url = fins[index], docker = docker, vpn = vpn, cookie = Sys.getenv("TIKTOK_ID_COOKIE"))
+
+      if(res$status_code == "8"){
+        stop("Please update your logged in cookie.")
+      }
 
       data <- try({
         res %>%
@@ -37,8 +41,9 @@ tk_comment <- function(post_id, verbose = T, port = NULL, vpn = F){
   if(verbose){
       cli::cli_alert_success("[{Sys.time()}] c-{post_id} ({nrow(response)})")
   }
+
   if(nrow(response) == 0){
-    response <- tibble::tibble(aweme_id = post_id)
+    return(tibble::tibble(query = post_id, found = F))
   }
 
   return(response)
@@ -47,7 +52,7 @@ tk_comment <- function(post_id, verbose = T, port = NULL, vpn = F){
 
 # Need to be maintained
 #' @export
-tk_reply <- function(comment_id, post_id, id_cookie, port = NULL, verbose = T, time_out = 10){
+tk_reply <- function(comment_id, post_id, id_cookie, docker = NULL, verbose = T, time_out = 10){
 
   response <- tibble::tibble()
   count <- sample(50:100, 1)
@@ -58,7 +63,7 @@ tk_reply <- function(comment_id, post_id, id_cookie, port = NULL, verbose = T, t
     cursor <- seq(max_cursor - 1000, max_cursor - 1, 50)
     cat("\rCursor: ", max_cursor, "  Comments: ", nrow(response))
     urls <- get_url("reply", query_1 = comment_id, query_2 = post_id, n = count, cursor = cursor)
-    fins <- get_signature(urls, port = port)
+    fins <- get_signature(urls, docker = docker)
 
     index <- 1
     while(has_more & index <= 20){
