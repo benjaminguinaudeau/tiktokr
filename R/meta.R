@@ -1,10 +1,14 @@
 #' tk_init
 #' @description Intitalize puppeeter browser in the reticulate session
 #' @export
-tk_init <- function(){
-  require(reticulate)
-  reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/stealth.py")
-  reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/browser.py")
+tk_init <- function(docker = F){
+  if(docker){
+    require(reticulate)
+    reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/stealth.py")
+    reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/browser.py")
+  } else {
+    tk_init_docker()
+  }
 }
 
 
