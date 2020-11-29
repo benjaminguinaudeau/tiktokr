@@ -99,7 +99,8 @@ TikTok requires API queries to be identified with a unique hash. To get
 this hash `tiktokr` runs a `puppeteer-chrome` session in the background.
 Apparently `puppeteer` sometimes causes issues on some operating
 systems, so we also created a Docker image, that can be run on any
-computer with Docker installed.
+computer with Docker installed. Note: if you run `tiktokr` with Docker
+you won’t need a Python installation.
 
 To find out if you are experiencing `puppeteer` problems run:
 
