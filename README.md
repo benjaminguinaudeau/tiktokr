@@ -96,12 +96,12 @@ tk_auth(cookie = "<paste here the output from document.cookie>")
 ## Using `tiktokr` with Docker
 
 TikTok requires API queries to be identified with a unique hash. To get
-this hash, `tiktokr` runs a `puppeteer-chrome` session in the
-background. Apparently `puppeteer` sometimes causes issues on some
-operating systems, so we also created a Docker image, that can be run on
-any computer with Docker installed.
+this hash `tiktokr` runs a `puppeteer-chrome` session in the background.
+Apparently `puppeteer` sometimes causes issues on some operating
+systems, so we also created a Docker image, that can be run on any
+computer with Docker installed.
 
-To find out, if you are experiencing puppeteer problems run:
+To find out if you are experiencing `puppeteer` problems run:
 
 ``` r
 
