@@ -21,6 +21,12 @@ b$signature
 
 ```{r}
 
+
+
+
+
+
+
 dockeR::doc_copy("tiktoksignature", from = "../tiktok_signature/api.R", to_cont = "/usr/api.R")
 dockeR::doc_copy("tiktoksignature", from = "../tiktok_signature/run_api.R", to_cont = "/usr/run_api.R")
 
@@ -42,11 +48,16 @@ res$r_code
 
 1. Install docker. Once it is installed you can verify with `docker -v```
 
-2. Build the image of a container able to generate tiktok signature (this needs to be done only once)
+2. Set `docker = T` in tk_auth() and run the following test:
 
 ```{r}
 
-
+tk_init()
+if(stringr::str_length(get_docker_signature("")) > 16){
+  message("Signature successfull, your docker container is working.")
+} else {
+  message("Unable to get the signature")
+}
 
 ```
 

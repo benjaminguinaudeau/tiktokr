@@ -1,5 +1,5 @@
 #' @export
-tk_comment <- function(post_id, verbose = T, vpn = F, docker = F){
+tk_comment <- function(post_id, verbose = T, vpn = F){
 
   response <- tibble::tibble()
   count <- sample(30:50, 1)
@@ -10,11 +10,11 @@ tk_comment <- function(post_id, verbose = T, vpn = F, docker = F){
     cursor <- seq(max_cursor - 1000, max_cursor - 1, 50)
 
     urls <- get_url("comment", query_1 = post_id, n = count, cursor = cursor)
-    fins <- get_signature(urls, docker = docker)
+    fins <- get_signature(urls)
 
     index <- 1
     while(has_more & index <= 20){
-      res <- get_data(url = fins[index], docker = docker, vpn = vpn, cookie = Sys.getenv("TIKTOK_ID_COOKIE"))
+      res <- get_data(url = fins[index], vpn = vpn, cookie = Sys.getenv("TIKTOK_ID_COOKIE"))
 
       if(res$status_code == "8"){
         stop("Please update your logged in cookie.")
@@ -52,7 +52,7 @@ tk_comment <- function(post_id, verbose = T, vpn = F, docker = F){
 
 # Need to be maintained
 #' @export
-tk_reply <- function(comment_id, post_id, id_cookie, docker = NULL, verbose = T, time_out = 10){
+tk_reply <- function(comment_id, post_id, id_cookie, verbose = T, time_out = 10){
 
   response <- tibble::tibble()
   count <- sample(50:100, 1)
@@ -63,7 +63,7 @@ tk_reply <- function(comment_id, post_id, id_cookie, docker = NULL, verbose = T,
     cursor <- seq(max_cursor - 1000, max_cursor - 1, 50)
     cat("\rCursor: ", max_cursor, "  Comments: ", nrow(response))
     urls <- get_url("reply", query_1 = comment_id, query_2 = post_id, n = count, cursor = cursor)
-    fins <- get_signature(urls, docker = docker)
+    fins <- get_signature(urls)
 
     index <- 1
     while(has_more & index <= 20){

@@ -1,10 +1,11 @@
 #' @export
-get_signature <- function(urls, docker = F){
+get_signature <- function(urls){
 
-  if(!docker) out <- get_puppeteer_signature(urls)
-  if(docker) out <- urls %>% purrr::map_chr(get_docker_signature)
-  # if(!is.null(port)) out <- urls %>% purrr::map_chr(get_api_signature, port = port)
-
+  if(Sys.getenv("TIKTOK_DOCKER") == "TRUE"){
+    out <- urls %>% purrr::map_chr(get_docker_signature)
+  } else {
+    out <- get_puppeteer_signature(urls)
+  }
 
   paste0(urls, "&_signature=", out)
 }

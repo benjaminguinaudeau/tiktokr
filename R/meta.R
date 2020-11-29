@@ -51,6 +51,8 @@ tk_auth <- function(cookie, ua, id_cookie, docker = F) {
     } else {
       message("TIKTOK_DOCKER found. Tiktokr will use a docker container to sign the urls")
     }
+  } else {
+    if(Sys.getenv("TIKTOK_DOCKER") == "") message("TIKTOK_DOCKER found. Tiktokr will use a docker container to sign the urls")
   }
 
   ## Tiktok Cookie
