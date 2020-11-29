@@ -1,13 +1,13 @@
 #' tk_init
 #' @description Intitalize puppeeter browser in the reticulate session
 #' @export
-tk_init <- function(docker = F){
-  if(docker){
+tk_init <- function(){
+  if(Sys.getenv("TIKTOK_DOCKER") != ""){
+    tk_init_docker()
+  } else {
     require(reticulate)
     reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/stealth.py")
     reticulate::source_python("https://raw.githubusercontent.com/benjaminguinaudeau/tiktokr/master/browser.py")
-  } else {
-    tk_init_docker()
   }
 }
 
@@ -33,7 +33,16 @@ tk_init <- function(docker = F){
 #' # You can check it with:
 #' Sys.getenv("TIKTOK_COOKIE")
 #' }
-tk_auth <- function(cookie, ua, id_cookie) {
+tk_auth <- function(cookie, ua, id_cookie, docker = F) {
+
+  if(docker){
+    if(Sys.getenv("TIKTOK_DOCKER") == ""){
+      message("Setting `TIKTOK_DOCKER` as TRUE")
+      set_renv("TIKTOK_DOCKER" = T)
+    } else {
+      message("TIKTOK_DOCKER found. Tiktokr will use a docker container to sign the urls")
+    }
+  }
 
   ## Tiktok Cookie
 
