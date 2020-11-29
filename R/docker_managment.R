@@ -30,7 +30,7 @@ tk_init_docker <- function(){
 
   # Check if container is running ; if not create it
   if(!any(stringr::str_detect(system("docker ps -a", intern = T), "tiktoksignature$"))){
-    message("Creating container `tiktoksignature`... This might take a couple of minutes.")
+    message("Creating container `tiktoksignature` and hosting plumber-API on port localhost:32768")
     system("docker run -dt -p 32768:6543 --name tiktoksignature tiktoksignature:latest", intern = T)
     if(!any(stringr::str_detect(system("docker ps", intern = T), "tiktoksignature$"))){
       cli::cli_alert_danger("Unable to create container `tiktoksignature`")
