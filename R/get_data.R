@@ -59,8 +59,8 @@ get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"), c
     max_cursor = as.character(out$maxCursor)
 
     if(scope != "user_post"){ min_cursor <- as.character(out$cursor) }
-    if(scope != "trending"){ min_cursor <- as.character(out$minCursor + 1) }
-    if(scope != "trending"){ max_cursor <- as.character(out$max_cursor + 1) }
+    if(scope == "trending"){ min_cursor <- as.character(as.numeric(out$minCursor) + 1) }
+    if(scope == "trending"){ max_cursor <- as.character(as.numeric(out$max_cursor) + 1) }
 
     # if(length(max_cursor) == 0){
     #   out <- out$body

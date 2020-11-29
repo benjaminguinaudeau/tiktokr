@@ -10,25 +10,6 @@ pacman::p_load(tidyverse)
 
 ```
 
-```{r}
-Sys.setenv(TIKTOK_UA="Mozilla%252F5.0%2B%28iPhone%253B%2BCPU%2BiPhone%2BOS%2B12_2%2Blike%2BMac%2BOS%2BX%29%2BAppleWebKit%252F605.1.15%2B%28KHTML%2C%2Blike%2BGecko%29%2BVersion%252F13.0%2BMobile%252F15E148%2BSafari%252F604.1")
-
-Sys.setenv(TIKTOK_UA_TEST="Mozilla%252F5.0%2B%28iPhone%253B%2BCPU%2BiPhone%2BOS%2B12_2%2Blike%2BMac%2BOS%2BX%29%2BAppleWebKit%252F605.1.15%2B%28KHTML%2C%2Blike%2BGecko%29%2BVersion%252F13.0%2BMobile%252F15E148%2BSafari%252F604.1")
-```
-
-
-```{r}
-usethis::edit_r_environ()
-
-user_id <- "_beardedguy"
-user <- tk_info(scope = "user", query = "_beardedgu")
-expect_equal(nrow(user), 1)
-expect_true("user.uniqueId" %in% names(user))
-expect_true("user.privateAccount" %in% names(user))
-expect_true("stats.heart" %in% names(user))
-expect_gt(ncol(user), 24)
-```
-
 
 ## Python browser
 
@@ -40,29 +21,8 @@ b$signature
 
 ```{r}
 
-url <- "https://v16-web.tiktok.com/video/tos/useast2a/tos-useast2a-pve-0068/d446cf215f0442ce9787ada9ca430ac4/?a=1988&br=3202&bt=1601&cr=0&cs=0&dr=0&ds=3&er=&expire=1606381521&l=202011260305060101890531330302C8A5&lr=tiktok_m&mime_type=video_mp4&policy=2&qs=0&rc=M2Q2aG1zcHNudzMzNTczM0ApZWY5OWllPGRmN2RnZGY8OGdmYGMxL2UxXmpfLS01MTZzczRjNC9fMTAvXjRjLzIvNi06Yw%3D%3D&signature=c8f4d90070595ec5d7a5e9b0be654476&tk=tt_webid_v2&vl=&vr="
-id <- "6899263243702797830"
-post_id <- "6876228576803441925"
-
-```
-
-
-```{r}
-
 dockeR::doc_copy("tiktoksignature", from = "../tiktok_signature/api.R", to_cont = "/usr/api.R")
 dockeR::doc_copy("tiktoksignature", from = "../tiktok_signature/run_api.R", to_cont = "/usr/run_api.R")
-
-# out <- res %>%
-#   rlist::list.flatten() %>%
-#   purrr::imap_dfc(~{
-#     if(length(.x) == 1){
-#       return(tibble::tibble(.x) %>% purrr::set_names(.y))
-#     } else {
-#       return(tibble::tibble(list(.x)) %>% purrr::set_names(.y))
-#     }
-#   })
-
-tk_install
 
 ```
 
@@ -91,64 +51,6 @@ res$r_code
 ```
 
 4. Verify that everything is running correctly. The output should be a character vector of three elements.
-
-```{r}
-
-tk_test_docker <- function(){
-  
-  version <- try({system("docker -v", intern = T)})
-  if(inherits(version, "try-error")){
-    cli::cli_alert_danger("Unable to find the installation of docker, make sure to install docker before using `tiktokt`")
-  } else {
-    cli::cli_alert_success(version)
-  }
-  
-  if(any(stringr::str_detect(system("docker images", intern = T), "tiktoksignature"))){
-    cli::cli_alert_success("Found image `tiktoksignature`")
-  } else {
-    cli::cli_alert_danger("Unable to find an image `tiktoksignature`")
-  }
-  
-  if(length(system("docker ps -a -f 'name=tiktoksignature'", intern = T)) == 1){
-    message("Creating container `tiktoksignature`... This might take a couple of minutes.")
-    system("docker run -dt --rm --name tiktoksignature tiktoksignature:latest", intern = T)
-    
-    if(length(system("docker ps -f 'name=tiktoksignature'", intern = T)) == 1){
-      cli::cli_alert_danger("Unable to create container `tiktoksignature`")
-      system("docker run -dt --rm --name tiktoksignature tiktoksignature:latest", intern = T)
-    } else {
-      cli::cli_alert_success("Successfully created container")
-    }
-    
-  } else {
-    cli::cli_alert_success("Found container `tiktoksignature`")
-  }
-  
-  
-  
-  if(stringr::str_length(get_docker_signature("")) > 16){
-    cli::cli_alert_success("Successfully signed a test url. Signature is working as expected")
-  } else {
-    cli::cli_alert_danger("Error when signing a url")
-  }
-  
-}
-
-tk_test_docker()
-tk_init()
-get_docker_signature("tt")
-get_puppeteer_signature("tt")
-get_docker_signature()
-
-```
-
-
-5. 
-
-```{r}
-
-```
-
 
 ## Docker Signature
 
@@ -183,87 +85,78 @@ rawToChar(res$content)
 
 jsonlite::fromJSON(rawToChar(res$content))$signature
 
-d <- httr::GET("test" http://localhost:8080/signature', interna)'
-               
-               tiktokr::get_docker_signature
-               
-               dockeR::list_container() %>%
-                 filter(str_detect(image, "tiktoksignature")) %>% 
-                 pull(names) %>%
-                 map(dockeR::stop_container, remove = T)
-               
-               
-               ```
-               
-               
-               ```{r}
-               query <- "mysterious_by_nature"
-               
-               shape_url <- function(){
-                 
-                 # base_url <- "https://m.tiktok.com/api/item_list/?aid=1988"
-                 base_url <- "https://www.tiktok.com/node/share/user/@mysterious_by_nature?aid=1988"
-                 
-                 
-                 # url_params$app_name <- "tiktok_web"     
-                 # url_params$device_platform <- "web"     
-                 # url_params$referer <- ""  
-                 # url_params$root_referer <- ""           
-                 # url_params$cookie_enabled <- "true"  
-                 # url_params$screen_width <- "1440"       
-                 # url_params$screen_height <- "900"       
-                 # url_params$browser_language <- "fr-FR"  
-                 # url_params$browser_platform <- "MacIntel" 
-                 # url_params$browser_online <- "true"                                                                                                 
-                 # url_params$ac <- "4g"             
-                 # url_params$timezone_name <- "America%2FToronto"                                                                                                       
-                 # url_params$priority_region <- ""  
-                 # url_params$appId <- "1233"                                                         
-                 # url_params$region <- "CA"                                                          
-                 #url_params$appType <- "m"                                                          
-                 #url_params$isAndroid <- "true"                                                    
-                 #url_params$isMobile <- "false"                                                     
-                 #url_params$isIOS <- "false"                                                        
-                 #url_params$OS <- "mac"     
-                 # url_params$language <- "fr" 
-                 # url_params$did <- "6893606546577982982"   
-                 # url_params$browser_name <- str_extract(ua, ".*?(?=\\/)")
-                 # url_params$browser_version <- encode_string(str_remove(ua, ".*?\\/"))
-                 # url_params$page_referer <- encode_string("https://www.tiktok.com/foryou")   
-                 
-                 ## User Query
-                 # url_params$uniqueId <- "mysterious_by_nature"
-                 # url_params$secUid <- "MS4wLjABAAAAzoTMYqYafiGwnL-hR8DflXL6CSuvU5wDLmz5NdxchWbbR0XL7XuYWq-4XRb4_ldr"
-                 # url_params$validUniqueId <- "mysterious_by_nature"
-                 
-                 url_params <- list()  
-                 url_params$id <- "6727327145951183878"
-                 url_params$secUid <- "MS4wLjABAAAA8ezUaW4ecJX222ObGXxt07F9BIh4QH3-g1P1DHyChT2LLi2cn-vAE2R53-H672ZO"
-                 
-                 
-                 url_params$count <- "50"
-                 url_params$maxCursor <- "1604716686000"
-                 url_params$minCursor <- "0"
-                 url_params$sourceType <- "8"
-                 
-                 ua <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36"
-                 url_params$user_agent <- encode_string(ua)
-                 url_params$verifyFp <- paste0("verify_", get_verify())
-                 
-                 
-                 query <- url_params %>% imap_chr(~paste0("&", .y, "=", .x)) %>% paste(collapse = "")  %>% paste0(base_url, .)
-                 final_url <- get_signature(url, ua = ua, port = NULL)
-                 tiktok_res <- httr::GET(final_url, httr::add_headers(.headers = c("user-agent" = ua)))
-                 jsonlite::fromJSON(rawToChar(tiktok_res$content))
-                 
-                 user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50)
-                 
-                 
-               }
-               
-               ````
-               
-               
-               
-               
-               
+
+```
+
+
+```{r}
+query <- "mysterious_by_nature"
+
+shape_url <- function(){
+  
+  # base_url <- "https://m.tiktok.com/api/item_list/?aid=1988"
+  base_url <- "https://www.tiktok.com/node/share/user/@mysterious_by_nature?aid=1988"
+  
+  
+  # url_params$app_name <- "tiktok_web"     
+  # url_params$device_platform <- "web"     
+  # url_params$referer <- ""  
+  # url_params$root_referer <- ""           
+  # url_params$cookie_enabled <- "true"  
+  # url_params$screen_width <- "1440"       
+  # url_params$screen_height <- "900"       
+  # url_params$browser_language <- "fr-FR"  
+  # url_params$browser_platform <- "MacIntel" 
+  # url_params$browser_online <- "true"                                                                                                 
+  # url_params$ac <- "4g"             
+  # url_params$timezone_name <- "America%2FToronto"                                                                                                       
+  # url_params$priority_region <- ""  
+  # url_params$appId <- "1233"                                                         
+  # url_params$region <- "CA"                                                          
+  #url_params$appType <- "m"                                                          
+  #url_params$isAndroid <- "true"                                                    
+  #url_params$isMobile <- "false"                                                     
+  #url_params$isIOS <- "false"                                                        
+  #url_params$OS <- "mac"     
+  # url_params$language <- "fr" 
+  # url_params$did <- "6893606546577982982"   
+  # url_params$browser_name <- str_extract(ua, ".*?(?=\\/)")
+  # url_params$browser_version <- encode_string(str_remove(ua, ".*?\\/"))
+  # url_params$page_referer <- encode_string("https://www.tiktok.com/foryou")   
+  
+  ## User Query
+  # url_params$uniqueId <- "mysterious_by_nature"
+  # url_params$secUid <- "MS4wLjABAAAAzoTMYqYafiGwnL-hR8DflXL6CSuvU5wDLmz5NdxchWbbR0XL7XuYWq-4XRb4_ldr"
+  # url_params$validUniqueId <- "mysterious_by_nature"
+  
+  url_params <- list()  
+  url_params$id <- "6727327145951183878"
+  url_params$secUid <- "MS4wLjABAAAA8ezUaW4ecJX222ObGXxt07F9BIh4QH3-g1P1DHyChT2LLi2cn-vAE2R53-H672ZO"
+  
+  
+  url_params$count <- "50"
+  url_params$maxCursor <- "1604716686000"
+  url_params$minCursor <- "0"
+  url_params$sourceType <- "8"
+  
+  ua <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36"
+  url_params$user_agent <- encode_string(ua)
+  url_params$verifyFp <- paste0("verify_", get_verify())
+  
+  
+  query <- url_params %>% imap_chr(~paste0("&", .y, "=", .x)) %>% paste(collapse = "")  %>% paste0(base_url, .)
+  final_url <- get_signature(url, ua = ua, port = NULL)
+  tiktok_res <- httr::GET(final_url, httr::add_headers(.headers = c("user-agent" = ua)))
+  jsonlite::fromJSON(rawToChar(tiktok_res$content))
+  
+  user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50)
+  
+  
+}
+
+````
+
+
+
+
+
