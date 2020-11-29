@@ -21,7 +21,7 @@ module
 [davidteather/TikTok-Api](https://github.com/davidteather/TikTok-Api).
 You will need Python 3.6 or Docker to use `tiktokr`. If you want to use
 Docker check out the guide for that
-[here](https://github.com/benjaminguinaudeau/tiktokr#authentification).
+[here](https://github.com/benjaminguinaudeau/tiktokr#using-tiktokr-with-docker).
 
 *Many thanks go to [Vivien Fabry](https://twitter.com/ViviFabrien) for
 creating the hexagon logo.*
@@ -31,7 +31,7 @@ creating the hexagon logo.*
   - [Installation](https://github.com/benjaminguinaudeau/tiktokr#installation)
   - [Authentification](https://github.com/benjaminguinaudeau/tiktokr#authentification)
   - [Using tiktokr with
-    Docker](https://github.com/benjaminguinaudeau/tiktokr#authentification)
+    Docker](https://github.com/benjaminguinaudeau/tiktokr#using-tiktokr-with-docker)
   - [Examples](https://github.com/benjaminguinaudeau/tiktokr#examples)
 
 ## Installation
