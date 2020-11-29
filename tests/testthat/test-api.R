@@ -14,12 +14,16 @@ if (Sys.getenv("USER") != "travis") {
   test_that("tk_init and signature", {
 
     expect_error(tk_info(scope = "user", query = "willsmith"), "Tiktokr was not initialized. Please run tk_init()")
+    Sys.setenv("TIKTOK_DOCKER" = "")
     tk_init()
     expect_gt(stringr::str_length(get_signature("")), 16)
+    Sys.setenv("TIKTOK_DOCKER" = "TRUE")
+    tk_init()
+    Sys.setenv("TIKTOK_DOCKER" = "")
 
   })
 
-  tk_init_docker()
+
 
   tk_auth(cookie = Sys.getenv("TIKTOK_COOKIE_TEST"), id_cookie = Sys.getenv("TIKTOK_ID_COOKIE_TEST"),
           ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0 Mobile/15E148 Safari/604.1')
@@ -32,9 +36,8 @@ if (Sys.getenv("USER") != "travis") {
 
   test_that("signature Puppetteer process", {
 
-    # Puppetteer Signature
-
-    sig <- get_signature("http://tiktok.com/trends", docker = F)
+    Sys.setenv("TIKTOK_DOCKER" = "TRUE")
+    sig <- get_signature("http://tiktok.com/trends")
     expect_true(stringr::str_detect(sig, "&_signature="))
     expect_true(stringr::str_detect(sig, "(?<=&_signature=).{10}"))
 
@@ -42,18 +45,21 @@ if (Sys.getenv("USER") != "travis") {
 
   test_that("signature docker process", {
 
-    # Docker Signature
-    sig <- get_signature("http://tiktok.com/trends", docker = T)
+    Sys.setenv("TIKTOK_DOCKER" = "TRUE")
+    sig <- get_signature("http://tiktok.com/trends")
     expect_true(stringr::str_detect(sig, "&_signature="))
     expect_true(stringr::str_detect(sig, "(?<=&_signature=).{10}"))
+
 
     # What happens if container is off
 
     if(length(system("docker ps -a -f 'name=tiktoksignature'", intern = T)) == 2){
       system("docker stop tiktoksignature", intern = T)
     }
-    expect_message(get_signature("http://tiktok.com/trends", docker = T), "Container was stopped. Starting container")
-    expect_silent(get_signature("http://tiktok.com/trends", docker = T))
+
+    expect_message(get_signature("http://tiktok.com/trends"), "Container was stopped. Starting container")
+    expect_silent(get_signature("http://tiktok.com/trends"))
+    Sys.setenv("TIKTOK_DOCKER" = "")
   })
 
   ## Captcha ----
@@ -109,12 +115,14 @@ if (Sys.getenv("USER") != "travis") {
 
     # Docker User
 
-    user_post <- tk_posts(scope = "user", query = "willsmith", n = 40, docker = T)
+    Sys.setenv("TIKTOK_DOCKER" = "TRUE")
+    user_post <- tk_posts(scope = "user", query = "willsmith", n = 40)
     expect_gt(nrow(user_post), 2)
     expect_true("desc" %in% names(user_post))
     expect_gt(ncol(user_post), 90)
-    user_post_ <- tk_posts(scope = "user", query = "willsmith", n = 100, docker = T)
+    user_post_ <- tk_posts(scope = "user", query = "willsmith", n = 100)
     expect_gt(nrow(dplyr::anti_join(user_post_, user_post, by = "id")), 0)
+    Sys.setenv("TIKTOK_DOCKER" = "")
 
     # Wrong User ID
 
@@ -168,12 +176,14 @@ if (Sys.getenv("USER") != "travis") {
 
     # Hashtag Docker
 
-    hashtag <- tk_posts(scope = "hashtag", query = "maincharacter", n = 25, docker = T)
+    Sys.setenv("TIKTOK_DOCKER" = "TRUE")
+    hashtag <- tk_posts(scope = "hashtag", query = "maincharacter", n = 25)
     expect_gt(nrow(hashtag), 20)
     expect_true("desc" %in% names(hashtag))
     expect_gt(ncol(hashtag), 60)
-    hashtag_ <- tk_posts(scope = "hashtag", query = "maincharacter", n = 60, docker = T)
+    hashtag_ <- tk_posts(scope = "hashtag", query = "maincharacter", n = 60)
     expect_gt(nrow(dplyr::anti_join(hashtag_, hashtag, by = "id")), 0)
+    Sys.setenv("TIKTOK_DOCKER" = "")
 
     # Wrong Hashtag
 
@@ -224,12 +234,14 @@ if (Sys.getenv("USER") != "travis") {
 
     # Docker Signature
 
-    music <- tk_posts(scope = "music", query = "6782187241935505410", n = 25, docker = T)
+    Sys.setenv("TIKTOK_DOCKER" = "TRUE")
+    music <- tk_posts(scope = "music", query = "6782187241935505410", n = 25)
     expect_gt(nrow(music), 20)
     expect_true("desc" %in% names(music))
     expect_gt(ncol(music), 60)
-    music_ <- tk_posts(scope = "music", query = "6782187241935505410", n = 60, docker = T)
+    music_ <- tk_posts(scope = "music", query = "6782187241935505410", n = 60)
     expect_gt(nrow(dplyr::anti_join(music_, music, by = "id")), 0)
+    Sys.setenv("TIKTOK_DOCKER" = "")
 
 
     # Wrong Music ID

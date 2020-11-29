@@ -104,8 +104,6 @@ get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"), c
 #' @export
 get_data <- function(url, parse = T, vpn = F, cookie = "", time_out = 10){
 
-
-
   if(!stringr::str_detect(url, "&_signature=")){
     final_url <- get_signature(url)
   } else {
