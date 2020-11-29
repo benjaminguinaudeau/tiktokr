@@ -88,8 +88,15 @@
 <!-- badges: start -->
 
 <p>The goal of <code>tiktokr</code> is to provide a scraper for the video-sharing social networking service <a href="http://tiktok.com/">TikTok</a>.</p>
-<p>While writing this library, we were broadly inspired by the Python module <a href="https://github.com/davidteather/TikTok-Api">davidteather/TikTok-Api</a>. You will need Python 3.6 or higher to use <code>tiktokr</code>.</p>
+<p>While writing this library, we were broadly inspired by the Python module <a href="https://github.com/davidteather/TikTok-Api">davidteather/TikTok-Api</a>. You will need Python 3.6 or Docker to use <code>tiktokr</code>. If you want to use Docker check out the guide for that <a href="https://github.com/benjaminguinaudeau/tiktokr#authentification">here</a>.</p>
 <p><em>Many thanks go to <a href="https://twitter.com/ViviFabrien">Vivien Fabry</a> for creating the hexagon logo.</em></p>
+<p><strong>Overview</strong></p>
+<ul>
+<li><a href="https://github.com/benjaminguinaudeau/tiktokr#installation">Installation</a></li>
+<li><a href="https://github.com/benjaminguinaudeau/tiktokr#authentification">Authentification</a></li>
+<li><a href="https://github.com/benjaminguinaudeau/tiktokr#authentification">Using tiktokr with Docker</a></li>
+<li><a href="https://github.com/benjaminguinaudeau/tiktokr#examples">Examples</a></li>
+</ul>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -124,41 +131,93 @@
 <p><a href="https://youtu.be/kYMV2ugxacs"><img src="https://github.com/benjaminguinaudeau/tiktokr/raw/master/data/preview.png" width="100%"></a></p>
 <p>The <code>tk_auth</code> function will save cookies (and user agent) as environment variable to your <code>.Renviron</code> file. You need to only run this once to use <code>tiktokr</code> or whenever you want to update your cookie/user agent.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/tk_auth.html">tk_auth</a></span><span class="op">(</span>cookie <span class="op">=</span> <span class="st">"&lt;paste here the output from document.cookie&gt;"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R">
+<span class="fu"><a href="reference/tk_auth.html">tk_auth</a></span><span class="op">(</span>cookie <span class="op">=</span> <span class="st">"&lt;paste here the output from document.cookie&gt;"</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="using-tiktokr-with-docker" class="section level2">
+<h2 class="hasAnchor">
+<a href="#using-tiktokr-with-docker" class="anchor"></a>Using <code>tiktokr</code> with Docker</h2>
+<p>TikTok requires API queries to be identified with a unique hash. To get this hash, <code>tiktokr</code> runs a <code>puppeteer-chrome</code> session in the background. Apparently <code>puppeteer</code> sometimes causes issues on some operating systems, so we also created a Docker image, that can be run on any computer with Docker installed.</p>
+<p>To find out, if you are experiencing puppeteer problems run:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">tiktokr</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span><span class="op">(</span><span class="st">"TIKTOK_DOCKER"</span> <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
+<span class="fu"><a href="reference/tk_auth.html">tk_auth</a></span><span class="op">(</span>cookie <span class="op">=</span> <span class="st">"&lt;your_cookie_here&gt;"</span><span class="op">)</span>
+<span class="fu"><a href="reference/tk_init.html">tk_init</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">get_signature</span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span>
+
+<span class="kw">if</span><span class="op">(</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_length.html">str_length</a></span><span class="op">(</span><span class="fu">get_docker_signature</span><span class="op">(</span><span class="st">""</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">16</span><span class="op">)</span><span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/message.html">message</a></span><span class="op">(</span><span class="st">"Puppeteer works well on you computer"</span><span class="op">)</span>
+<span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/message.html">message</a></span><span class="op">(</span><span class="st">"Puppeteer does not work, please consider using Docker"</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<p>If you experience a problem try to install Docker as outlined in the steps below.</p>
+<div id="installing-docker" class="section level3">
+<h3 class="hasAnchor">
+<a href="#installing-docker" class="anchor"></a>Installing Docker</h3>
+<p>If you have either a <a href="https://docs.docker.com/docker-for-mac/install/">Mac</a>, Linux (for example <a href="https://docs.docker.com/engine/install/ubuntu/">Ubuntu</a>) or <a href="https://docs.docker.com/docker-for-windows/install/">Windows 10 Professional / Education / Enterprise</a> operating system, simply install Docker (click on respective hyperlinks).</p>
+<p>If you only have Windows 10 Home the installation of Docker requires more steps.</p>
+<ol>
+<li><p>Follow the steps to <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">install Windows Subsystem for Linux</a></p></li>
+<li><p>Follow the steps to <a href="https://docs.docker.com/docker-for-windows/install-windows-home/">install Docker on Windows Home</a></p></li>
+</ol>
+</div>
+<div id="initialize-docker" class="section level3">
+<h3 class="hasAnchor">
+<a href="#initialize-docker" class="anchor"></a>Initialize Docker</h3>
+<p>To run <code>tiktokr</code> with Docker, simply run <code><a href="reference/tk_auth.html">tk_auth()</a></code> with <code>docker = TRUE</code> which sets the necessary environment variable.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/tk_auth.html">tk_auth</a></span><span class="op">(</span>docker <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<p>Now run <code><a href="reference/tk_init.html">tk_init()</a></code> to set up the Docker container.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/tk_init.html">tk_init</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p>You can check whether your Docker container is working correctly by running the following code:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="kw">if</span><span class="op">(</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_length.html">str_length</a></span><span class="op">(</span><span class="fu">get_docker_signature</span><span class="op">(</span><span class="st">""</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">16</span><span class="op">)</span><span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/message.html">message</a></span><span class="op">(</span><span class="st">"Signature successfull, your docker container is working."</span><span class="op">)</span>
+<span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/message.html">message</a></span><span class="op">(</span><span class="st">"Unable to get the signature"</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<p>Now try running the examples below.</p>
+</div>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
-<p>For every session involving <code>tiktokr</code>, you will need to initialize the package with <code><a href="reference/tk_init.html">tk_init()</a></code>. Once it is initiliazed you can run as many queries as you want.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>For every session involving <code>tiktokr</code>, you will need to initialize the package with <code><a href="reference/tk_init.html">tk_init()</a></code>. Once it is initialized you can run as many queries as you want.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/tk_init.html">tk_init</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div id="get-tiktok-trends" class="section level3">
 <h3 class="hasAnchor">
 <a href="#get-tiktok-trends" class="anchor"></a>Get TikTok trends</h3>
 <p>Returns a tibble with trends.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Trend</span>
 <span class="va">trends</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"trends"</span>, n <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="get-tiktoks-from-user" class="section level3">
 <h3 class="hasAnchor">
 <a href="#get-tiktoks-from-user" class="anchor"></a>Get TikToks from User</h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">user_posts</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"user"</span>, query <span class="op">=</span> <span class="st">"willsmith"</span>, n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> </code></pre></div>
 </div>
 <div id="get-tiktoks-from-hashtag" class="section level3">
 <h3 class="hasAnchor">
 <a href="#get-tiktoks-from-hashtag" class="anchor"></a>Get TikToks from hashtag</h3>
 <p>Note: Hashtags query only provides 2k hits, which are not drawn randomly or based on the most recent post date but rather <strong>some mix of recent and popular</strong> TikToks.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hash_post</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"hashtag"</span>, query <span class="op">=</span> <span class="st">"maincharacter"</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> </code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="va">hash_post</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"hashtag"</span>, query <span class="op">=</span> <span class="st">"maincharacter"</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> </code></pre></div>
 </div>
 <div id="get-tiktoks-from-music-id" class="section level3">
 <h3 class="hasAnchor">
 <a href="#get-tiktoks-from-music-id" class="anchor"></a>Get TikToks from music id</h3>
 <p>Note: Hashtags query only provides 2k hits, which are not drawn randomly or based on the most recent post date but rather <strong>some mix of recent and popular</strong> TikToks.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">user_posts</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"user"</span>, query <span class="op">=</span> <span class="st">"willsmith"</span>, n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="va">user_posts</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"user"</span>, query <span class="op">=</span> <span class="st">"willsmith"</span>, n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
 <span class="va">music_post</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"music"</span>, query <span class="op">=</span> <span class="va">user_posts</span><span class="op">$</span><span class="va">music_id</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="download-tiktok-videos" class="section level3">
@@ -166,7 +225,7 @@
 <a href="#download-tiktok-videos" class="anchor"></a>Download TikTok Videos</h3>
 <p>With <code>tk_dwnl</code> you can download videos from TikTok.</p>
 <p>From Trends:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># fs::dir_create("video")</span>
 <span class="va">trends</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tk_posts.html">tk_posts</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"trends"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
 
@@ -199,6 +258,8 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://codecov.io/gh/benjaminguinaudeau/tiktokr?branch=master"><img src="https://codecov.io/gh/benjaminguinaudeau/tiktokr/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://travis-ci.com/benjaminguinaudeau/tiktokr"><img src="https://travis-ci.com/benjaminguinaudeau/tiktokr.svg?branch=master" alt="Travis build status"></a></li>
 </ul>
 </div>
 </div>
