@@ -32,19 +32,19 @@ get_puppeteer_signature <- function(urls){
 
 #' @export
 get_docker_signature <- function(url, port = 32768){
-    if(length(system("docker ps -f 'name=tiktoksignature'", intern = T)) == 1){
+    if(!any(stringr::str_detect(system("docker ps", intern = T), "tiktoksignature$"))){
       message("Container was stopped. Starting container")
       system("docker start tiktoksignature", intern = T)
       Sys.sleep(6)
     }
 
   cmd <- list(url = url, ua = Sys.getenv("TIKTOK_UA"))
-  req <- try(httr::POST(url = glue::glue("http://0.0.0.0:{port}/"),  body  = cmd, encode = "json"))
+  req <- try(httr::POST(url = glue::glue("http://localhost:{port}/"),  body  = cmd, encode = "json"))
   if(inherits(req, "try-error")){
 
     system("docker stop tiktoksignature", intern = T)
     system("docker start tiktoksignature", intern = T)
-    req <- try(httr::POST(url = glue::glue("http://0.0.0.0:{port}/"),  body  = cmd, encode = "json"))
+    req <- try(httr::POST(url = glue::glue("http://localshost:{port}/"),  body  = cmd, encode = "json"))
   }
   jsonlite::fromJSON(rawToChar(req$content))
 }
