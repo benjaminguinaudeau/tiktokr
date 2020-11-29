@@ -24,9 +24,18 @@ knitr::opts_chunk$set(
 
 The goal of `tiktokr` is to provide a scraper for the video-sharing social networking service [TikTok](http://tiktok.com/). 
 
-While writing this library, we were broadly inspired by the Python module [davidteather/TikTok-Api](https://github.com/davidteather/TikTok-Api). You will need Python 3.6 or higher to use `tiktokr`.
+While writing this library, we were broadly inspired by the Python module [davidteather/TikTok-Api](https://github.com/davidteather/TikTok-Api). You will need Python 3.6 or Docker to use `tiktokr`. If you want to use Docker check out the guide for that [here](https://github.com/benjaminguinaudeau/tiktokr#authentification).
 
 *Many thanks go to [Vivien Fabry](https://twitter.com/ViviFabrien) for creating the hexagon logo.*
+
+
+**Overview**
+
++ [Installation](https://github.com/benjaminguinaudeau/tiktokr#installation)
++ [Authentification](https://github.com/benjaminguinaudeau/tiktokr#authentification)
++ [Using tiktokr with Docker](https://github.com/benjaminguinaudeau/tiktokr#authentification)
++ [Examples](https://github.com/benjaminguinaudeau/tiktokr#examples)
+
 
 ## Installation
 
@@ -82,11 +91,77 @@ tk_auth(cookie = "<paste here the output from document.cookie>")
 
 ```
 
+## Using `tiktokr` with Docker
+
+TikTok requires API queries to be identified with a unique hash. To get this hash, `tiktokr` runs a `puppeteer-chrome` session in the background. Apparently `puppeteer` sometimes causes issues on some operating systems, so we also created a Docker image, that can be run on any computer with Docker installed. 
+
+To find out, if you are experiencing puppeteer problems run: 
+
+```{r, eval = F}
+
+library(tiktokr)
+Sys.setenv("TIKTOK_DOCKER" = "")
+tk_auth(cookie = "<your_cookie_here>")
+tk_init()
+out <- get_signature("test")
+
+if(stringr::str_length(get_docker_signature("")) > 16){
+  message("Puppeteer works well on you computer")
+} else {
+  message("Puppeteer does not work, please consider using Docker")
+}
+
+
+```
+
+
+If you experience a problem try to install Docker as outlined in the steps below.
+
+### Installing Docker
+
+If you have either a [Mac](https://docs.docker.com/docker-for-mac/install/), Linux (for example [Ubuntu](https://docs.docker.com/engine/install/ubuntu/)) or [Windows 10 Professional / Education / Enterprise](https://docs.docker.com/docker-for-windows/install/) operating system, simply install Docker (click on respective hyperlinks).
+
+
+If you only have Windows 10 Home the installation of Docker requires more steps.
+
+1. Follow the steps to [install Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+
+
+2. Follow the steps to [install Docker on Windows Home](https://docs.docker.com/docker-for-windows/install-windows-home/)
+
+### Initialize Docker
+
+To run `tiktokr` with Docker, simply run `tk_auth()` with `docker = TRUE` which sets the necessary environment variable.
+
+```{r}
+tk_auth(docker = T)
+```
+
+Now run `tk_init()` to set up the Docker container.
+
+```{r}
+tk_init()
+
+```
+
+You can check whether your Docker container is working correctly by running the following code:
+
+```{r}
+
+if(stringr::str_length(get_docker_signature("")) > 16){
+  message("Signature successfull, your docker container is working.")
+} else {
+  message("Unable to get the signature")
+}
+
+```
+
+Now try running the examples below.
+
 ## Examples
 
-
 For every session involving `tiktokr`, you will need to initialize the package with `tk_init()`. Once
-it is initiliazed you can run as many queries as you want.
+it is initialized you can run as many queries as you want.
 
 ```{r}
 tk_init()
