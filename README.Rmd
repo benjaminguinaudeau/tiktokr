@@ -115,7 +115,7 @@ if(stringr::str_length(get_docker_signature("")) > 16){
 ```
 
 
-If you experience a problem try to install Docker as outlined in the steps below.
+If you experience problems try to install Docker as outlined in the steps below.
 
 ### Installing Docker
 
@@ -149,9 +149,9 @@ You can check whether your Docker container is working correctly by running the 
 ```{r}
 
 if(stringr::str_length(get_docker_signature("")) > 16){
-  message("Signature successfull, your docker container is working.")
+  message("Signature successful. Your Docker container is working.")
 } else {
-  message("Unable to get the signature")
+  message("Unable to get signature")
 }
 
 ```
