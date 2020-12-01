@@ -131,7 +131,7 @@ If you only have Windows 10 Home the installation of Docker requires more steps.
 
 ### Initialize Docker
 
-To run `tiktokr` with Docker, simply run `tk_auth()` with `docker = TRUE` which sets the necessary environment variable.
+To run `tiktokr` with Docker you need to use `tk_auth()` with `docker = TRUE` which sets the necessary environment variable.
 
 ```{r}
 tk_auth(docker = T)

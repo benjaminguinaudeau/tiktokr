@@ -143,7 +143,7 @@ more steps.
 
 ### Initialize Docker
 
-To run `tiktokr` with Docker, simply run `tk_auth()` with `docker =
+To run `tiktokr` with Docker you need to use `tk_auth()` with `docker =
 TRUE` which sets the necessary environment variable.
 
 ``` r
