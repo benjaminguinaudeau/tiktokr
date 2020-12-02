@@ -21,7 +21,7 @@ tk_info <- function(scope, query, ...){
     "user" = {
       url <- get_url("username", query_1 = query)
       tmp <- get_data(url, ...)
-      if(tmp[["statusCode"]] == "10202"){
+      if(tmp[["statusCode"]] %in% c("10202", "10221")){
         return(tibble::tibble(query = query, found = F))
       }
       tmp$userInfo
