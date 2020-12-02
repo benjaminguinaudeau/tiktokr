@@ -3,6 +3,9 @@
 #' @export
 
 get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"), cursor = 0, query_1 = NULL, query_2 = "", save_dir = NULL, query = NULL, ...){
+
+  if(lubridate::is.Date(start_date)){ start_date <- as.numeric(start_date)}
+
   response <- tibble::tibble()
   if(stringr::str_detect(scope, "music|trend|hash")){
     max_n <- 30
@@ -79,9 +82,9 @@ get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"), c
     }
 
     if(scope == "user_post"){
-      if(min(from_unix(response$createTime)) < start_date){
+      if(min(response$createTime) < start_date){
         response <- response %>%
-          dplyr::filter(from_unix(createTime) < start_date)
+          dplyr::filter(createTime > start_date)
 
         n <- 0
       }
