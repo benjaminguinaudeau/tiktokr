@@ -25,6 +25,8 @@
 #' }
 tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("01-01-1900"), save_dir = NULL, verbose = T, ...){
 
+  if(lubridate::is.Date(start_date)){ start_date <- as.numeric(start_date)}
+
   if(!(scope %in% c("user", "hashtag", "music", "trends"))){
     stop("scope must be one of the following: user, hashtag, music or trends")
   }
@@ -87,7 +89,7 @@ tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("
             cli::cli_alert_info("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} (private)")
           } else {
             out <- out %>%
-              dplyr::filter(from_unix(createTime) > start_date)
+              dplyr::filter(createTime > start_date)
 
             if(nrow(out) != 0){
               cli::cli_alert_success("[{Sys.time()}] {stringr::str_extract(scope, '.')}-{query} ({nrow(out)})")
@@ -97,7 +99,7 @@ tk_posts <- function(scope, query = "", n = 10000, start_date = lubridate::dmy("
           }
         } else {
           out <- out %>%
-            dplyr::filter(from_unix(createTime) > start_date)
+            dplyr::filter(createTime > start_date)
         }
       }
     return(out)
