@@ -21,7 +21,8 @@ tk_info <- function(scope, query, ...){
     "user" = {
       url <- get_url("username", query_1 = query)
       tmp <- get_data(url, ...)
-      if(tmp[["statusCode"]] %in% c("10202", "10221")){
+      if(as.numeric(tmp[["statusCode"]]) > 10000 ){ #c("10202", "10221", "10225")
+        warning(paste(query, "Error", tmp[["statusCode"]]))
         return(tibble::tibble(query = query, found = F))
       }
       tmp$userInfo

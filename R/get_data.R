@@ -21,7 +21,8 @@ get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"), c
     url <- get_url(scope, n = max_n, min = min_cursor, max = max_cursor, query_1 = query_1, query_2 = query_2)
     out <- get_data(url, parse = T, ...)
 
-    if(out$statusCode == "10219"){
+    if(as.numeric(out[["statusCode"]]) > 10000 ){ #c("10202", "10221", "10225")
+      warning(paste(query, "Error", out[["statusCode"]]))
       return(tibble::tibble(query = query, found = F))
     }
 
@@ -151,15 +152,15 @@ get_data <- function(url, parse = T, vpn = F, cookie = "", time_out = 10){
     jsonlite::fromJSON()
 
   if(!is.null(out[["statusCode"]])){
-    if(out$statusCode == "10000"){
-      stop("Captcha required. Please update your tiktok cookie using `tk_auth(cookie = <your new tiktok cookie>)`.")
+    if(as.numeric(out[["statusCode"]]) > 10000 ){ #c("10202", "10221", "10225")
+      warning(paste(query, "Error", out[["statusCode"]]))
+      return(tibble::tibble(query = query, found = F))
     }
-  }
-  if(!is.null(out[["status_code"]])){
     if(out$status_code == "8"){
-      # stop("Captcha required. Please update the cookie file.")
+      stop("Captcha required. Please update your tiktok cookie using `tk_auth(cookie = <your new tiktok cookie>)` or wait some time before querying again. ")
     }
   }
+
 
   return(out)
 }
