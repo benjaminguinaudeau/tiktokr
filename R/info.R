@@ -21,8 +21,8 @@ tk_info <- function(scope, query, ...){
     "user" = {
       url <- get_url("username", query_1 = query)
       tmp <- get_data(url, ...)
-      if(as.numeric(tmp[["statusCode"]]) > 10000 ){ #c("10202", "10221", "10225")
-        warning(paste(query, "Error", tmp[["statusCode"]]))
+      if(as.numeric(tmp[["status_code"]]) > 10000 ){ #c("10202", "10221", "10225")
+        warning(paste(query, "Error", tmp[["status_code"]]))
         return(tibble::tibble(query = query, found = F))
       }
       tmp$userInfo
@@ -32,7 +32,7 @@ tk_info <- function(scope, query, ...){
     "hashtag" = {
       url <- get_url("hashtag", query_1 = query)
       tmp <- get_data(url, ...)
-      if(tmp[["statusCode"]] == "10205"){
+      if(tmp[["status_code"]] == "10205"){
         return(tibble::tibble(query = query, found = F))
       }
       tmp
@@ -48,7 +48,7 @@ tk_info <- function(scope, query, ...){
     "post" = {
       url <- get_url("post", query_1 = query)
       tmp <- get_data(url, ...)
-      if(tmp[["statusCode"]] == "10204"){
+      if(tmp[["status_code"]] == "10204"){
         return(tibble::tibble(query = query, found = F))
       }
       tmp
