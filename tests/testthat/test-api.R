@@ -95,7 +95,7 @@ if (Sys.getenv("USER") != "travis") {
 
     user <- "idontexist_at_all"
     Sys.setenv("TIKTOK_UA" = "")
-    expect_error(tk_info(scope = "user", query = user), "No user agent was detected. Please register a user agent using tk_init()")
+    expect_error(tk_info(scope = "user", query = user), "No user agent was detected. Please register a user agent using tk_auth()")
     Sys.setenv("TIKTOK_UA" = "a")
     expect_false(tk_info(scope = "user", query = user)$found)
     Sys.setenv("TIKTOK_UA" = Sys.getenv("TIKTOK_UA_TEST"))
@@ -128,7 +128,7 @@ if (Sys.getenv("USER") != "travis") {
 
     user <- "idontexist_at_all"
     Sys.setenv("TIKTOK_UA" = "")
-    expect_error(tk_posts(scope = "user", query = user, n = 40), "No user agent was detected. Please register a user agent using tk_init()")
+    expect_error(tk_posts(scope = "user", query = user, n = 40), "No user agent was detected. Please register a user agent using tk_auth()")
     Sys.setenv("TIKTOK_UA" = "a")
     expect_false(tk_posts(scope = "user", query = user, n = 40)$found)
     Sys.setenv("TIKTOK_UA" = Sys.getenv("TIKTOK_UA_TEST"))
@@ -150,13 +150,13 @@ if (Sys.getenv("USER") != "travis") {
     hashtag <- tk_info(scope = "hashtag", query = "maincharacter")
     expect_equal(nrow(hashtag), 1)
     expect_true("challengeInfo.challenge.id" %in% names(hashtag))
-    expect_equal(ncol(hashtag), 16)
+    expect_equal(ncol(hashtag), 17)
 
     # Wrong Hashtag Info
 
     hashtag <- "iamnohashtag"
     Sys.setenv("TIKTOK_UA" = "")
-    expect_error(tk_info(scope = "hashtag", query = hashtag), "No user agent was detected. Please register a user agent using tk_init()")
+    expect_error(tk_info(scope = "hashtag", query = hashtag), "No user agent was detected. Please register a user agent using tk_auth()")
     Sys.setenv("TIKTOK_UA" = "a")
     expect_false(tk_info(scope = "hashtag", query = hashtag)$found)
     Sys.setenv("TIKTOK_UA" = Sys.getenv("TIKTOK_UA_TEST"))
@@ -189,7 +189,7 @@ if (Sys.getenv("USER") != "travis") {
 
     hashtag <- "iamnohashtag"
     Sys.setenv("TIKTOK_UA" = "")
-    expect_error(tk_posts(scope = "hashtag", query = hashtag, n = 40), "No user agent was detected. Please register a user agent using tk_init()")
+    expect_error(tk_posts(scope = "hashtag", query = hashtag, n = 40), "No user agent was detected. Please register a user agent using tk_auth()")
     Sys.setenv("TIKTOK_UA" = "a")
     expect_false(tk_posts(scope = "hashtag", query = hashtag, n = 40)$found)
     Sys.setenv("TIKTOK_UA" = Sys.getenv("TIKTOK_UA_TEST"))
@@ -214,7 +214,7 @@ if (Sys.getenv("USER") != "travis") {
 
     music <- "67821871935505411" # No existing music
     Sys.setenv("TIKTOK_UA" = "")
-    expect_error(tk_info(scope = "music", query = music), "No user agent was detected. Please register a user agent using tk_init()")
+    expect_error(tk_info(scope = "music", query = music), "No user agent was detected. Please register a user agent using tk_auth()")
     Sys.setenv("TIKTOK_UA" = "a")
     expect_false(tk_info(scope = "music", query = music)$found)
     Sys.setenv("TIKTOK_UA" = Sys.getenv("TIKTOK_UA_TEST"))
@@ -248,7 +248,7 @@ if (Sys.getenv("USER") != "travis") {
 
     music <- "67821871935505411" # No existing music
     Sys.setenv("TIKTOK_UA" = "")
-    expect_error(tk_posts(scope = "music", query = music), "No user agent was detected. Please register a user agent using tk_init()")
+    expect_error(tk_posts(scope = "music", query = music), "No user agent was detected. Please register a user agent using tk_auth()")
     Sys.setenv("TIKTOK_UA" = "a")
     expect_false(tk_info(scope = "music", query = music)$found)
     Sys.setenv("TIKTOK_UA" = Sys.getenv("TIKTOK_UA_TEST"))
@@ -272,7 +272,7 @@ if (Sys.getenv("USER") != "travis") {
 
     post <- 6826115812009495 # don't 'exist
     Sys.setenv("TIKTOK_UA" = "")
-    expect_error(tk_info(scope = "post", query = post), "No user agent was detected. Please register a user agent using tk_init()")
+    expect_error(tk_info(scope = "post", query = post), "No user agent was detected. Please register a user agent using tk_auth()")
     Sys.setenv("TIKTOK_UA" = "a")
     expect_false(tk_info(scope = "post", query = post)$found)
     Sys.setenv("TIKTOK_UA" = Sys.getenv("TIKTOK_UA_TEST"))
@@ -293,9 +293,9 @@ if (Sys.getenv("USER") != "travis") {
 
     post <- 6826115812009495 # don't 'exist
     Sys.setenv("TIKTOK_UA" = "")
-    expect_error(tk_posts(scope = "trends", n = 25), "No user agent was detected. Please register a user agent using tk_init()")
+    expect_error(tk_posts(scope = "trends", n = 25), "No user agent was detected. Please register a user agent using tk_auth()")
     Sys.setenv("TIKTOK_UA" = "a")
-    expect_silent(tk_posts(scope = "trends", n = 25))
+    expect_gt(nrow(tk_posts(scope = "trends", n = 25)), 25)
     Sys.setenv("TIKTOK_UA" = Sys.getenv("TIKTOK_UA_TEST"))
   })
 
@@ -310,7 +310,7 @@ if (Sys.getenv("USER") != "travis") {
 
     comment <- 67429688936433925 #Wrong comment id
     Sys.setenv("TIKTOK_UA" = "")
-    expect_error(tk_comment(post_id = "comment"), "No user agent was detected. Please register a user agent using tk_init()")
+    expect_error(tk_comment(post_id = "comment"), "No user agent was detected. Please register a user agent using tk_auth()")
     Sys.setenv("TIKTOK_UA" = "a")
     expect_false(tk_comment(post_id = "comment")$found)
     Sys.setenv("TIKTOK_UA" = Sys.getenv("TIKTOK_UA_TEST"))

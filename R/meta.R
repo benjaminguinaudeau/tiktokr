@@ -92,6 +92,7 @@ tk_auth <- function(cookie, ua, id_cookie, docker = F) {
 
   if(missing(id_cookie)) id_cookie <- Sys.getenv("TIKTOK_ID_COOKIE")
   set_renv("TIKTOK_ID_COOKIE" = id_cookie)
+  readRenviron(.Renviron())
 
 }
 

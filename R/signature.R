@@ -16,7 +16,7 @@ get_puppeteer_signature <- function(urls){
   if(!exists("py")) stop("Tiktokr was not initialized. Please run tk_init()")
   if(!"browser" %in% names(py)) stop("Tiktokr was not initialized. Please run tk_init()")
   ua <- Sys.getenv("TIKTOK_UA")
-  if(ua == "") stop("No user agent was detected. Please register a user agent using tk_init()")
+  if(ua == "") stop("No user agent was detected. Please register a user agent using tk_auth()")
 
 
   url <- paste(urls, collapse = '", "')
@@ -33,11 +33,15 @@ get_puppeteer_signature <- function(urls){
 
 #' @export
 get_docker_signature <- function(url, port = 32768){
-    if(!any(stringr::str_detect(system("docker ps", intern = T), "tiktoksignature$"))){
-      message("Container was stopped. Starting container")
-      system("docker start tiktoksignature", intern = T)
-      Sys.sleep(6)
-    }
+
+  ua <- Sys.getenv("TIKTOK_UA")
+  if(ua == "") stop("No user agent was detected. Please register a user agent using tk_auth()")
+
+  if(!any(stringr::str_detect(system("docker ps", intern = T), "tiktoksignature$"))){
+    message("Container was stopped. Starting container")
+    system("docker start tiktoksignature", intern = T)
+    Sys.sleep(6)
+  }
 
   cmd <- list(url = url, ua = Sys.getenv("TIKTOK_UA"))
   req <- try(httr::POST(url = glue::glue("http://localhost:{port}/"),  body  = cmd, encode = "json"))

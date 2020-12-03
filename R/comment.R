@@ -16,6 +16,10 @@ tk_comment <- function(post_id, verbose = T, vpn = F){
     while(has_more & index <= 20){
       res <- get_data(url = fins[index], vpn = vpn, cookie = Sys.getenv("TIKTOK_ID_COOKIE"))
 
+      if(res$code == "8"){
+          stop("Please update your logged in cookie.")
+      }
+
       data <- try({
         res %>%
         .[["comments"]] %>%
