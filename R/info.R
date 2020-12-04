@@ -21,9 +21,7 @@ tk_info <- function(scope, query, ...){
     "user" = {
       url <- get_url("username", query_1 = query)
       tmp <- get_data(url, ...)
-      if(tmp[["statusCode"]] == "10202"){
-        return(tibble::tibble(query = query, found = F))
-      }
+      if("found" %in% names(tmp)) return(tibble::tibble(query = query, found = F))
       tmp$userInfo
 
     },
@@ -31,9 +29,7 @@ tk_info <- function(scope, query, ...){
     "hashtag" = {
       url <- get_url("hashtag", query_1 = query)
       tmp <- get_data(url, ...)
-      if(tmp[["statusCode"]] == "10205"){
-        return(tibble::tibble(query = query, found = F))
-      }
+      if("found" %in% names(tmp)) return(tibble::tibble(query = query, found = F))
       tmp
     },
 
@@ -47,15 +43,19 @@ tk_info <- function(scope, query, ...){
     "post" = {
       url <- get_url("post", query_1 = query)
       tmp <- get_data(url, ...)
-      if(tmp[["statusCode"]] == "10204"){
+      if("found" %in% names(tmp)){
         return(tibble::tibble(query = query, found = F))
       }
       tmp
     }
   )
 
+  if("found" %in% names(res)){
+    return(tibble::tibble(query = query, found = F))
+  }
+
   if(is.null(res)){
-    return(tibble::tibble(query = query))
+    return(tibble::tibble(query = query, found = F))
   }
 
   out <- res %>%

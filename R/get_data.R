@@ -3,6 +3,9 @@
 #' @export
 
 get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"), cursor = 0, query_1 = NULL, query_2 = "", save_dir = NULL, query = NULL, ...){
+
+  if(lubridate::is.Date(start_date)){ start_date <- as.numeric(start_date)}
+
   response <- tibble::tibble()
   if(stringr::str_detect(scope, "music|trend|hash")){
     max_n <- 30
@@ -18,8 +21,8 @@ get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"), c
     url <- get_url(scope, n = max_n, min = min_cursor, max = max_cursor, query_1 = query_1, query_2 = query_2)
     out <- get_data(url, parse = T, ...)
 
-    if(out$statusCode == "10219"){
-      return(tibble::tibble(query = query, found = F))
+    if("found" %in% names(out)){
+      return(out)
     }
 
     if(scope %in% c("music_post", "hashtag_post")){
@@ -79,9 +82,9 @@ get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"), c
     }
 
     if(scope == "user_post"){
-      if(min(from_unix(response$createTime)) < start_date){
+      if(min(response$createTime) < start_date){
         response <- response %>%
-          dplyr::filter(from_unix(createTime) < start_date)
+          dplyr::filter(createTime > start_date)
 
         n <- 0
       }
@@ -148,15 +151,36 @@ get_data <- function(url, parse = T, vpn = F, cookie = "", time_out = 10){
     jsonlite::fromJSON()
 
   if(!is.null(out[["statusCode"]])){
-    if(out$statusCode == "10000"){
-      stop("Captcha required. Please update your tiktok cookie using `tk_auth(cookie = <your new tiktok cookie>)`.")
-    }
+    out$code <- out$statusCode
   }
   if(!is.null(out[["status_code"]])){
-    if(out$status_code == "8"){
-      # stop("Captcha required. Please update the cookie file.")
+    out$code <- out$status_code
+  }
+  if(!is.null(out[["statusMsg"]])){
+    out$msg <- out$statusMsg
+  }
+
+  if(!is.null(out[["code"]])){
+    # print(out$code)
+    # if(out$code == "8"){
+    #   if(out$type == "verify"){
+    #   stop("Captcha required. Please update your tiktok cookie using `tk_auth(cookie = <your new tiktok cookie>)` or wait some time before querying again. ")
+    #   }
+    # }
+    if(as.numeric(out$code) == 10000 ){ #c("10202", "10221",  "10204", "10225")
+      stop("Captcha required. Please update your tiktok cookie using `tk_auth(cookie = <your new tiktok cookie>)` or wait some time before querying again. ")
+    }
+    if(as.numeric(out$code) > 10000 ){ #c("10202", "10221",  "10204", "10225")
+      # 10202 User not found
+      # 10205 Hashtag not found
+      # 10101 Hashtag not found
+
+
+      # warning(paste("Error", out$code, out$msg))
+      return(tibble::tibble(found = F))
     }
   }
+
 
   return(out)
 }
