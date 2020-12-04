@@ -49,7 +49,7 @@ get_docker_signature <- function(url, port = 32768){
 
     system("docker stop tiktoksignature", intern = T)
     system("docker start tiktoksignature", intern = T)
-    req <- try(httr::POST(url = glue::glue("http://localshost:{port}/"),  body  = cmd, encode = "json"))
+    req <- try(httr::POST(url = glue::glue("http://localhost:{port}/"),  body  = cmd, encode = "json"))
   }
   jsonlite::fromJSON(rawToChar(req$content))
 }
