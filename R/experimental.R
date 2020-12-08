@@ -23,6 +23,8 @@ get_vpn_data <- function(final_url, vpn_host = "", vpn_port = "", cookie = "", t
     httr::POST(glue::glue("http://{vpn_host}:{vpn_port}/get"), body = data,  encode = "json", timeout = httr::timeout(time_out))
   })
 
+  if(req$status_code == 500) stop(jsonlite::fromJSON(rawToChar(req$content))$message)
+
   return(req)
 }
 
