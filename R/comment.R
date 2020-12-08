@@ -1,5 +1,5 @@
 #' @export
-tk_comment <- function(post_id, verbose = T, vpn = F){
+tk_comment <- function(post_id, n = 10000, verbose = T, vpn = F){
 
   response <- tibble::tibble()
   count <- sample(30:50, 1)
@@ -16,14 +16,14 @@ tk_comment <- function(post_id, verbose = T, vpn = F){
     while(has_more & index <= 20){
       res <- get_data(url = fins[index], vpn = vpn, cookie = Sys.getenv("TIKTOK_ID_COOKIE"))
 
-      if(res$code == "8"){
-          stop("Please update your logged in cookie.")
-      }
+      # if(res$code == "8"){
+      #     stop("Please update your logged in cookie.")
+      # }
 
       data <- try({
         res %>%
-        .[["comments"]] %>%
-        parse_json_structure
+          .[["comments"]] %>%
+          parse_json_structure
       }, silent = T)
 
       if(inherits(data, "try-error")){ has_more <- F ; break }
@@ -32,14 +32,18 @@ tk_comment <- function(post_id, verbose = T, vpn = F){
       response <- dplyr::bind_rows(response, data) %>%
         dplyr::distinct(cid, .keep_all = T)
 
-      has_more <- res$has_more
+      if(nrow(response) > n){
+        has_more <- F
+      } else {
+        has_more <- res$has_more
+      }
       index <- index + 1
     }
     max_cursor <- max_cursor + 1000
   }
 
   if(verbose){
-      cli::cli_alert_success("[{Sys.time()}] c-{post_id} ({nrow(response)})")
+    cli::cli_alert_success("[{Sys.time()}] c-{post_id} ({nrow(response)})")
   }
 
   if(nrow(response) == 0){
