@@ -170,6 +170,9 @@ get_data <- function(url, parse = T, cookie = "", time_out = 10){
     if(as.numeric(out$code) == 10000 ){ #c("10202", "10221",  "10204", "10225")
       stop("Captcha required. Please update your tiktok cookie using `tk_auth(cookie = <your new tiktok cookie>)` or wait some time before querying again. ")
     }
+    if(out$code == "10222"){
+      return(out)
+    }
     if(as.numeric(out$code) > 10000 ){ #c("10202", "10221",  "10204", "10225")
       # 10202 User not found
       # 10205 Hashtag not found
