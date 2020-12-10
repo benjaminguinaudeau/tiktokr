@@ -1,4 +1,41 @@
 
+# get_vpn_data <- function(final_url, vpn_host = "", vpn_port = "", cookie = "", time_out = 10){
+#
+#   if(vpn_host == ""){
+#     vpn_host <- Sys.getenv("tiktok_vpn_host")
+#   }
+#
+#   if(vpn_port == ""){
+#     vpn_port <- Sys.getenv("tiktok_vpn_port")
+#   }
+#
+#   head <- list(
+#     method = "GET",
+#     referer = "https://www.tiktok.com/trending?lang=en",
+#     `user-agent` = Sys.getenv("TIKTOK_UA"),
+#     cookie = cookie
+#   )
+#
+#   data <- list(url = final_url, head = head)
+#
+#   req <- try({
+#     httr::POST(glue::glue("http://{vpn_host}:{vpn_port}/get"), body = data,  encode = "json", timeout = httr::timeout(time_out))
+#   })
+#
+#   if(req$status_code == 500) stop(jsonlite::fromJSON(rawToChar(req$content))$message)
+#
+#   return(req)
+# }
+
+#' @export
+shape_headers <- function(headers){
+  headers %>%
+    imap_chr(~{
+      glue::glue("-H '{.y}: {.x}'")
+    }) %>%
+    paste(collapse = " ")
+}
+
 #' @export
 get_vpn_data <- function(final_url, vpn_host = "", vpn_port = "", cookie = "", time_out = 10){
 
@@ -10,18 +47,27 @@ get_vpn_data <- function(final_url, vpn_host = "", vpn_port = "", cookie = "", t
     vpn_port <- Sys.getenv("tiktok_vpn_port")
   }
 
-  head <- list(
+  if(!exists("current_server")) stop("current_server not found")
+  server <- .GlobalEnv$current_server
+
+  head <- c(
     method = "GET",
-    referer = "https://www.tiktok.com/trending?lang=en",
+    referer = "https://www.tiktok.com/foryou",
     `user-agent` = Sys.getenv("TIKTOK_UA"),
-    cookie = cookie
+    cookie = "tt_webid_v2={paste(sample(1:10, 19, replace = T), collapse = '')}"
   )
 
-  data <- list(url = final_url, head = head)
+  cmd <- glue::glue("curl '{URLencode(final_url)}' {shape_headers(head)} --compressed")
 
-  req <- try({
-    httr::POST(glue::glue("http://{vpn_host}:{vpn_port}/get"), body = data,  encode = "json", timeout = httr::timeout(time_out))
-  })
+  # data <- list(url = final_url, head = head)
+  #
+  # req <- try({
+  #   httr::POST(glue::glue("http://{vpn_host}:{vpn_port}/get"), body = data,  encode = "json", timeout = httr::timeout(time_out))
+  # })
+  #
+  # if(req$status_code == 500) stop(jsonlite::fromJSON(rawToChar(req$content))$message)
+  req <- ssh::ssh_exec_internal(server$session, command = cmd)
+  req <- list(content = req$stdout)
 
   return(req)
 }

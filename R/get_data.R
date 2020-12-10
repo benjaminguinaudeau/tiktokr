@@ -105,7 +105,7 @@ get_n <- function(scope, n = 10000, start_date = lubridate::dmy("01-01-1900"), c
 #' @param url url to visit and get data from
 #' @param parse logical. whether to return parsed data or not. Defautls to \code{TRUE}.
 #' @export
-get_data <- function(url, parse = T, vpn = F, cookie = "", time_out = 10){
+get_data <- function(url, parse = T, cookie = "", time_out = 10){
 
   if(!stringr::str_detect(url, "&_signature=")){
     final_url <- get_signature(url)
@@ -113,7 +113,7 @@ get_data <- function(url, parse = T, vpn = F, cookie = "", time_out = 10){
     final_url <- url
   }
 
-  if(vpn){
+  if(Sys.getenv("TIKTOK_VPN") != ""){
     req <- try(get_vpn_data(final_url, cookie = cookie, time_out = time_out))
   } else {
     req <- httr::GET(final_url,
