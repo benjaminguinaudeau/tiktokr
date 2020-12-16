@@ -4,7 +4,7 @@
 \alias{tk_auth}
 \title{Set up TikTok cookie and user agent}
 \usage{
-tk_auth(cookie, ua, id_cookie)
+tk_auth(cookie, ua, id_cookie, docker = F)
 }
 \arguments{
 \item{cookie}{The TikTok cookie as string. Find out here how to get a TikTok cookie: \url{https://www.youtube.com/watch?v=kYMV2ugxacs&feature=youtu.be}}

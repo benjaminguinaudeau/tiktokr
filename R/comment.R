@@ -1,5 +1,5 @@
 #' @export
-tk_comment <- function(post_id, n = 10000, verbose = T, vpn = F){
+tk_comment <- function(post_id, n = 10000, verbose = T){
 
   response <- tibble::tibble()
   count <- sample(30:50, 1)
@@ -14,7 +14,7 @@ tk_comment <- function(post_id, n = 10000, verbose = T, vpn = F){
 
     index <- 1
     while(has_more & index <= 20){
-      res <- get_data(url = fins[index], vpn = vpn, cookie = Sys.getenv("TIKTOK_ID_COOKIE"))
+      res <- get_data(url = fins[index], cookie = Sys.getenv("TIKTOK_ID_COOKIE"))
 
       # if(res$code == "8"){
       #     stop("Please update your logged in cookie.")
