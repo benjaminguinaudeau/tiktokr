@@ -42,9 +42,11 @@ tk_init <- function(){
 #' Sys.getenv("TIKTOK_COOKIE")
 #'
 #' }
-tk_auth <- function(cookie, ua, id_cookie, docker = F) {
+tk_auth <- function(cookie, ua, id_cookie, docker = NULL) {
 
-  if(docker){
+  if(is.null(docker)){
+    if(Sys.getenv("TIKTOK_DOCKER") != "") message("TIKTOK_DOCKER found. Tiktokr will use a docker container to sign the urls")
+  } else if(docker){
     if(Sys.getenv("TIKTOK_DOCKER") == ""){
       message("Setting `TIKTOK_DOCKER` as TRUE")
       set_renv("TIKTOK_DOCKER" = T)
@@ -52,7 +54,7 @@ tk_auth <- function(cookie, ua, id_cookie, docker = F) {
       message("TIKTOK_DOCKER found. Tiktokr will use a docker container to sign the urls")
     }
   } else {
-    if(Sys.getenv("TIKTOK_DOCKER") == "") message("TIKTOK_DOCKER found. Tiktokr will use a docker container to sign the urls")
+    set_renv("TIKTOK_DOCKER" = "")
   }
 
   ## Tiktok Cookie
