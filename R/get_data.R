@@ -117,13 +117,13 @@ get_data <- function(url, parse = T, cookie = "", time_out = 10){
     req <- try(get_vpn_data(final_url, cookie = cookie, time_out = time_out))
   } else {
     req <- httr::GET(final_url,
-                httr::add_headers(.headers = c(
-                  method = "GET",
-                  referer = "https://www.tiktok.com/foryou",
-                  `user-agent` = Sys.getenv("TIKTOK_UA"),
-                  cookie = cookie
-                ))
-      )
+                     httr::add_headers(.headers = c(
+                       method = "GET",
+                       referer = "https://www.tiktok.com/foryou",
+                       `user-agent` = Sys.getenv("TIKTOK_UA"),
+                       cookie = cookie
+                     ))
+    )
   }
 
   if(inherits(req, "try-error")){stop("Error happened while requesting")}
@@ -147,8 +147,15 @@ get_data <- function(url, parse = T, cookie = "", time_out = 10){
     content <- "{}"
   }
 
-  out <- content %>%
-    jsonlite::fromJSON()
+  out <- try({
+    content %>%
+      jsonlite::fromJSON()
+  })
+  if(inherits(out, "try-error")){
+    out <- content %>%
+      str_replace_all("(?<=[^\\d]{1,60})\\b(?=[^\\d]{1,60})", "\"") %>%
+      jsonlite::fromJSON()
+  }
 
   if(!is.null(out[["statusCode"]])){
     out$code <- out$statusCode
@@ -169,6 +176,9 @@ get_data <- function(url, parse = T, cookie = "", time_out = 10){
     # }
     if(as.numeric(out$code) == 10000 ){ #c("10202", "10221",  "10204", "10225")
       stop("Captcha required. Please update your tiktok cookie using `tk_auth(cookie = <your new tiktok cookie>)` or wait some time before querying again. ")
+    }
+    if(out$code == "10222"){
+      return(out)
     }
     if(as.numeric(out$code) > 10000 ){ #c("10202", "10221",  "10204", "10225")
       # 10202 User not found

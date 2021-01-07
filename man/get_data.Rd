@@ -4,7 +4,7 @@
 \alias{get_data}
 \title{get_data}
 \usage{
-get_data(url, parse = T, vpn = F, cookie = "", time_out = 10, docker = F)
+get_data(url, parse = T, cookie = "", time_out = 10)
 }
 \arguments{
 \item{url}{url to visit and get data from}

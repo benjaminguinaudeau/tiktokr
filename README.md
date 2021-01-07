@@ -7,11 +7,24 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![Codecov test
-coverage](https://codecov.io/gh/benjaminguinaudeau/tiktokr/branch/master/graph/badge.svg)](https://codecov.io/gh/benjaminguinaudeau/tiktokr?branch=master)
-[![Travis build
-status](https://travis-ci.com/benjaminguinaudeau/tiktokr.svg?branch=master)](https://travis-ci.com/benjaminguinaudeau/tiktokr)
+<!-- [![Codecov test coverage](https://codecov.io/gh/benjaminguinaudeau/tiktokr/branch/master/graph/badge.svg)](https://codecov.io/gh/benjaminguinaudeau/tiktokr?branch=master) -->
+<!-- [![Travis build status](https://travis-ci.com/benjaminguinaudeau/tiktokr.svg?branch=master)](https://travis-ci.com/benjaminguinaudeau/tiktokr) -->
 <!-- badges: end -->
+
+**Disclaimer (January, 7th 2021)**
+
+**At the beginning of December 2020, Tiktok changed its API structure
+and its security measures to control the traffic of metadata. As a
+result, requests made with `tiktokr` are blocked very often, if not
+systematically (error when parsing the json data structure).**
+
+**After trying minor patches, we concluded that Tiktokr needs to be
+completely rewritten to fit the new infrastructure of Tiktok. Because
+none of the author has the time currently to rewrite the package, we
+putting it on hold for now and appologize for the resulting
+inconvenience. If you are interested in taking over the challenge, we
+are glad to share the knowledge that we have accumulated along the
+development of tiktokr.**
 
 The goal of `tiktokr` is to provide a scraper for the video-sharing
 social networking service [TikTok](http://tiktok.com/).
@@ -28,11 +41,11 @@ creating the hexagon logo.*
 
 **Overview**
 
-  - [Installation](https://github.com/benjaminguinaudeau/tiktokr#installation)
-  - [Authentification](https://github.com/benjaminguinaudeau/tiktokr#authentification)
-  - [Using tiktokr with
+-   [Installation](https://github.com/benjaminguinaudeau/tiktokr#installation)
+-   [Authentification](https://github.com/benjaminguinaudeau/tiktokr#authentification)
+-   [Using tiktokr with
     Docker](https://github.com/benjaminguinaudeau/tiktokr#using-tiktokr-with-docker)
-  - [Examples](https://github.com/benjaminguinaudeau/tiktokr#examples)
+-   [Examples](https://github.com/benjaminguinaudeau/tiktokr#examples)
 
 ## Installation
 
@@ -73,7 +86,7 @@ a cookie session:
 
 1.  Open a browser and go to “<http://tiktok.com>”
 2.  Scroll down a bit, to ensure, that you don’t get any captcha
-3.  Open the javascript console (in Chrome: View \> Developer \>
+3.  Open the javascript console (in Chrome: View &gt; Developer &gt;
     Javascript Console)
 4.  Run `document.cookie` in the console. Copy the entire output (your
     cookie).
@@ -89,7 +102,6 @@ variable to your `.Renviron` file. You need to only run this once to use
 `tiktokr` or whenever you want to update your cookie/user agent.
 
 ``` r
-
 tk_auth(cookie = "<paste here the output from document.cookie>")
 ```
 
@@ -105,7 +117,6 @@ you won’t need a Python installation.
 To find out if you are experiencing `puppeteer` problems run:
 
 ``` r
-
 library(tiktokr)
 Sys.setenv("TIKTOK_DOCKER" = "")
 tk_auth(cookie = "<your_cookie_here>")
@@ -143,8 +154,8 @@ more steps.
 
 ### Initialize Docker
 
-To run `tiktokr` with Docker you need to use `tk_auth()` with `docker =
-TRUE` which sets the necessary environment variable.
+To run `tiktokr` with Docker you need to use `tk_auth()` with
+`docker = TRUE` which sets the necessary environment variable.
 
 ``` r
 tk_auth(docker = T)
@@ -160,7 +171,6 @@ You can check whether your Docker container is working correctly by
 running the following code:
 
 ``` r
-
 if(stringr::str_length(get_docker_signature("")) > 16){
   message("Signature successful. Your Docker container is working.")
 } else {
@@ -202,7 +212,6 @@ or based on the most recent post date but rather **some mix of recent
 and popular** TikToks.
 
 ``` r
-
 hash_post <- tk_posts(scope = "hashtag", query = "maincharacter", n = 100) 
 ```
 
@@ -213,7 +222,6 @@ or based on the most recent post date but rather **some mix of recent
 and popular** TikToks.
 
 ``` r
-
 user_posts <- tk_posts(scope = "user", query = "willsmith", n = 50)
 music_post <- tk_posts(scope = "music", query = user_posts$music_id[1], n = 100)
 ```

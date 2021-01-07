@@ -49,12 +49,13 @@ get_vpn_data <- function(final_url, vpn_host = "", vpn_port = "", cookie = "", t
 
   if(!exists("current_server")) stop("current_server not found")
   server <- .GlobalEnv$current_server
+  cookie <- ifelse(cookie == "", "", paste0("; ", cookie))
 
   head <- c(
     method = "GET",
     referer = "https://www.tiktok.com/foryou",
     `user-agent` = Sys.getenv("TIKTOK_UA"),
-    cookie = "tt_webid_v2={paste(sample(1:10, 19, replace = T), collapse = '')}"
+    cookie = glue::glue("tt_webid_v2={paste(sample(1:10, 19, replace = T), collapse = '')}{cookie}")
   )
 
   cmd <- glue::glue("curl '{URLencode(final_url)}' {shape_headers(head)} --compressed")

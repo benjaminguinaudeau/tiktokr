@@ -18,9 +18,18 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![Codecov test coverage](https://codecov.io/gh/benjaminguinaudeau/tiktokr/branch/master/graph/badge.svg)](https://codecov.io/gh/benjaminguinaudeau/tiktokr?branch=master)
-[![Travis build status](https://travis-ci.com/benjaminguinaudeau/tiktokr.svg?branch=master)](https://travis-ci.com/benjaminguinaudeau/tiktokr)
+<!-- [![Codecov test coverage](https://codecov.io/gh/benjaminguinaudeau/tiktokr/branch/master/graph/badge.svg)](https://codecov.io/gh/benjaminguinaudeau/tiktokr?branch=master) -->
+<!-- [![Travis build status](https://travis-ci.com/benjaminguinaudeau/tiktokr.svg?branch=master)](https://travis-ci.com/benjaminguinaudeau/tiktokr) -->
 <!-- badges: end -->
+
+**Disclaimer (January, 7th 2021)**
+
+**At the beginning of December 2020, Tiktok changed its API structure and its security measures to control the traffic of metadata. As a result, requests made with `tiktokr` are blocked very often, if not systematically (error when parsing the json data structure).**
+
+**After trying minor patches, we concluded that Tiktokr needs to be completely rewritten to fit the new infrastructure of Tiktok. Because none of the author has the time currently to rewrite the package, we putting it on hold for now and appologize for the resulting inconvenience. If you are interested in taking over the challenge, we are glad to share the knowledge that we have accumulated along the development of tiktokr.**
+
+
+
 
 The goal of `tiktokr` is to provide a scraper for the video-sharing social networking service [TikTok](http://tiktok.com/). 
 
